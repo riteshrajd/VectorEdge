@@ -239,7 +239,7 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
       />
       
       <aside
-        className="bg-zinc-950 text-white transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] border-l border-zinc-800 flex flex-col overflow-hidden"
+        className="bg-zinc-950 text-white transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] border-l border-zinc-800 flex flex-col overflow"
         style={{ width: `${width}px` }}
       >
       {/* Header */}

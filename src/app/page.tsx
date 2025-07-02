@@ -17,11 +17,11 @@ export default function Home(): JSX.Element {
   };
 
   return (
-    <div className="flex flex-col bg-zinc-950 min-h-screen font-sans">
+    <div className="flex flex-col h-screen font-sans overflow-x-clip overflow-y-scroll">
       <div className="w-full z-10">
         <Header />
       </div>
-      <div className="flex flex-1">
+      <div className="flex flex-1 h-full">
         <SidebarLeft onItemSelect={handleInstrumentSelect} />
         <main className="flex-1 min-w-0 bg-zinc-950 text-white">
           <MainContent selectedInstrument={selectedInstrument} />

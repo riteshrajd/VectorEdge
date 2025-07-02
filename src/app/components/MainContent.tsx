@@ -77,7 +77,7 @@ const MainContent: React.FC<MainContentProps> = ({ selectedInstrument }) => {
   }));
 
   return (
-    <div className="h-full bg-zinc-950 text-white">
+    <div className="h-full flex-col bg-zinc-950 text-white">
       {/* Header Section */}
       <div className="border-b border-zinc-800 p-6">
         <div className="flex items-center justify-between mb-4">
@@ -192,7 +192,7 @@ const MainContent: React.FC<MainContentProps> = ({ selectedInstrument }) => {
       </div>
 
       {/* Content Area */}
-      <div className="flex-1 p-6">
+      <div className="flex-1 h-full p-6 overflow-y-scroll">
         {activeTab === 'overview' && (
           <div className="space-y-6">
             {/* Chart Placeholder */}

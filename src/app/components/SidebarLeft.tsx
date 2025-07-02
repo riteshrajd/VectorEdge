@@ -40,11 +40,12 @@ import Image from 'next/image';
 type IconMap = Record<string, LucideIcon>;
 
 const SidebarLeft: React.FC<SidebarLeftProps> = ({ onItemSelect }) => {
+  const sub : string = 'Pro';
+
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [activeTab, setActiveTab] = useState<TabType>('stocks');
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
-
   const toggleSidebar = useCallback((): void => {
     setIsCollapsed(!isCollapsed);
   }, [isCollapsed]);
@@ -125,10 +126,10 @@ const SidebarLeft: React.FC<SidebarLeftProps> = ({ onItemSelect }) => {
     <aside
       className={`${
         isCollapsed ? "w-16" : "w-72"
-      } bg-zinc-950 text-white transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] border-r border-zinc-800 flex flex-col overflow-hidden`}
+      } bg-steel-900 text-white transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] border-r border-steel-800 flex flex-col overflow-hidden`}
     >
       {/* Header with toggle */}
-      <div className="flex items-center justify-between p-4 border-b border-zinc-800">
+      <div className="flex items-center justify-between p-4 border-b border-steel-800">
         {!isCollapsed && (
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 rounded-lg flex items-center justify-center">
@@ -140,12 +141,19 @@ const SidebarLeft: React.FC<SidebarLeftProps> = ({ onItemSelect }) => {
                 className="block shrink-0" // Ensures image is always visible
               />
             </div>
-            <span className="font-bold text-lg shrink-0">VectorEdge <span>Pro</span></span>
+            <span className="font-bold text-lg shrink-0">VectorEdge 
+              <span className=
+                {`${sub==='Lite' ? 'text-white/80 rounded-xl font-quicksand text-md font-light px-1' : ''}
+                ${sub==='Plus' ? 'border-1 border-zinc-600 ml-1 text-white rounded-xl font-roboto font-light px-1' : ''}
+                ${sub==='Pro' ? 'border-1 border-white text-white rounded-lg ml-1 pb-0.5 px-1' : ''}`}>
+                {sub}
+              </span>
+            </span>
           </div>
         )}
         <button
           onClick={toggleSidebar}
-          className="p-2 hover:bg-zinc-800 rounded-lg transition-colors"
+          className="p-2 hover:bg-steel-800 rounded-lg transition-colors"
           aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           {isCollapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
@@ -153,10 +161,10 @@ const SidebarLeft: React.FC<SidebarLeftProps> = ({ onItemSelect }) => {
       </div>
 
       {/* Search Bar */}
-      <div className="p-4 border-b border-zinc-800">
+      <div className="p-4 border-b border-steel-800">
         {isCollapsed ? (
           <button
-            className="w-full p-2 hover:bg-zinc-800 rounded-lg transition-colors flex justify-center"
+            className="w-full p-2 hover:bg-steel-800 rounded-lg transition-colors flex justify-center"
             aria-label="Search"
           >
             <Search size={18} />
@@ -172,7 +180,7 @@ const SidebarLeft: React.FC<SidebarLeftProps> = ({ onItemSelect }) => {
               placeholder="Search instruments..."
               value={searchTerm}
               onChange={handleSearchChange}
-              className="w-full pl-10 pr-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-sm focus:outline-none focus:border-blue-500 transition-colors"
+              className="w-full pl-10 pr-4 py-2 bg-steel-800 border border-zinc-700 rounded-lg text-sm focus:outline-none focus:border-blue-500 transition-colors"
             />
           </div>
         )}
@@ -180,40 +188,40 @@ const SidebarLeft: React.FC<SidebarLeftProps> = ({ onItemSelect }) => {
 
       {/* Action Buttons */}
       {
-        <div className="p-4 border-b border-zinc-800">
+        <div className="p-4 border-b border-steel-800">
           <div className="flex space-x-2 justify-evenly">
             <button
-              className="p-2 hover:bg-zinc-800 rounded-lg transition-colors"
+              className="p-2 hover:bg-steel-800 rounded-lg transition-colors"
               aria-label="Filter"
             >
               <Settings size={16} />
             </button>
             <button
-              className="p-2 hover:bg-zinc-800 rounded-lg transition-colors"
+              className="p-2 hover:bg-steel-800 rounded-lg transition-colors"
               aria-label="Filter"
             >
               <InfoIcon size={16} />
             </button>
             <button
-              className="p-2 hover:bg-zinc-800 rounded-lg transition-colors"
+              className="p-2 hover:bg-steel-800 rounded-lg transition-colors"
               aria-label="Filter"
             >
               <FuelIcon size={16} />
             </button>
             <button
-              className="p-2 hover:bg-zinc-800 rounded-lg transition-colors"
+              className="p-2 hover:bg-steel-800 rounded-lg transition-colors"
               aria-label="Filter"
             >
               <Tv2Icon size={16} />
             </button>
             <button
-              className="p-2 hover:bg-zinc-800 rounded-lg transition-colors"
+              className="p-2 hover:bg-steel-800 rounded-lg transition-colors"
               aria-label="Filter"
             >
               <Zap size={16} />
             </button>
             <button
-              className="p-2 hover:bg-zinc-800 rounded-lg transition-colors"
+              className="p-2 hover:bg-steel-800 rounded-lg transition-colors"
               aria-label="Settings"
             >
               <Filter size={16} />
@@ -224,13 +232,13 @@ const SidebarLeft: React.FC<SidebarLeftProps> = ({ onItemSelect }) => {
 
       {/* Tabs */}
       {!isCollapsed ? (
-        <div className="flex border-b border-zinc-800">
+        <div className="flex border-b border-steel-800">
           <button
             onClick={() => handleTabChange("stocks")}
             className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${
               activeTab === "stocks"
-                ? "bg-zinc-800 text-white border-b-2 border-white"
-                : "text-zinc-400 hover:text-white hover:bg-zinc-800"
+                ? "bg-steel-800 text-white border-b-2 border-white"
+                : "text-zinc-400 hover:text-white hover:bg-steel-800"
             }`}
           >
             Stocks
@@ -239,17 +247,17 @@ const SidebarLeft: React.FC<SidebarLeftProps> = ({ onItemSelect }) => {
             onClick={() => handleTabChange("futures")}
             className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${
               activeTab === "futures"
-                ? "bg-zinc-800 text-white border-b-2 border-white"
-                : "text-zinc-400 hover:text-white hover:bg-zinc-800"
+                ? "bg-steel-800 text-white border-b-2 border-white"
+                : "text-zinc-400 hover:text-white hover:bg-steel-800"
             }`}
           >
             Futures
           </button>
         </div>
       ) : (
-        <div className="flex justify-center border-b border-zinc-800 min-h-12.5">
+        <div className="flex justify-center border-b border-steel-800 min-h-12.5">
           <button
-            className="p-2 hover:bg-zinc-800 rounded-lg transition-colors"
+            className="p-2 hover:bg-steel-800 rounded-lg transition-colors"
             aria-label="Settings"
           >
             <Filter size={16} />
@@ -268,7 +276,7 @@ const SidebarLeft: React.FC<SidebarLeftProps> = ({ onItemSelect }) => {
             <div
               key={item.symbol}
               onClick={() => handleItemClick(item)}
-              className="flex items-center p-3 hover:bg-zinc-800 cursor-pointer border-b border-zinc-800/50 transition-colors group"
+              className="flex items-center p-3 hover:bg-steel-800 cursor-pointer border-b border-steel-800/50 transition-colors group"
             >
               {/* Icon */}
               <div
@@ -332,16 +340,16 @@ const SidebarLeft: React.FC<SidebarLeftProps> = ({ onItemSelect }) => {
 
       {/* Collapsed state bottom buttons */}
       {isCollapsed && (
-        <div className="p-2 border-t border-zinc-800">
+        <div className="p-2 border-t border-steel-800">
           <div className="flex flex-col space-y-2">
             <button
-              className="p-2 hover:bg-zinc-800 rounded-lg transition-colors flex justify-center"
+              className="p-2 hover:bg-steel-800 rounded-lg transition-colors flex justify-center"
               aria-label="Settings"
             >
               <Settings size={18} />
             </button>
             <button
-              className="p-2 hover:bg-zinc-800 rounded-lg transition-colors flex justify-center"
+              className="p-2 hover:bg-steel-800 rounded-lg transition-colors flex justify-center"
               aria-label="Filter"
             >
               <Filter size={18} />
