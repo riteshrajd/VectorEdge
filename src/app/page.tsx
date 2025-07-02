@@ -1,27 +1,24 @@
-import { useState } from 'react';
+'use client';
+
+import { JSX, useState } from 'react';
 import Header from "./components/Header";
 import MainContent from "./components/MainContent";
 import SidebarLeft from "./components/SidebarLeft";
 import SidebarRight from "./components/SidebarRight";
+import { Instrument } from "./types";
 
-// Define type for instrument (replace with actual structure if needed)
-type Instrument = {
-  id: string;
-  name: string;
-  // Add other instrument properties as needed
-} | null;
+export default function Home(): JSX.Element {
+  const [selectedInstrument, setSelectedInstrument] = useState<Instrument | null>(null);
 
-export default function Home() {
-  const [selectedInstrument, setSelectedInstrument] = useState<Instrument>(null);
-
-  const handleInstrumentSelect = (instrument: Instrument) => {
+  const handleInstrumentSelect = (instrument: Instrument): void => {
     setSelectedInstrument(instrument);
     console.log('Selected instrument:', instrument);
+    // This will later be used to update the MainContent
   };
 
   return (
-    <div className="flex flex-col bg-zinc-950 min-h-screen">
-      <div className="w-full">
+    <div className="flex flex-col bg-zinc-950 min-h-screen font-sans">
+      <div className="w-full z-10">
         <Header />
       </div>
       <div className="flex flex-1">

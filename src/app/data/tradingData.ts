@@ -1,6 +1,16 @@
-// data/tradingData.js - Pseudo Database for Trading Platform
+// data/tradingData.ts - Typed Trading Data
 
-export const stocksData = [
+import { 
+  Stock, 
+  Future, 
+  MarketStatus, 
+  UserWatchlist, 
+  Category, 
+  NewsItem, 
+  TechnicalIndicators 
+} from '../types';
+
+export const stocksData: Stock[] = [
   {
     symbol: 'NIFTY',
     name: 'Nifty 50 Index',
@@ -193,7 +203,7 @@ export const stocksData = [
   }
 ];
 
-export const futuresData = [
+export const futuresData: Future[] = [
   {
     symbol: 'NIFTYFUT',
     name: 'Nifty Future Current Month',
@@ -241,7 +251,7 @@ export const futuresData = [
 ];
 
 // Market status data
-export const marketStatus = {
+export const marketStatus: MarketStatus = {
   isOpen: true,
   openTime: '09:15',
   closeTime: '15:30',
@@ -252,7 +262,7 @@ export const marketStatus = {
 };
 
 // User watchlist data
-export const userWatchlists = [
+export const userWatchlists: UserWatchlist[] = [
   {
     id: 1,
     name: 'My Watchlist',
@@ -270,7 +280,7 @@ export const userWatchlists = [
 ];
 
 // Categories for filtering
-export const categories = [
+export const categories: Category[] = [
   { id: 'all', name: 'All', count: stocksData.length + futuresData.length },
   { id: 'indices', name: 'Indices', count: 4 },
   { id: 'banking', name: 'Banking', count: 4 },
@@ -280,7 +290,7 @@ export const categories = [
 ];
 
 // News data (for future use)
-export const newsData = [
+export const newsData: NewsItem[] = [
   {
     id: 1,
     title: 'Market opens higher amid positive global cues',
@@ -302,7 +312,7 @@ export const newsData = [
 ];
 
 // Technical indicators data (for charts)
-export const technicalIndicators = {
+export const technicalIndicators: TechnicalIndicators = {
   RSI: 65.4,
   MACD: 'Bullish',
   MovingAverage50: 25420.30,
