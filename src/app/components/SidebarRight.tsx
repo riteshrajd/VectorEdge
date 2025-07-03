@@ -57,39 +57,48 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
   const [isResizing, setIsResizing] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<TabType>('chat');
   const resizeRef = useRef<HTMLDivElement>(null);
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      content: 'Hello! I\'m your AI trading assistant. How can I help you analyze the markets today?',
-      sender: 'ai',
-      timestamp: new Date(),
-      type: 'text'
-    }
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState<string>('');
   const [isTyping, setIsTyping] = useState<boolean>(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Sample analysis data
-  const [analyses] = useState<AnalysisItem[]>([
-    {
-      id: '1',
-      title: 'Technical Analysis',
-      content: 'NIFTY showing bullish momentum with RSI at 65. Strong support at 25,400.',
-      type: 'bullish',
-      confidence: 78,
-      timestamp: new Date(Date.now() - 1000 * 60 * 15)
-    },
-    {
-      id: '2',
-      title: 'Market Sentiment',
-      content: 'Banking sector showing mixed signals. Recommend cautious approach.',
-      type: 'neutral',
-      confidence: 65,
-      timestamp: new Date(Date.now() - 1000 * 60 * 30)
-    }
-  ]);
+  const [analyses, setAnalyses] = useState<AnalysisItem[]>([]);
+
+  // Initialize messages and analyses on client side to avoid hydration mismatch
+  useEffect(() => {
+    const now = new Date();
+    
+    setMessages([
+      {
+        id: '1',
+        content: 'Hello! I\'m your AI trading assistant. How can I help you analyze the markets today?',
+        sender: 'ai',
+        timestamp: now,
+        type: 'text'
+      }
+    ]);
+
+    setAnalyses([
+      {
+        id: '1',
+        title: 'Technical Analysis',
+        content: 'NIFTY showing bullish momentum with RSI at 65. Strong support at 25,400.',
+        type: 'bullish',
+        confidence: 78,
+        timestamp: new Date(now.getTime() - 1000 * 60 * 15)
+      },
+      {
+        id: '2',
+        title: 'Market Sentiment',
+        content: 'Banking sector showing mixed signals. Recommend cautious approach.',
+        type: 'neutral',
+        confidence: 65,
+        timestamp: new Date(now.getTime() - 1000 * 60 * 30)
+      }
+    ]);
+  }, []);
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   DollarSign,
   Clock, 
@@ -26,7 +26,12 @@ interface OverviewTabProps {
 
 const OverviewTab: React.FC<OverviewTabProps> = ({ instrument }) => {
   const [chartPeriod, setChartPeriod] = useState('1D');
-  const [chartData] = useState<ChartData[]>(() => generateChartData(instrument.symbol));
+  const [chartData, setChartData] = useState<ChartData[]>([]);
+
+  // Initialize chart data on client side to avoid hydration mismatch
+  useEffect(() => {
+    setChartData(generateChartData(instrument.symbol));
+  }, [instrument.symbol]);
 
   const formatPrice = (price: number) => {
     return instrument.symbol.includes('USD') || instrument.symbol.includes('SPX') 
@@ -52,9 +57,29 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ instrument }) => {
   };
 
   const displayData = getChartDataForPeriod(chartPeriod);
-  const maxPrice = Math.max(...displayData.map(d => d.high));
-  const minPrice = Math.min(...displayData.map(d => d.low));
+  const maxPrice = displayData.length > 0 ? Math.max(...displayData.map(d => d.high)) : 0;
+  const minPrice = displayData.length > 0 ? Math.min(...displayData.map(d => d.low)) : 0;
   const priceRange = maxPrice - minPrice;
+
+  // Show loading state while chart data is being generated
+  if (chartData.length === 0) {
+    return (
+      <div className="space-y-6">
+        <Card className="bg-card border-border">
+          <CardHeader className="pb-4">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-lg font-semibold">Price Chart</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="h-80 relative bg-muted/20 rounded-lg p-4 flex items-center justify-center">
+              <div className="text-muted-foreground">Loading chart data...</div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
