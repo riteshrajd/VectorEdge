@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useCallback } from 'react';
 import { 
   ChevronLeft, 
@@ -13,18 +15,19 @@ import {
   Fuel,
   Landmark,
   Star,
-  Plus,
   Settings,
   Filter,
   LucideIcon,
   Zap,
-  FuelIcon,
-  PiIcon,
-  TvIcon,
-  Tv2Icon,
-  InfoIcon,
-  Cog
+  Info,
+  Tv2,
+  Eye
 } from 'lucide-react';
+import Image from 'next/image';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 // Import types and data
 import { 
@@ -34,18 +37,18 @@ import {
   ChangeData 
 } from '../types';
 import { stocksData, futuresData } from '../data/tradingData';
-import Image from 'next/image';
 
 // Icon mapping type
 type IconMap = Record<string, LucideIcon>;
 
 const SidebarLeft: React.FC<SidebarLeftProps> = ({ onItemSelect }) => {
-  const sub : string = 'Pro';
+  const sub: string = 'Pro';
 
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [activeTab, setActiveTab] = useState<TabType>('stocks');
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
+
   const toggleSidebar = useCallback((): void => {
     setIsCollapsed(!isCollapsed);
   }, [isCollapsed]);
@@ -101,7 +104,7 @@ const SidebarLeft: React.FC<SidebarLeftProps> = ({ onItemSelect }) => {
     return {
       change: isPositive ? `+${change.toFixed(2)}` : change.toFixed(2),
       changePercent: isPositive ? `+${changePercent.toFixed(2)}%` : `${changePercent.toFixed(2)}%`,
-      colorClass: isPositive ? 'text-green-400' : 'text-red-400'
+      colorClass: isPositive ? 'text-green-500' : 'text-red-500'
     };
   }, []);
 
@@ -125,235 +128,216 @@ const SidebarLeft: React.FC<SidebarLeftProps> = ({ onItemSelect }) => {
   return (
     <aside
       className={`${
-        isCollapsed ? "w-16" : "w-72"
-      } bg-steel-900 text-white transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] border-r border-steel-800 flex flex-col overflow-hidden`}
+        isCollapsed ? "w-16" : "w-80"
+      } bg-background border-r border-border transition-all duration-300 ease-in-out flex flex-col overflow-hidden`}
     >
       {/* Header with toggle */}
-      <div className="flex items-center justify-between p-4 border-b border-steel-800">
+      <div className="flex items-center justify-between p-4 border-b border-border bg-muted/20">
         {!isCollapsed && (
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center">
+          <div className="flex items-center space-x-3">
+            <div className="relative h-8 w-8 rounded-lg bg-gradient-to-br from-primary to-primary/80 p-1.5 shadow-lg">
               <Image
-                src={"/assets/images/logo.png"}
+                src="/assets/images/logo.png"
                 alt="VectorEdge Pro Logo"
                 width={20}
                 height={20}
-                className="block shrink-0" // Ensures image is always visible
+                className="h-full w-full object-contain brightness-0 invert dark:invert-0"
+                priority
               />
             </div>
-            <span className="font-bold text-lg shrink-0">VectorEdge 
-              <span className=
-                {`${sub==='Lite' ? 'text-white/80 rounded-xl font-quicksand text-md font-light px-1' : ''}
-                ${sub==='Plus' ? 'border-1 border-zinc-600 ml-1 text-white rounded-xl font-roboto font-light px-1' : ''}
-                ${sub==='Pro' ? 'border-1 border-white text-white rounded-lg ml-1 pb-0.5 px-1' : ''}`}>
+            <div className="flex items-center space-x-2">
+              <span className="font-bold text-lg text-foreground font-quicksand">
+                VectorEdge
+              </span>
+              <span className="rounded-md border border-primary/20 bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
                 {sub}
               </span>
-            </span>
+            </div>
           </div>
         )}
-        <button
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={toggleSidebar}
-          className="p-2 hover:bg-steel-800 rounded-lg transition-colors"
-          aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          className="h-8 w-8"
         >
-          {isCollapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
-        </button>
+          {isCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+        </Button>
       </div>
 
       {/* Search Bar */}
-      <div className="p-4 border-b border-steel-800">
+      <div className="p-4 border-b border-border">
         {isCollapsed ? (
-          <button
-            className="w-full p-2 hover:bg-steel-800 rounded-lg transition-colors flex justify-center"
-            aria-label="Search"
-          >
-            <Search size={18} />
-          </button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" className="w-full h-10">
+                <Search size={16} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="right">
+              <p>Search instruments</p>
+            </TooltipContent>
+          </Tooltip>
         ) : (
           <div className="relative">
-            <Search
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-zinc-400"
-              size={16}
-            />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
             <input
               type="text"
               placeholder="Search instruments..."
               value={searchTerm}
               onChange={handleSearchChange}
-              className="w-full pl-10 pr-4 py-2 bg-steel-800 border border-zinc-700 rounded-lg text-sm focus:outline-none focus:border-blue-500 transition-colors"
+              className="w-full pl-10 pr-4 py-2 bg-muted/50 border border-input rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all"
             />
           </div>
         )}
       </div>
 
       {/* Action Buttons */}
-      {
-        <div className="p-4 border-b border-steel-800">
-          <div className="flex space-x-2 justify-evenly">
-            <button
-              className="p-2 hover:bg-steel-800 rounded-lg transition-colors"
-              aria-label="Filter"
-            >
-              <Settings size={16} />
-            </button>
-            <button
-              className="p-2 hover:bg-steel-800 rounded-lg transition-colors"
-              aria-label="Filter"
-            >
-              <InfoIcon size={16} />
-            </button>
-            <button
-              className="p-2 hover:bg-steel-800 rounded-lg transition-colors"
-              aria-label="Filter"
-            >
-              <FuelIcon size={16} />
-            </button>
-            <button
-              className="p-2 hover:bg-steel-800 rounded-lg transition-colors"
-              aria-label="Filter"
-            >
-              <Tv2Icon size={16} />
-            </button>
-            <button
-              className="p-2 hover:bg-steel-800 rounded-lg transition-colors"
-              aria-label="Filter"
-            >
-              <Zap size={16} />
-            </button>
-            <button
-              className="p-2 hover:bg-steel-800 rounded-lg transition-colors"
-              aria-label="Settings"
-            >
-              <Filter size={16} />
-            </button>
-          </div>
+      <div className="p-4 border-b border-border">
+        <div className={`grid ${isCollapsed ? 'grid-cols-1 gap-2' : 'grid-cols-6 gap-2'}`}>
+          {[
+            { icon: Settings, tooltip: "Settings" },
+            { icon: Info, tooltip: "Information" },
+            { icon: Fuel, tooltip: "Energy" },
+            { icon: Tv2, tooltip: "Media" },
+            { icon: Zap, tooltip: "Quick Actions" },
+            { icon: Filter, tooltip: "Filter" }
+          ].map(({ icon: Icon, tooltip }, index) => (
+            <Tooltip key={index}>
+              <TooltipTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-8 w-8">
+                  <Icon size={14} />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side={isCollapsed ? "right" : "top"}>
+                <p>{tooltip}</p>
+              </TooltipContent>
+            </Tooltip>
+          ))}
         </div>
-      }
+      </div>
 
       {/* Tabs */}
       {!isCollapsed ? (
-        <div className="flex border-b border-steel-800">
-          <button
-            onClick={() => handleTabChange("stocks")}
-            className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${
-              activeTab === "stocks"
-                ? "bg-steel-800 text-white border-b-2 border-white"
-                : "text-zinc-400 hover:text-white hover:bg-steel-800"
-            }`}
-          >
-            Stocks
-          </button>
-          <button
-            onClick={() => handleTabChange("futures")}
-            className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${
-              activeTab === "futures"
-                ? "bg-steel-800 text-white border-b-2 border-white"
-                : "text-zinc-400 hover:text-white hover:bg-steel-800"
-            }`}
-          >
-            Futures
-          </button>
+        <div className="px-4 py-2 border-b border-border">
+          <Tabs value={activeTab} onValueChange={(value) => handleTabChange(value as TabType)}>
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="stocks" className="text-sm">Stocks</TabsTrigger>
+              <TabsTrigger value="futures" className="text-sm">Futures</TabsTrigger>
+            </TabsList>
+          </Tabs>
         </div>
       ) : (
-        <div className="flex justify-center border-b border-steel-800 min-h-12.5">
-          <button
-            className="p-2 hover:bg-steel-800 rounded-lg transition-colors"
-            aria-label="Settings"
-          >
-            <Filter size={16} />
-          </button>
+        <div className="flex justify-center py-2 border-b border-border">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-8 w-8">
+                <Filter size={14} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="right">
+              <p>Toggle view</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
       )}
 
       {/* Instruments List */}
-      <div className="flex-1 overflow-y-auto">
-        {filteredData().map((item: Instrument) => {
-          const IconComponent = getIconForSymbol(item.symbol, activeTab);
-          const changeData = formatChange(item.change, item.changePercent);
-          const isFavorite = favorites.has(item.symbol);
+      <div className="flex-1 overflow-y-auto custom-scrollbar">
+        <div className="space-y-1 p-2">
+          {filteredData().map((item: Instrument) => {
+            const IconComponent = getIconForSymbol(item.symbol, activeTab);
+            const changeData = formatChange(item.change, item.changePercent);
+            const isFavorite = favorites.has(item.symbol);
 
-          return (
-            <div
-              key={item.symbol}
-              onClick={() => handleItemClick(item)}
-              className="flex items-center p-3 hover:bg-steel-800 cursor-pointer border-b border-steel-800/50 transition-colors group"
-            >
-              {/* Icon */}
-              <div
-                className={`${
-                  isCollapsed ? "mx-auto" : "mr-3"
-                } w-8 h-8 rounded-full flex items-center justify-center`}
-                style={{ backgroundColor: item.color }}
+            return (
+              <Card
+                key={item.symbol}
+                className="p-3 cursor-pointer hover:bg-accent/50 transition-all duration-200 border-0 bg-muted/20 hover:shadow-md group"
+                onClick={() => handleItemClick(item)}
               >
-                <IconComponent size={16} className="text-white" />
-              </div>
-
-              {!isCollapsed && (
-                <>
-                  {/* Symbol and Name */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between">
-                      <span className="font-medium text-sm truncate">
-                        {item.symbol}
-                      </span>
-                      <button
-                        onClick={(e) => handleFavoriteClick(e, item.symbol)}
-                        className="opacity-0 group-hover:opacity-100 transition-opacity"
-                        aria-label={
-                          isFavorite
-                            ? "Remove from favorites"
-                            : "Add to favorites"
-                        }
-                      >
-                        <Star
-                          size={14}
-                          className={
-                            isFavorite
-                              ? "fill-yellow-400 text-yellow-400"
-                              : "text-zinc-400"
-                          }
-                        />
-                      </button>
-                    </div>
-                    <p className="text-xs text-zinc-400 truncate">
-                      {item.name}
-                    </p>
+                <div className="flex items-center space-x-3">
+                  {/* Icon */}
+                  <div
+                    className={`${
+                      isCollapsed ? "mx-auto" : ""
+                    } w-10 h-10 rounded-full flex items-center justify-center shadow-sm`}
+                    style={{ backgroundColor: item.color }}
+                  >
+                    <IconComponent size={18} className="text-white" />
                   </div>
 
-                  {/* Price and Change */}
-                  <div className="text-right ml-2">
-                    <div className="text-sm font-medium font-mono">
-                      {formatPrice(item.price)}
-                    </div>
-                    <div
-                      className={`text-xs font-mono ${changeData.colorClass}`}
-                    >
-                      {changeData.change}
-                    </div>
-                  </div>
-                </>
-              )}
-            </div>
-          );
-        })}
+                  {!isCollapsed && (
+                    <>
+                      {/* Symbol and Name */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between">
+                          <span className="font-semibold text-sm truncate text-foreground">
+                            {item.symbol}
+                          </span>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={(e) => handleFavoriteClick(e, item.symbol)}
+                            className="opacity-0 group-hover:opacity-100 transition-opacity h-6 w-6"
+                          >
+                            <Star
+                              size={12}
+                              className={
+                                isFavorite
+                                  ? "fill-yellow-400 text-yellow-400"
+                                  : "text-muted-foreground"
+                              }
+                            />
+                          </Button>
+                        </div>
+                        <p className="text-xs text-muted-foreground truncate">
+                          {item.name}
+                        </p>
+                      </div>
+
+                      {/* Price and Change */}
+                      <div className="text-right">
+                        <div className="text-sm font-semibold font-mono text-foreground">
+                          {formatPrice(item.price)}
+                        </div>
+                        <div className={`text-xs font-mono ${changeData.colorClass}`}>
+                          {changeData.change}
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </Card>
+            );
+          })}
+        </div>
       </div>
 
       {/* Collapsed state bottom buttons */}
       {isCollapsed && (
-        <div className="p-2 border-t border-steel-800">
+        <div className="p-2 border-t border-border">
           <div className="flex flex-col space-y-2">
-            <button
-              className="p-2 hover:bg-steel-800 rounded-lg transition-colors flex justify-center"
-              aria-label="Settings"
-            >
-              <Settings size={18} />
-            </button>
-            <button
-              className="p-2 hover:bg-steel-800 rounded-lg transition-colors flex justify-center"
-              aria-label="Filter"
-            >
-              <Filter size={18} />
-            </button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-8 w-8">
+                  <Settings size={14} />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="right">
+                <p>Settings</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-8 w-8">
+                  <Eye size={14} />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="right">
+                <p>Watchlist</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
         </div>
       )}
