@@ -1,28 +1,7 @@
 "use client";
 
 import React, { useState, useCallback } from 'react';
-import { 
-  ChevronLeft, 
-  ChevronRight, 
-  Search, 
-  TrendingUp, 
-  BarChart3, 
-  PieChart, 
-  Activity,
-  DollarSign,
-  Globe,
-  Building2,
-  Fuel,
-  Landmark,
-  Star,
-  Settings,
-  Filter,
-  LucideIcon,
-  Zap,
-  Info,
-  Tv2,
-  Eye
-} from 'lucide-react';
+import { ChevronLeft, ChevronRight, Search, TrendingUp, BarChart3, PieChart, Activity, DollarSign, Globe, Building2, Fuel, Landmark, Star, Settings, Filter, DivideIcon as LucideIcon, Zap, Info, Tv2, Eye } from 'lucide-react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
