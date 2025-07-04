@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { 
   ChevronLeft, 
@@ -9,6 +11,7 @@ import {
   Send,
   Bot,
   User,
+<<<<<<< HEAD
   AlertTriangle,
   Trash2,
   Zap,
@@ -17,6 +20,19 @@ import {
   History
 } from 'lucide-react';
 import { Instrument } from '../types';
+=======
+  Target,
+  AlertTriangle,
+  Trash2,
+  Settings,
+  History,
+  Zap
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+>>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
 
 // Types
 interface Message {
@@ -41,7 +57,7 @@ interface SidebarRightProps {
   isVisible?: boolean;
 }
 
-type TabType = 'chat' | 'analysis' | 'suggestions';
+type TabType = 'chat' | 'analysis';
 
 const SidebarRight: React.FC<SidebarRightProps> = ({ 
   selectedInstrument, 
@@ -52,39 +68,48 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
   const [isResizing, setIsResizing] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<TabType>('chat');
   const resizeRef = useRef<HTMLDivElement>(null);
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      content: 'Hello! I\'m your AI trading assistant. How can I help you analyze the markets today?',
-      sender: 'ai',
-      timestamp: new Date(),
-      type: 'text'
-    }
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState<string>('');
   const [isTyping, setIsTyping] = useState<boolean>(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Sample analysis data
-  const [analyses] = useState<AnalysisItem[]>([
-    {
-      id: '1',
-      title: 'Technical Analysis',
-      content: 'NIFTY showing bullish momentum with RSI at 65. Strong support at 25,400.',
-      type: 'bullish',
-      confidence: 78,
-      timestamp: new Date(Date.now() - 1000 * 60 * 15)
-    },
-    {
-      id: '2',
-      title: 'Market Sentiment',
-      content: 'Banking sector showing mixed signals. Recommend cautious approach.',
-      type: 'neutral',
-      confidence: 65,
-      timestamp: new Date(Date.now() - 1000 * 60 * 30)
-    }
-  ]);
+  const [analyses, setAnalyses] = useState<AnalysisItem[]>([]);
+
+  // Initialize messages and analyses on client side to avoid hydration mismatch
+  useEffect(() => {
+    const now = new Date();
+    
+    setMessages([
+      {
+        id: '1',
+        content: 'Hello! I\'m your AI trading assistant. How can I help you analyze the markets today?',
+        sender: 'ai',
+        timestamp: now,
+        type: 'text'
+      }
+    ]);
+
+    setAnalyses([
+      {
+        id: '1',
+        title: 'Technical Analysis',
+        content: 'NIFTY showing bullish momentum with RSI at 65. Strong support at 25,400.',
+        type: 'bullish',
+        confidence: 78,
+        timestamp: new Date(now.getTime() - 1000 * 60 * 15)
+      },
+      {
+        id: '2',
+        title: 'Market Sentiment',
+        content: 'Banking sector showing mixed signals. Recommend cautious approach.',
+        type: 'neutral',
+        confidence: 65,
+        timestamp: new Date(now.getTime() - 1000 * 60 * 30)
+      }
+    ]);
+  }, []);
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -204,9 +229,15 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
 
   const getAnalysisColor = (type: string): string => {
     switch (type) {
+<<<<<<< HEAD
       case 'bullish': return 'text-[var(--positive)]';
       case 'bearish': return 'text-[var(--negative)]';
       default: return 'text-[var(--neutral)]';
+=======
+      case 'bullish': return 'text-green-500';
+      case 'bearish': return 'text-red-500';
+      default: return 'text-yellow-500';
+>>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
     }
   };
 
@@ -226,6 +257,7 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
       <div
         ref={resizeRef}
         onMouseDown={startResize}
+<<<<<<< HEAD
         className={`w-[1px] ${isCollapsed ? 'hidden': ''} bg-[var(--bg-primary)] hover:bg-[var(--accent)] cursor-ew-resize transition-colors ${
           isResizing ? 'bg-[var(--accent)]' : ''
         }`}
@@ -236,11 +268,16 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
         onMouseDown={startResize}
         className={`w-[1px] ${isCollapsed ? 'hidden': ''} bg-[var(--border)] hover:bg-[var(--accent)] cursor-ew-resize transition-colors ${
           isResizing ? 'bg-[var(--accent)]' : ''
+=======
+        className={`w-1 bg-border hover:bg-primary cursor-ew-resize transition-colors ${
+          isResizing ? 'bg-primary' : ''
+>>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
         }`}
         style={{ height: '100vh' }}
       />
       
       <aside
+<<<<<<< HEAD
         className="bg-[var(--bg-primary)] text-[var(--text-primary)] transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] border-l border-[var(--border)] flex flex-col overflow"
         style={{ width: `${width}px` }}
       >
@@ -260,10 +297,70 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
               <Brain size={14} className="text-white" />
             </div>
             <span className="font-semibold text-base">Vector AI</span>
+=======
+        className="bg-background text-foreground transition-all duration-300 ease-in-out border-l border-border flex flex-col overflow-hidden"
+        style={{ width: `${width}px` }}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between p-4 border-b border-border bg-muted/20">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleSidebar}
+            className="h-8 w-8"
+          >
+            {isCollapsed ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
+          </Button>
+          
+          {!isCollapsed && (
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary/80 rounded-lg flex items-center justify-center">
+                <Brain size={16} className="text-primary-foreground" />
+              </div>
+              <span className="font-bold text-lg font-quicksand">AI Assistant</span>
+            </div>
+          )}
+        </div>
+
+        {/* Tabs */}
+        {!isCollapsed ? (
+          <div className="px-4 py-2 border-b border-border">
+            <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as TabType)}>
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="chat" className="flex items-center space-x-2">
+                  <MessageCircle size={16} />
+                  <span>Chat</span>
+                </TabsTrigger>
+                <TabsTrigger value="analysis" className="flex items-center space-x-2">
+                  <BarChart3 size={16} />
+                  <span>Analysis</span>
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center border-b border-border py-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setActiveTab('chat')}
+              className={`h-8 w-8 mb-1 ${activeTab === 'chat' ? 'bg-accent text-accent-foreground' : ''}`}
+            >
+              <MessageCircle size={16} />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setActiveTab('analysis')}
+              className={`h-8 w-8 ${activeTab === 'analysis' ? 'bg-accent text-accent-foreground' : ''}`}
+            >
+              <BarChart3 size={16} />
+            </Button>
+>>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
           </div>
         )}
-      </div>
 
+<<<<<<< HEAD
       {/* Tabs */}
       {!isCollapsed ? (
         <div className="flex border-b border-[var(--border)]">
@@ -393,13 +490,52 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
                         <div className="w-1.5 h-1.5 bg-[var(--text-muted)] rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
                         <div className="w-1.5 h-1.5 bg-[var(--text-muted)] rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                       </div>
+=======
+        {/* Content */}
+        <div className="flex-1 flex flex-col overflow-hidden">
+          {activeTab === 'chat' && (
+            <>
+              {/* Chat Header */}
+              {!isCollapsed && (
+                <div className="p-4 border-b border-border bg-muted/10">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <span className="text-sm text-muted-foreground">AI Online</span>
+                    </div>
+                    <div className="flex space-x-1">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={clearChat}
+                            className="h-6 w-6"
+                          >
+                            <Trash2 size={12} />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Clear chat</p>
+                        </TooltipContent>
+                      </Tooltip>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-6 w-6">
+                            <Settings size={12} />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Settings</p>
+                        </TooltipContent>
+                      </Tooltip>
+>>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
                     </div>
                   </div>
                 </div>
               )}
-              <div ref={messagesEndRef} />
-            </div>
 
+<<<<<<< HEAD
             {/* Input */}
             {!isCollapsed && (
               <div className="p-4 border-t border-[var(--border)]">
@@ -510,10 +646,221 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
                 <button className="p-2 bg-[var(--bg-secondary)] hover:bg-[var(--bg-hover)] rounded-lg transition-colors">
                   <BarChart3 size={14} className="text-[var(--accent)]" />
                 </button>
+=======
+              {/* Messages */}
+              <div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-4">
+                {messages.map((message) => (
+                  <div
+                    key={message.id}
+                    className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                  >
+                    <div
+                      className={`max-w-[80%] ${
+                        isCollapsed ? 'max-w-[90%]' : ''
+                      } flex ${message.sender === 'user' ? 'flex-row-reverse' : 'flex-row'} items-start space-x-2`}
+                    >
+                      <div
+                        className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 ${
+                          message.sender === 'user' 
+                            ? 'bg-primary' 
+                            : 'bg-gradient-to-br from-primary/80 to-primary'
+                        }`}
+                      >
+                        {message.sender === 'user' ? (
+                          <User size={14} className="text-primary-foreground" />
+                        ) : (
+                          <Bot size={14} className="text-primary-foreground" />
+                        )}
+                      </div>
+                      <Card
+                        className={`${
+                          message.sender === 'user'
+                            ? 'bg-primary text-primary-foreground'
+                            : 'bg-muted'
+                        } border-0`}
+                      >
+                        <CardContent className="p-3">
+                          <p className="text-sm">{message.content}</p>
+                          <span className="text-xs opacity-60 mt-1 block">
+                            {formatTime(message.timestamp)}
+                          </span>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </div>
+                ))}
+                
+                {isTyping && (
+                  <div className="flex justify-start">
+                    <div className="flex items-start space-x-2">
+                      <div className="w-7 h-7 bg-gradient-to-br from-primary/80 to-primary rounded-full flex items-center justify-center">
+                        <Bot size={14} className="text-primary-foreground" />
+                      </div>
+                      <Card className="bg-muted border-0">
+                        <CardContent className="p-3">
+                          <div className="flex space-x-1">
+                            <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"></div>
+                            <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                            <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </div>
+                )}
+                <div ref={messagesEndRef} />
+>>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
               </div>
-            )}
+
+              {/* Input */}
+              {!isCollapsed && (
+                <div className="p-4 border-t border-border">
+                  <div className="flex space-x-2">
+                    <input
+                      ref={inputRef}
+                      type="text"
+                      value={inputMessage}
+                      onChange={(e) => setInputMessage(e.target.value)}
+                      onKeyPress={handleKeyPress}
+                      placeholder="Ask about market analysis..."
+                      className="flex-1 px-3 py-2 bg-muted border border-input rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all"
+                    />
+                    <Button
+                      onClick={handleSendMessage}
+                      disabled={!inputMessage.trim()}
+                      size="icon"
+                      className="h-10 w-10"
+                    >
+                      <Send size={16} />
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+
+          {activeTab === 'analysis' && (
+            <div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-4">
+              {!isCollapsed ? (
+                <>
+                  {/* Quick Actions */}
+                  <div className="grid grid-cols-2 gap-2 mb-4">
+                    <Button variant="outline" className="p-3 h-auto flex flex-col items-center space-y-1">
+                      <Zap size={16} className="text-yellow-500" />
+                      <span className="text-xs">Quick Analysis</span>
+                    </Button>
+                    <Button variant="outline" className="p-3 h-auto flex flex-col items-center space-y-1">
+                      <Target size={16} className="text-green-500" />
+                      <span className="text-xs">Price Targets</span>
+                    </Button>
+                  </div>
+
+                  {/* Current Analysis */}
+                  {selectedInstrument && (
+                    <Card className="bg-muted/30 border-border mb-4">
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-sm flex items-center">
+                          <BarChart3 size={16} className="mr-2" />
+                          {selectedInstrument.symbol} Analysis
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Signal:</span>
+                          <span className="text-green-500">Bullish</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Confidence:</span>
+                          <span className="text-primary">72%</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Support:</span>
+                          <span>{(selectedInstrument.price * 0.98).toFixed(2)}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Resistance:</span>
+                          <span>{(selectedInstrument.price * 1.02).toFixed(2)}</span>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {/* Analysis List */}
+                  {analyses.map((analysis) => (
+                    <Card key={analysis.id} className="bg-muted/30 border-border">
+                      <CardContent className="p-4">
+                        <div className="flex items-start justify-between mb-2">
+                          <div className="flex items-center space-x-2">
+                            <div className={getAnalysisColor(analysis.type)}>
+                              {getAnalysisIcon(analysis.type)}
+                            </div>
+                            <h4 className="font-medium text-sm">{analysis.title}</h4>
+                          </div>
+                          <span className="text-xs text-muted-foreground">
+                            {formatTime(analysis.timestamp)}
+                          </span>
+                        </div>
+                        <p className="text-sm text-muted-foreground mb-2">{analysis.content}</p>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-1">
+                            <span className="text-xs text-muted-foreground">Confidence:</span>
+                            <span className={`text-xs font-medium ${getAnalysisColor(analysis.type)}`}>
+                              {analysis.confidence}%
+                            </span>
+                          </div>
+                          <Button variant="link" size="sm" className="text-xs h-auto p-0">
+                            View Details
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </>
+              ) : (
+                <div className="flex flex-col items-center space-y-3">
+                  <Button variant="ghost" size="icon" className="h-10 w-10">
+                    <Zap size={16} className="text-yellow-500" />
+                  </Button>
+                  <Button variant="ghost" size="icon" className="h-10 w-10">
+                    <Target size={16} className="text-green-500" />
+                  </Button>
+                  <Button variant="ghost" size="icon" className="h-10 w-10">
+                    <BarChart3 size={16} className="text-primary" />
+                  </Button>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Collapsed state bottom buttons */}
+        {isCollapsed && (
+          <div className="p-2 border-t border-border">
+            <div className="flex flex-col space-y-2">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-8 w-8">
+                    <Settings size={14} />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="left">
+                  <p>Settings</p>
+                </TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-8 w-8">
+                    <History size={14} />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="left">
+                  <p>History</p>
+                </TooltipContent>
+              </Tooltip>
+            </div>
           </div>
         )}
+<<<<<<< HEAD
       </div>
       }
       {/* Collapsed state bottom buttons */}
@@ -530,6 +877,9 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
         </div>
       )}
     </aside>
+=======
+      </aside>
+>>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
     </div>
   );
 };
