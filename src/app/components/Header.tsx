@@ -25,7 +25,6 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 export default function Header() {
   return (
 <<<<<<< HEAD
-<<<<<<< HEAD
     <div
       className="relative font-roboto font-extralight text-white h-12 w-full flex items-center justify-center p-2 overflow-clip"
       // style={{ position: "relative" }} // 'relative' is already in className, no need for inline style unless overriding
@@ -41,8 +40,6 @@ export default function Header() {
       <p className="relative z-10">Pro Launching Soon - Prebook and get upto 60% off</p> {/* Text stays above the image */}
     </div>
 =======
-=======
->>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
     <header className="relative h-14 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       {/* Background gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5" />
@@ -170,9 +167,6 @@ export default function Header() {
         </div>
       </div>
     </header>
-<<<<<<< HEAD
->>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
-=======
 >>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
   );
 }

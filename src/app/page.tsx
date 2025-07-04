@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 "use client";
 
 import { JSX, useState } from "react";
@@ -39,11 +38,3 @@ export default function Home(): JSX.Element {
     </div>
   );
 }
-=======
-import { JSX } from 'react';
-import ClientPage from './components/ClientPage';
-
-export default function Home(): JSX.Element {
-  return <ClientPage />;
-}
->>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
