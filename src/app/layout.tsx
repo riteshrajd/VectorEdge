@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import SidebarLeft from "./components/SidebarLeft";
-import SidebarRight from "./components/SidebarRight";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,6 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <title>VectorEdge</title>
       <body className="">
         {children}
       </body>

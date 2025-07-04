@@ -128,25 +128,34 @@ export interface NewsItemExtended extends NewsItem {
 }
 
 // Sample Chart Data (OHLCV)
+
+// Deterministic data generation
 export const generateChartData = (symbol: string, days: number = 365): ChartData[] => {
   const data: ChartData[] = [];
-  const basePrice = symbol === 'NIFTY' ? 25500 : symbol === 'RELIANCE' ? 1500 : 1200;
-  let currentPrice = basePrice;
+  // Create a seed based on symbol for deterministic results
+  const seed = Array.from(symbol).reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  
+  // Simple deterministic PRNG
+  const random = (index: number) => {
+    const x = Math.sin(seed + index) * 10000;
+    return x - Math.floor(x);
+  };
+
+  let currentPrice = symbol === 'NIFTY' ? 25500 : 
+                    symbol === 'RELIANCE' ? 1500 : 
+                    symbol === 'BANKNIFTY' ? 57000 : 1200;
   
   for (let i = days; i >= 0; i--) {
-    const date = new Date();
-    date.setDate(date.getDate() - i);
-    
-    const volatility = 0.02; // 2% daily volatility
-    const change = (Math.random() - 0.5) * volatility * currentPrice;
+    const volatility = 0.02;
+    const change = (random(i) - 0.5) * volatility * currentPrice;
     const open = currentPrice;
     const close = currentPrice + change;
-    const high = Math.max(open, close) + Math.random() * 0.01 * currentPrice;
-    const low = Math.min(open, close) - Math.random() * 0.01 * currentPrice;
-    const volume = Math.floor(Math.random() * 10000000) + 1000000;
+    const high = Math.max(open, close) + random(i * 2) * 0.01 * currentPrice;
+    const low = Math.min(open, close) - random(i * 3) * 0.01 * currentPrice;
+    const volume = Math.floor(random(i * 4) * 10000000) + 1000000;
     
     data.push({
-      timestamp: date.toISOString(),
+      timestamp: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString(),
       open: Math.round(open * 100) / 100,
       high: Math.round(high * 100) / 100,
       low: Math.round(low * 100) / 100,

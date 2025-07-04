@@ -3,17 +3,10 @@
 import React, { useState } from 'react';
 import { 
   DollarSign,
-  Clock, 
-  Percent, 
+  Clock,
   Building2, 
-  TrendingUp, 
-  TrendingDown,
   Volume2,
-  Calendar,
   Maximize2,
-  BarChart3,
-  Activity,
-  Globe
 } from 'lucide-react';
 import { Instrument } from '../../types';
 import { generateChartData, ChartData } from '../../data/expandedTradingData';
@@ -22,7 +15,7 @@ interface OverviewTabProps {
   instrument: Instrument;
 }
 
-const OverviewTab: React.FC<OverviewTabProps> = ({ instrument }) => {
+const TechnicalTab: React.FC<OverviewTabProps> = ({ instrument }) => {
   const [chartPeriod, setChartPeriod] = useState('1D');
   const [chartData] = useState<ChartData[]>(() => generateChartData(instrument.symbol));
 
@@ -287,4 +280,4 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ instrument }) => {
   );
 };
 
-export default OverviewTab;
+export default TechnicalTab;

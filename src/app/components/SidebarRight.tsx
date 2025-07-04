@@ -9,20 +9,14 @@ import {
   Send,
   Bot,
   User,
-  Lightbulb,
-  Target,
   AlertTriangle,
-  CheckCircle,
-  Clock,
   Trash2,
-  RefreshCw,
   Zap,
-  X,
-  Plus,
+  Target,
   Settings,
-  History,
-  Bookmark
+  History
 } from 'lucide-react';
+import { Instrument } from '../types';
 
 // Types
 interface Message {
@@ -43,7 +37,7 @@ interface AnalysisItem {
 }
 
 interface SidebarRightProps {
-  selectedInstrument?: any;
+  selectedInstrument?: Instrument;
   isVisible?: boolean;
 }
 
@@ -54,7 +48,7 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
   isVisible = true 
 }) => {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
-  const [width, setWidth] = useState<number>(320);
+  const [width, setWidth] = useState<number>(300);
   const [isResizing, setIsResizing] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<TabType>('chat');
   const resizeRef = useRef<HTMLDivElement>(null);
@@ -106,9 +100,9 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
     if (!isResizing) return;
     
     const newWidth = window.innerWidth - e.clientX;
-    const minWidth = isCollapsed ? 64 : 280;
-    const maxWidth = 600;
-    
+    const minWidth = isCollapsed ? 60 : 260;
+    const maxWidth = 500;
+
     if (newWidth >= minWidth && newWidth <= maxWidth) {
       setWidth(newWidth);
     }
@@ -140,7 +134,7 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
 
   const toggleSidebar = useCallback((): void => {
     setIsCollapsed(!isCollapsed);
-    setWidth(isCollapsed ? 320 : 64);
+    setWidth(isCollapsed ? 300 : 60);
   }, [isCollapsed]);
 
   const handleSendMessage = useCallback(async (): Promise<void> => {
@@ -210,17 +204,17 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
 
   const getAnalysisColor = (type: string): string => {
     switch (type) {
-      case 'bullish': return 'text-green-400';
-      case 'bearish': return 'text-red-400';
-      default: return 'text-yellow-400';
+      case 'bullish': return 'text-[var(--positive)]';
+      case 'bearish': return 'text-[var(--negative)]';
+      default: return 'text-[var(--neutral)]';
     }
   };
 
   const getAnalysisIcon = (type: string) => {
     switch (type) {
-      case 'bullish': return <TrendingUp size={16} />;
-      case 'bearish': return <AlertTriangle size={16} />;
-      default: return <BarChart3 size={16} />;
+      case 'bullish': return <TrendingUp size={14} />;
+      case 'bearish': return <AlertTriangle size={14} />;
+      default: return <BarChart3 size={14} />;
     }
   };
 
@@ -232,105 +226,106 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
       <div
         ref={resizeRef}
         onMouseDown={startResize}
-        className={`w-1 bg-zinc-800 hover:bg-blue-500 cursor-ew-resize transition-colors ${
-          isResizing ? 'bg-blue-500' : ''
+        className={`w-[1px] bg-[var(--border)] hover:bg-[var(--accent)] cursor-ew-resize transition-colors ${
+          isResizing ? 'bg-[var(--accent)]' : ''
         }`}
         style={{ height: '100vh' }}
       />
       
       <aside
-        className="bg-zinc-950 text-white transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] border-l border-zinc-800 flex flex-col overflow"
+        className="bg-[var(--bg-primary)] text-[var(--text-primary)] transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] border-l border-[var(--border)] flex flex-col overflow"
         style={{ width: `${width}px` }}
       >
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-zinc-800">
+      <div className="flex items-center justify-between p-3 border-b border-[var(--border)]">
         <button
           onClick={toggleSidebar}
-          className="p-2 hover:bg-zinc-800 rounded-lg transition-colors"
+          className="p-1.5 hover:bg-[var(--bg-hover)] rounded-lg transition-colors"
           aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
-          {isCollapsed ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
+          {isCollapsed ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
         </button>
         
         {!isCollapsed && (
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-              <Brain size={16} className="text-white" />
+            <div className="w-7 h-7 bg-gradient-to-br from-[var(--accent-ai)] to-[var(--accent-secondary-ai)] rounded-lg flex items-center justify-center">
+              <Brain size={14} className="text-white" />
             </div>
-            <span className="font-bold text-lg">AI Assistant</span>
+            <span className="font-bold text-base">AI Assistant</span>
           </div>
         )}
       </div>
 
       {/* Tabs */}
       {!isCollapsed ? (
-        <div className="flex border-b border-zinc-800">
+        <div className="flex border-b border-[var(--border)]">
           <button
             onClick={() => setActiveTab('chat')}
-            className={`flex-1 py-3 px-4 text-sm font-medium transition-colors flex items-center justify-center space-x-2 ${
+            className={`flex-1 py-2 px-3 text-xs font-medium transition-colors flex items-center justify-center space-x-1 ${
               activeTab === 'chat'
-                ? "bg-zinc-800 text-white border-b-2 border-blue-500"
-                : "text-zinc-400 hover:text-white hover:bg-zinc-800"
+                ? "bg-[var(--bg-secondary)] text-[var(--text-primary)] border-b-2 border-[var(--accent)]"
+                : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-hover)]"
             }`}
           >
-            <MessageCircle size={16} />
+            <MessageCircle size={14} />
             <span>Chat</span>
           </button>
           <button
             onClick={() => setActiveTab('analysis')}
-            className={`flex-1 py-3 px-4 text-sm font-medium transition-colors flex items-center justify-center space-x-2 ${
+            className={`flex-1 py-2 px-3 text-xs font-medium transition-colors flex items-center justify-center space-x-1 ${
               activeTab === 'analysis'
-                ? "bg-zinc-800 text-white border-b-2 border-blue-500"
-                : "text-zinc-400 hover:text-white hover:bg-zinc-800"
+                ? "bg-[var(--bg-secondary)] text-[var(--text-primary)] border-b-2 border-[var(--accent)]"
+                : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-hover)]"
             }`}
           >
-            <BarChart3 size={16} />
+            <BarChart3 size={14} />
             <span>Analysis</span>
           </button>
         </div>
       ) : (
-        <div className="flex flex-col items-center border-b border-zinc-800 py-2">
+        <div className="flex flex-col items-center border-b border-[var(--border)] py-1.5">
           <button
             onClick={() => setActiveTab('chat')}
-            className={`p-2 rounded-lg transition-colors mb-1 ${
-              activeTab === 'chat' ? 'bg-zinc-800 text-blue-400' : 'hover:bg-zinc-800'
+            className={`p-1.5 rounded-lg transition-colors mb-1 ${
+              activeTab === 'chat' ? 'bg-[var(--bg-secondary)] text-[var(--accent-ai)]' : 'hover:bg-[var(--bg-hover)]'
             }`}
           >
-            <MessageCircle size={16} />
+            <MessageCircle size={14} />
           </button>
           <button
             onClick={() => setActiveTab('analysis')}
-            className={`p-2 rounded-lg transition-colors ${
-              activeTab === 'analysis' ? 'bg-zinc-800 text-blue-400' : 'hover:bg-zinc-800'
+            className={`p-1.5 rounded-lg transition-colors ${
+              activeTab === 'analysis' ? 'bg-[var(--bg-secondary)] text-[var(--accent-ai)]' : 'hover:bg-[var(--bg-hover)]'
             }`}
           >
-            <BarChart3 size={16} />
+            <BarChart3 size={14} />
           </button>
         </div>
       )}
 
       {/* Content */}
+      {isCollapsed ? (<div className='flex-1'></div>) : 
       <div className="flex-1 flex flex-col overflow-hidden">
         {activeTab === 'chat' && (
           <>
             {/* Chat Header */}
             {!isCollapsed && (
-              <div className="p-4 border-b border-zinc-800 bg-zinc-900/50">
+              <div className="p-3 border-b border-[var(--border)] bg-[var(--bg-secondary)]">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                    <span className="text-sm text-zinc-300">AI Online</span>
+                  <div className="flex items-center space-x-1.5">
+                    <div className="w-1.5 h-1.5 bg-[var(--positive)] rounded-full"></div>
+                    <span className="text-xs text-[var(--text-muted)]">AI Online</span>
                   </div>
                   <div className="flex space-x-1">
                     <button
                       onClick={clearChat}
-                      className="p-1 hover:bg-zinc-700 rounded transition-colors"
+                      className="p-1 hover:bg-[var(--bg-hover)] rounded transition-colors"
                       title="Clear chat"
                     >
-                      <Trash2 size={14} />
+                      <Trash2 size={12} />
                     </button>
-                    <button className="p-1 hover:bg-zinc-700 rounded transition-colors" title="Settings">
-                      <Settings size={14} />
+                    <button className="p-1 hover:bg-[var(--bg-hover)] rounded transition-colors" title="Settings">
+                      <Settings size={12} />
                     </button>
                   </div>
                 </div>
@@ -338,39 +333,39 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
             )}
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            <div className="flex-1 overflow-y-auto p-3 space-y-3">
               {messages.map((message) => (
                 <div
                   key={message.id}
                   className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
-                    className={`max-w-[80%] ${
-                      isCollapsed ? 'max-w-[90%]' : ''
-                    } flex ${message.sender === 'user' ? 'flex-row-reverse' : 'flex-row'} items-start space-x-2`}
+                    className={`max-w-[80%] flex ${
+                      message.sender === 'user' ? 'flex-row-reverse' : 'flex-row'
+                    } items-start space-x-2`}
                   >
                     <div
-                      className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 ${
+                      className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${
                         message.sender === 'user' 
-                          ? 'bg-blue-600' 
-                          : 'bg-gradient-to-br from-purple-500 to-blue-600'
+                          ? 'bg-[var(--user-bubble)]' 
+                          : 'bg-gradient-to-br from-[var(--accent-ai)] to-[var(--accent-secondary-ai)]'
                       }`}
                     >
                       {message.sender === 'user' ? (
-                        <User size={14} />
+                        <User size={12} />
                       ) : (
-                        <Bot size={14} />
+                        <Bot size={12} />
                       )}
                     </div>
                     <div
-                      className={`rounded-lg p-3 ${
+                      className={`rounded-lg p-2 text-sm ${
                         message.sender === 'user'
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-zinc-800 text-zinc-100'
+                          ? 'bg-[var(--user-bubble)] text-[var(--text-primary)]'
+                          : 'bg-[var(--ai-bubble)] text-[var(--text-primary)]'
                       }`}
                     >
-                      <p className="text-sm">{message.content}</p>
-                      <span className="text-xs opacity-60 mt-1 block">
+                      <p>{message.content}</p>
+                      <span className="text-xs opacity-70 mt-0.5 block">
                         {formatTime(message.timestamp)}
                       </span>
                     </div>
@@ -381,14 +376,14 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
               {isTyping && (
                 <div className="flex justify-start">
                   <div className="flex items-start space-x-2">
-                    <div className="w-7 h-7 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center">
-                      <Bot size={14} />
+                    <div className="w-6 h-6 bg-gradient-to-br from-[var(--accent)] to-[var(--accent-secondary-ai)] rounded-full flex items-center justify-center">
+                      <Bot size={12} />
                     </div>
-                    <div className="bg-zinc-800 rounded-lg p-3">
+                    <div className="bg-[var(--ai-bubble)] rounded-lg p-2">
                       <div className="flex space-x-1">
-                        <div className="w-2 h-2 bg-zinc-400 rounded-full animate-bounce"></div>
-                        <div className="w-2 h-2 bg-zinc-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                        <div className="w-2 h-2 bg-zinc-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                        <div className="w-1.5 h-1.5 bg-[var(--text-muted)] rounded-full animate-bounce"></div>
+                        <div className="w-1.5 h-1.5 bg-[var(--text-muted)] rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                        <div className="w-1.5 h-1.5 bg-[var(--text-muted)] rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                       </div>
                     </div>
                   </div>
@@ -399,23 +394,23 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
 
             {/* Input */}
             {!isCollapsed && (
-              <div className="p-4 border-t border-zinc-800">
-                <div className="flex space-x-2">
+              <div className="p-3 border-t border-[var(--border)]">
+                <div className="flex space-x-1.5">
                   <input
                     ref={inputRef}
                     type="text"
                     value={inputMessage}
                     onChange={(e) => setInputMessage(e.target.value)}
-                    onKeyPress={handleKeyPress}
+                    onKeyDown={handleKeyPress}
                     placeholder="Ask about market analysis..."
-                    className="flex-1 px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-sm focus:outline-none focus:border-blue-500 transition-colors"
+                    className="flex-1 px-2.5 py-1.5 bg-[var(--bg-secondary)] border border-[var(--border-secondary)] rounded-lg text-xs focus:outline-none focus:border-[var(--accent)] transition-colors"
                   />
                   <button
                     onClick={handleSendMessage}
                     disabled={!inputMessage.trim()}
-                    className="px-3 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-zinc-700 disabled:cursor-not-allowed rounded-lg transition-colors flex items-center justify-center"
+                    className="px-2.5 py-1.5 bg-[var(--accent)] hover:bg-[var(--accent-hover)] disabled:bg-[var(--disabled)] disabled:cursor-not-allowed rounded-lg transition-colors flex items-center justify-center"
                   >
-                    <Send size={16} />
+                    <Send size={14} />
                   </button>
                 </div>
               </div>
@@ -424,36 +419,36 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
         )}
 
         {activeTab === 'analysis' && (
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          <div className="flex-1 overflow-y-auto p-3 space-y-3">
             {!isCollapsed ? (
               <>
                 {/* Quick Actions */}
-                <div className="grid grid-cols-2 gap-2 mb-4">
-                  <button className="p-3 bg-zinc-800 hover:bg-zinc-700 rounded-lg transition-colors flex flex-col items-center space-y-1">
-                    <Zap size={16} className="text-yellow-400" />
-                    <span className="text-xs">Quick Analysis</span>
+                <div className="grid grid-cols-2 gap-1.5 mb-3">
+                  <button className="p-2 bg-[var(--bg-secondary)] hover:bg-[var(--bg-hover)] rounded-lg transition-colors flex flex-col items-center space-y-0.5">
+                    <Zap size={14} className="text-[var(--neutral)]" />
+                    <span className="text-2xs">Quick Analysis</span>
                   </button>
-                  <button className="p-3 bg-zinc-800 hover:bg-zinc-700 rounded-lg transition-colors flex flex-col items-center space-y-1">
-                    <Target size={16} className="text-green-400" />
-                    <span className="text-xs">Price Targets</span>
+                  <button className="p-2 bg-[var(--bg-secondary)] hover:bg-[var(--bg-hover)] rounded-lg transition-colors flex flex-col items-center space-y-0.5">
+                    <Target size={14} className="text-[var(--positive)]" />
+                    <span className="text-2xs">Price Targets</span>
                   </button>
                 </div>
 
                 {/* Current Analysis */}
                 {selectedInstrument && (
-                  <div className="bg-zinc-800 rounded-lg p-4 mb-4">
-                    <h3 className="font-medium text-sm mb-2 flex items-center">
-                      <BarChart3 size={16} className="mr-2" />
+                  <div className="bg-[var(--bg-secondary)] rounded-lg p-3 mb-3">
+                    <h3 className="font-medium text-xs mb-1.5 flex items-center">
+                      <BarChart3 size={14} className="mr-1.5" />
                       {selectedInstrument.symbol} Analysis
                     </h3>
-                    <div className="space-y-2 text-sm text-zinc-300">
+                    <div className="space-y-1.5 text-xs text-[var(--text-muted)]">
                       <div className="flex justify-between">
                         <span>Signal:</span>
-                        <span className="text-green-400">Bullish</span>
+                        <span className="text-[var(--positive)]">Bullish</span>
                       </div>
                       <div className="flex justify-between">
                         <span>Confidence:</span>
-                        <span className="text-blue-400">72%</span>
+                        <span className="text-[var(--accent)]">72%</span>
                       </div>
                       <div className="flex justify-between">
                         <span>Support:</span>
@@ -469,27 +464,27 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
 
                 {/* Analysis List */}
                 {analyses.map((analysis) => (
-                  <div key={analysis.id} className="bg-zinc-800 rounded-lg p-4">
-                    <div className="flex items-start justify-between mb-2">
-                      <div className="flex items-center space-x-2">
+                  <div key={analysis.id} className="bg-[var(--bg-secondary)] rounded-lg p-3">
+                    <div className="flex items-start justify-between mb-1.5">
+                      <div className="flex items-center space-x-1.5">
                         <div className={getAnalysisColor(analysis.type)}>
                           {getAnalysisIcon(analysis.type)}
                         </div>
-                        <h4 className="font-medium text-sm">{analysis.title}</h4>
+                        <h4 className="font-medium text-xs">{analysis.title}</h4>
                       </div>
-                      <span className="text-xs text-zinc-400">
+                      <span className="text-2xs text-[var(--text-muted)]">
                         {formatTime(analysis.timestamp)}
                       </span>
                     </div>
-                    <p className="text-sm text-zinc-300 mb-2">{analysis.content}</p>
+                    <p className="text-xs text-[var(--text-primary)] mb-1.5">{analysis.content}</p>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-1">
-                        <span className="text-xs text-zinc-400">Confidence:</span>
-                        <span className={`text-xs font-medium ${getAnalysisColor(analysis.type)}`}>
+                        <span className="text-2xs text-[var(--text-muted)]">Confidence:</span>
+                        <span className={`text-2xs font-medium ${getAnalysisColor(analysis.type)}`}>
                           {analysis.confidence}%
                         </span>
                       </div>
-                      <button className="text-xs text-blue-400 hover:text-blue-300">
+                      <button className="text-2xs text-[var(--accent)] hover:text-[var(--accent-hover)]">
                         View Details
                       </button>
                     </div>
@@ -497,31 +492,31 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
                 ))}
               </>
             ) : (
-              <div className="flex flex-col items-center space-y-3">
-                <button className="p-3 bg-zinc-800 hover:bg-zinc-700 rounded-lg transition-colors">
-                  <Zap size={16} className="text-yellow-400" />
+              <div className="flex flex-col items-center space-y-2">
+                <button className="p-2 bg-[var(--bg-secondary)] hover:bg-[var(--bg-hover)] rounded-lg transition-colors">
+                  <Zap size={14} className="text-[var(--neutral)]" />
                 </button>
-                <button className="p-3 bg-zinc-800 hover:bg-zinc-700 rounded-lg transition-colors">
-                  <Target size={16} className="text-green-400" />
+                <button className="p-2 bg-[var(--bg-secondary)] hover:bg-[var(--bg-hover)] rounded-lg transition-colors">
+                  <Target size={14} className="text-[var(--positive)]" />
                 </button>
-                <button className="p-3 bg-zinc-800 hover:bg-zinc-700 rounded-lg transition-colors">
-                  <BarChart3 size={16} className="text-blue-400" />
+                <button className="p-2 bg-[var(--bg-secondary)] hover:bg-[var(--bg-hover)] rounded-lg transition-colors">
+                  <BarChart3 size={14} className="text-[var(--accent)]" />
                 </button>
               </div>
             )}
           </div>
         )}
       </div>
-
+      }
       {/* Collapsed state bottom buttons */}
       {isCollapsed && (
-        <div className="p-2 border-t border-zinc-800">
-          <div className="flex flex-col space-y-2">
-            <button className="p-2 hover:bg-zinc-800 rounded-lg transition-colors flex justify-center">
-              <Settings size={16} />
+        <div className="p-1.5 border-t border-[var(--border)]">
+          <div className="flex flex-col space-y-1.5">
+            <button className="p-1.5 hover:bg-[var(--bg-hover)] rounded-lg transition-colors flex justify-center">
+              <Settings size={14} />
             </button>
-            <button className="p-2 hover:bg-zinc-800 rounded-lg transition-colors flex justify-center">
-              <History size={16} />
+            <button className="p-1.5 hover:bg-[var(--bg-hover)] rounded-lg transition-colors flex justify-center">
+              <History size={14} />
             </button>
           </div>
         </div>

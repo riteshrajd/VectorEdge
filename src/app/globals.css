@@ -148,3 +148,43 @@
 @theme {
   --font-roboto: Roboto, sans-serif;
 }
+
+:root {
+  /* Backgrounds */
+  --bg-primary: hsl(0, 0%, 15%);       /* Primary background color */
+  --bg-secondary: hsl(0, 0%, 20%);     /* Secondary background color */
+  --bg-tertiary: hsl(0, 0%, 10%);      /* Tertiary background */
+  --bg-hover: hsl(0, 0%, 25%);         /* Hover state background */
+  --bg-quaternary: hsl(0, 0%, 5%);     /* Additional background level */
+  
+  /* Text */
+  --text-primary: #ffffff;              /* Primary text color */
+  --text-secondary: hsl(0, 0%, 70%);    /* Secondary text color */
+  --text-muted: hsl(0, 0%, 50%);       /* Muted text color */
+  --text-accent: hsl(0, 0%, 80%);      /* Accent text */
+  
+  /* Borders */
+  --border: hsl(0, 0%, 20%);            /* Primary border color */
+  --border-secondary: hsl(0, 0%, 15%);  /* Secondary border color */
+  
+  /* Accents & Status */
+  --accent: hsl(0, 0%, 50%);            /* Primary accent color */
+  --accent-ai: hsl(181, 50%, 55%);            /* Primary accent color */
+  --accent-secondary-ai: hsl(201, 55%, 45%);  /* Secondary accent */
+  --accent-secondary: hsl(0, 0%, 40%);  /* Secondary accent */
+  --accent-hover: hsl(0, 0%, 45%);      /* Accent hover state */
+  --positive: hsl(120, 40%, 50%);       /* Positive state (green) */
+  --negative: hsl(0, 60%, 50%);         /* Negative state (red) */
+  --neutral: hsl(60, 70%, 50%);         /* Neutral state (yellow) */
+  --disabled: hsl(0, 0%, 30%);          /* Disabled state */
+  
+  /* UI Elements */
+  --user-bubble: hsl(0, 0%, 25%);       /* User chat bubble */
+  --ai-bubble: hsl(0, 0%, 20%);         /* AI chat bubble */
+  --star-fill: hsl(60, 70%, 50%);       /* Favorite star color */
+  
+  /* Instrument colors */
+  --instrument-1: hsl(240, 20%, 70%);
+  --instrument-2: hsl(40, 20%, 60%);
+  --instrument-3: hsl(160, 20%, 40%);
+}

@@ -1,0 +1,184 @@
+{
+  "free_data_sources": {
+    "price_data": {
+      "yahoo_finance": {
+        "url": "https://query1.finance.yahoo.com/v8/finance/chart/TSLA",
+        "sample_response": {
+          "chart": {
+            "result": [
+              {
+                "meta": {
+                  "currency": "USD",
+                  "symbol": "TSLA",
+                  "regularMarketPrice": 248.50,
+                  "previousClose": 251.52,
+                  "regularMarketDayHigh": 253.18,
+                  "regularMarketDayLow": 246.22,
+                  "regularMarketVolume": 45234567,
+                  "marketCap": 789456123456,
+                  "fiftyTwoWeekHigh": 299.29,
+                  "fiftyTwoWeekLow": 138.80
+                },
+                "timestamp": [1704067200, 1704070800],
+                "indicators": {
+                  "quote": [
+                    {
+                      "open": [250.08, 248.42],
+                      "high": [253.18, 249.85],
+                      "low": [246.22, 245.67],
+                      "close": [248.50, 247.93],
+                      "volume": [45234567, 41234567]
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      },
+      "alpha_vantage": {
+        "url": "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=TSLA&apikey=demo",
+        "free_limit": "25 calls/day",
+        "sample_response": {
+          "Global Quote": {
+            "01. symbol": "TSLA",
+            "02. open": "248.42",
+            "03. high": "253.18",
+            "04. low": "246.22",
+            "05. price": "248.50",
+            "06. volume": "45234567",
+            "07. latest trading day": "2024-01-01",
+            "08. previous close": "251.52",
+            "09. change": "-3.02",
+            "10. change percent": "-1.20%"
+          }
+        }
+      }
+    },
+    "company_info": {
+      "finnhub": {
+        "url": "https://finnhub.io/api/v1/stock/profile2?symbol=TSLA&token=demo",
+        "free_limit": "60 calls/minute",
+        "sample_response": {
+          "country": "US",
+          "currency": "USD",
+          "exchange": "NASDAQ",
+          "ipo": "2010-06-29",
+          "marketCapitalization": 789456.123,
+          "name": "Tesla Inc",
+          "phone": "15125169000",
+          "shareOutstanding": 3178.92,
+          "ticker": "TSLA",
+          "weburl": "https://www.tesla.com",
+          "logo": "https://static2.finnhub.io/file/publicdatany/finnhubimage/stock_logo/TSLA.png",
+          "finnhubIndustry": "Automobiles"
+        }
+      }
+    },
+    "news": {
+      "finnhub_news": {
+        "url": "https://finnhub.io/api/v1/company-news?symbol=TSLA&from=2024-01-01&to=2024-01-02&token=demo",
+        "sample_response": [
+          {
+            "category": "general",
+            "datetime": 1704067200,
+            "headline": "Tesla's Q4 Deliveries Beat Expectations",
+            "id": 123456,
+            "image": "https://example.com/image.jpg",
+            "related": "TSLA",
+            "source": "Reuters",
+            "summary": "Tesla delivered more vehicles than expected in Q4 2024...",
+            "url": "https://reuters.com/article/tesla-deliveries"
+          }
+        ]
+      },
+      "rss_feeds": {
+        "google_news": "https://news.google.com/rss/search?q=Tesla+stock&hl=en-US&gl=US&ceid=US:en",
+        "yahoo_finance": "https://feeds.finance.yahoo.com/rss/2.0/headline?s=TSLA&region=US&lang=en-US"
+      }
+    },
+    "technical_indicators": {
+      "alpha_vantage_sma": {
+        "url": "https://www.alphavantage.co/query?function=SMA&symbol=TSLA&interval=daily&time_period=20&series_type=close&apikey=demo",
+        "sample_response": {
+          "Meta Data": {
+            "1: Symbol": "TSLA",
+            "2: Indicator": "Simple Moving Average (SMA)",
+            "3: Last Refreshed": "2024-01-01",
+            "4: Interval": "daily",
+            "5: Time Period": 20
+          },
+          "Technical Analysis: SMA": {
+            "2024-01-01": {
+              "SMA": "245.67"
+            }
+          }
+        }
+      }
+    },
+    "sentiment_analysis": {
+      "reddit_api": {
+        "url": "https://www.reddit.com/r/stocks/search.json?q=Tesla&limit=10",
+        "sample_response": {
+          "data": {
+            "children": [
+              {
+                "data": {
+                  "title": "Tesla stock discussion",
+                  "selftext": "What do you think about Tesla's recent performance?",
+                  "score": 156,
+                  "num_comments": 43,
+                  "created_utc": 1704067200
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "implementation_example": {
+    "reliance_data": {
+      "symbol": "RELIANCE.NS",
+      "price": 2456.75,
+      "change": "+12.50",
+      "change_percent": "+0.51%",
+      "volume": 2345678,
+      "market_cap": 1654321000000,
+      "pe_ratio": 24.5,
+      "day_high": 2467.80,
+      "day_low": 2445.20,
+      "52_week_high": 2968.00,
+      "52_week_low": 2220.00,
+      "news": [
+        {
+          "headline": "Reliance Industries Q3 Results Beat Estimates",
+          "source": "Economic Times",
+          "time": "2 hours ago",
+          "sentiment": "Positive"
+        }
+      ],
+      "basic_signals": {
+        "sma_20": 2423.45,
+        "rsi": 67.2,
+        "trend": "Bullish",
+        "support": 2420.00,
+        "resistance": 2480.00
+      }
+    }
+  },
+  "api_limits": {
+    "yahoo_finance": "No official limit (unofficial APIs)",
+    "alpha_vantage": "25 calls/day (free)",
+    "finnhub": "60 calls/minute (free)",
+    "reddit": "No API key needed for public data",
+    "google_news_rss": "No limit"
+  },
+  "quick_setup": {
+    "step_1": "Get Alpha Vantage free API key",
+    "step_2": "Get Finnhub free API key", 
+    "step_3": "Use Yahoo Finance unofficial API (no key needed)",
+    "step_4": "Parse RSS feeds for news",
+    "step_5": "Calculate basic sentiment from news headlines"
+  }
+}

@@ -13,17 +13,12 @@ import {
   Fuel,
   Landmark,
   Star,
-  Plus,
   Settings,
   Filter,
   LucideIcon,
   Zap,
-  FuelIcon,
-  PiIcon,
-  TvIcon,
-  Tv2Icon,
-  InfoIcon,
-  Cog
+  Info,
+  Tv2
 } from 'lucide-react';
 
 // Import types and data
@@ -40,7 +35,7 @@ import Image from 'next/image';
 type IconMap = Record<string, LucideIcon>;
 
 const SidebarLeft: React.FC<SidebarLeftProps> = ({ onItemSelect }) => {
-  const sub : string = 'Pro';
+  const sub : string = 'Lite';
 
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -101,7 +96,7 @@ const SidebarLeft: React.FC<SidebarLeftProps> = ({ onItemSelect }) => {
     return {
       change: isPositive ? `+${change.toFixed(2)}` : change.toFixed(2),
       changePercent: isPositive ? `+${changePercent.toFixed(2)}%` : `${changePercent.toFixed(2)}%`,
-      colorClass: isPositive ? 'text-green-400' : 'text-red-400'
+      colorClass: isPositive ? 'text-[var(--positive)]' : 'text-[var(--negative)]'
     };
   }, []);
 
@@ -125,27 +120,27 @@ const SidebarLeft: React.FC<SidebarLeftProps> = ({ onItemSelect }) => {
   return (
     <aside
       className={`${
-        isCollapsed ? "w-16" : "w-72"
-      } bg-steel-900 text-white transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] border-r border-steel-800 flex flex-col overflow-hidden`}
+        isCollapsed ? "w-14" : "w-60"
+      } bg-[var(--bg-primary)] text-[var(--text-primary)] transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] border-r border-[var(--border)] flex flex-col overflow-clip`}
     >
       {/* Header with toggle */}
-      <div className="flex items-center justify-between p-4 border-b border-steel-800">
+      <div className="flex items-center justify-between p-3 border-b border-[var(--border)]">
         {!isCollapsed && (
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center">
+            <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-[var(--bg-secondary)]">
               <Image
                 src={"/assets/images/logo.png"}
                 alt="VectorEdge Pro Logo"
-                width={20}
-                height={20}
-                className="block shrink-0" // Ensures image is always visible
+                width={16}
+                height={16}
+                className="block shrink-0"
               />
             </div>
-            <span className="font-bold text-lg shrink-0">VectorEdge 
+            <span className="font-bold text-base shrink-0">VectorEdge 
               <span className=
-                {`${sub==='Lite' ? 'text-white/80 rounded-xl font-quicksand text-md font-light px-1' : ''}
-                ${sub==='Plus' ? 'border-1 border-zinc-600 ml-1 text-white rounded-xl font-roboto font-light px-1' : ''}
-                ${sub==='Pro' ? 'border-1 border-white text-white rounded-lg ml-1 pb-0.5 px-1' : ''}`}>
+                {`${sub==='Lite' ? 'text-[var(--text-muted)] rounded-xl font-quicksand text-sm font-light px-1' : ''}
+                ${sub==='Plus' ? 'border border-[var(--border)] ml-1 text-[var(--text-primary)] rounded-xl font-roboto font-light px-1' : ''}
+                ${sub==='Pro' ? 'border border-[var(--accent)] text-[var(--accent)] rounded-lg ml-1 pb-0.5 px-1' : ''}`}>
                 {sub}
               </span>
             </span>
@@ -153,112 +148,68 @@ const SidebarLeft: React.FC<SidebarLeftProps> = ({ onItemSelect }) => {
         )}
         <button
           onClick={toggleSidebar}
-          className="p-2 hover:bg-steel-800 rounded-lg transition-colors"
+          className="p-1.5 hover:bg-[var(--bg-hover)] rounded-lg transition-colors"
           aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
-          {isCollapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+          {isCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
         </button>
       </div>
 
       {/* Search Bar */}
-      <div className="p-4 border-b border-steel-800">
+      <div className="p-3 border-b border-[var(--border)]">
         {isCollapsed ? (
           <button
-            className="w-full p-2 hover:bg-steel-800 rounded-lg transition-colors flex justify-center"
+            className="w-full p-1.5 hover:bg-[var(--bg-hover)] rounded-lg transition-colors flex justify-center"
             aria-label="Search"
           >
-            <Search size={18} />
+            <Search size={16} />
           </button>
         ) : (
           <div className="relative">
             <Search
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-zinc-400"
-              size={16}
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[var(--text-muted)]"
+              size={14}
             />
             <input
               type="text"
               placeholder="Search instruments..."
               value={searchTerm}
               onChange={handleSearchChange}
-              className="w-full pl-10 pr-4 py-2 bg-steel-800 border border-zinc-700 rounded-lg text-sm focus:outline-none focus:border-blue-500 transition-colors"
+              className="w-full pl-9 pr-3 py-2 bg-[var(--bg-secondary)] border border-[var(--border-secondary)] rounded-lg text-sm focus:outline-none focus:border-[var(--accent)] focus:border-opacity-50 transition-colors"
             />
           </div>
         )}
       </div>
 
-      {/* Action Buttons */}
-      {
-        <div className="p-4 border-b border-steel-800">
-          <div className="flex space-x-2 justify-evenly">
-            <button
-              className="p-2 hover:bg-steel-800 rounded-lg transition-colors"
-              aria-label="Filter"
-            >
-              <Settings size={16} />
-            </button>
-            <button
-              className="p-2 hover:bg-steel-800 rounded-lg transition-colors"
-              aria-label="Filter"
-            >
-              <InfoIcon size={16} />
-            </button>
-            <button
-              className="p-2 hover:bg-steel-800 rounded-lg transition-colors"
-              aria-label="Filter"
-            >
-              <FuelIcon size={16} />
-            </button>
-            <button
-              className="p-2 hover:bg-steel-800 rounded-lg transition-colors"
-              aria-label="Filter"
-            >
-              <Tv2Icon size={16} />
-            </button>
-            <button
-              className="p-2 hover:bg-steel-800 rounded-lg transition-colors"
-              aria-label="Filter"
-            >
-              <Zap size={16} />
-            </button>
-            <button
-              className="p-2 hover:bg-steel-800 rounded-lg transition-colors"
-              aria-label="Settings"
-            >
-              <Filter size={16} />
-            </button>
-          </div>
-        </div>
-      }
-
       {/* Tabs */}
       {!isCollapsed ? (
-        <div className="flex border-b border-steel-800">
+        <div className="flex border-b border-[var(--border)]">
           <button
             onClick={() => handleTabChange("stocks")}
-            className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${
+            className={`flex-1 py-2 px-3 text-sm font-medium transition-colors ${
               activeTab === "stocks"
-                ? "bg-steel-800 text-white border-b-2 border-white"
-                : "text-zinc-400 hover:text-white hover:bg-steel-800"
+                ? "bg-[var(--bg-secondary)] text-[var(--text-primary)] border-b-2 border-[var(--accent)]"
+                : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-hover)]"
             }`}
           >
             Stocks
           </button>
           <button
             onClick={() => handleTabChange("futures")}
-            className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${
+            className={`flex-1 py-2 px-3 text-sm font-medium transition-colors ${
               activeTab === "futures"
-                ? "bg-steel-800 text-white border-b-2 border-white"
-                : "text-zinc-400 hover:text-white hover:bg-steel-800"
+                ? "bg-[var(--bg-secondary)] text-[var(--text-primary)] border-b-2 border-[var(--accent)]"
+                : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-hover)]"
             }`}
           >
             Futures
           </button>
         </div>
       ) : (
-        <div className="flex justify-center border-b border-steel-800 min-h-12.5">
+        <div className="flex justify-center border-b border-[var(--border)] min-h-10">
           <button
-            className="p-2 hover:bg-steel-800 rounded-lg transition-colors"
-            aria-label="Settings"
+            className="p-1.5 my-4 hover:bg-[var(--bg-hover)] rounded-lg transition-colors"
+            aria-label="Filter"
           >
             <Filter size={16} />
           </button>
@@ -276,16 +227,16 @@ const SidebarLeft: React.FC<SidebarLeftProps> = ({ onItemSelect }) => {
             <div
               key={item.symbol}
               onClick={() => handleItemClick(item)}
-              className="flex items-center p-3 hover:bg-steel-800 cursor-pointer border-b border-steel-800/50 transition-colors group"
+              className={`flex items-center p-2 ${!isCollapsed ? 'pr-3':''} hover:bg-[var(--bg-hover)] cursor-pointer border-b border-[var(--border-secondary)] transition-colors group`}
             >
               {/* Icon */}
               <div
                 className={`${
-                  isCollapsed ? "mx-auto" : "mr-3"
-                } w-8 h-8 rounded-full flex items-center justify-center`}
+                  isCollapsed ? "mx-auto" : "mr-2"
+                } w-7 h-7 rounded-full flex items-center justify-center`}
                 style={{ backgroundColor: item.color }}
               >
-                <IconComponent size={16} className="text-white" />
+                <IconComponent size={16} className="text-[var(--text-primary)]" />
               </div>
 
               {!isCollapsed && (
@@ -309,19 +260,19 @@ const SidebarLeft: React.FC<SidebarLeftProps> = ({ onItemSelect }) => {
                           size={14}
                           className={
                             isFavorite
-                              ? "fill-yellow-400 text-yellow-400"
-                              : "text-zinc-400"
+                              ? "fill-[var(--star-fill)] text-[var(--star-fill)]"
+                              : "text-[var(--text-muted)]"
                           }
                         />
                       </button>
                     </div>
-                    <p className="text-xs text-zinc-400 truncate">
+                    <p className="text-xs text-[var(--text-muted)] truncate leading-tight">
                       {item.name}
                     </p>
                   </div>
 
                   {/* Price and Change */}
-                  <div className="text-right ml-2">
+                  <div className="text-right ml-1">
                     <div className="text-sm font-medium font-mono">
                       {formatPrice(item.price)}
                     </div>
@@ -339,24 +290,22 @@ const SidebarLeft: React.FC<SidebarLeftProps> = ({ onItemSelect }) => {
       </div>
 
       {/* Collapsed state bottom buttons */}
-      {isCollapsed && (
-        <div className="p-2 border-t border-steel-800">
-          <div className="flex flex-col space-y-2">
+        <div className={` flex p-1.5 border-t border-[var(--border)] pl-3`}>
+          <div className="flex flex-col space-y-1.5">
             <button
-              className="p-2 hover:bg-steel-800 rounded-lg transition-colors flex justify-center"
+              className="p-1.5 hover:bg-[var(--bg-hover)] rounded-lg transition-colors flex justify-center"
               aria-label="Settings"
             >
-              <Settings size={18} />
+              <Settings size={16} />
             </button>
             <button
-              className="p-2 hover:bg-steel-800 rounded-lg transition-colors flex justify-center"
+              className="p-1.5 hover:bg-[var(--bg-hover)] rounded-lg transition-colors flex justify-center"
               aria-label="Filter"
             >
-              <Filter size={18} />
+              <Filter size={16} />
             </button>
           </div>
         </div>
-      )}
     </aside>
   );
 };
