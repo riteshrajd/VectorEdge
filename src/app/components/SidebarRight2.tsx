@@ -37,21 +37,22 @@ interface AnalysisItem {
 }
 
 interface SidebarRightProps {
+  setRightWidth?: void;
+  setIsRightCollapsed?: void;
   selectedInstrument?: Instrument;
   isVisible?: boolean;
 }
 
 type TabType = 'chat' | 'analysis' | 'suggestions';
 
-const SidebarRight: React.FC<SidebarRightProps> = ({ 
+const SidebarRight: React.FC<SidebarRightProps> = ({
+  setRightWidth, 
+  setIsRightCollapsed,
   selectedInstrument, 
   isVisible = true 
 }) => {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
-  const [width, setWidth] = useState<number>(360);
-  const [isResizing, setIsResizing] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<TabType>('chat');
-  const resizeRef = useRef<HTMLDivElement>(null);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
@@ -90,52 +91,15 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, []);
 
-  // Resize functionality
-  const startResize = useCallback((e: React.MouseEvent) => {
-    setIsResizing(true);
-    e.preventDefault();
-  }, []);
-
-  const handleResize = useCallback((e: MouseEvent) => {
-    if (!isResizing) return;
-    
-    const newWidth = window.innerWidth - e.clientX;
-    const minWidth = isCollapsed ? 56 : 260;
-    const maxWidth = 500;
-
-    if (newWidth >= minWidth && newWidth <= maxWidth) {
-      setWidth(newWidth);
-    }
-  }, [isResizing, isCollapsed]);
-
-  const stopResize = useCallback(() => {
-    setIsResizing(false);
-  }, []);
-
-  useEffect(() => {
-    if (isResizing) {
-      document.addEventListener('mousemove', handleResize);
-      document.addEventListener('mouseup', stopResize);
-      document.body.style.cursor = 'ew-resize';
-      document.body.style.userSelect = 'none';
-    }
-
-    return () => {
-      document.removeEventListener('mousemove', handleResize);
-      document.removeEventListener('mouseup', stopResize);
-      document.body.style.cursor = '';
-      document.body.style.userSelect = '';
-    };
-  }, [isResizing, handleResize, stopResize]);
-
   useEffect(() => {
     scrollToBottom();
   }, [messages, scrollToBottom]);
 
   const toggleSidebar = useCallback((): void => {
     setIsCollapsed(!isCollapsed);
-    setWidth(isCollapsed ? 360 : 56);
-  }, [isCollapsed]);
+    setRightWidth(isCollapsed ? 360 : 56);
+    setIsRightCollapsed(!isCollapsed);
+  }, [isCollapsed, setRightWidth]);
 
   const handleSendMessage = useCallback(async (): Promise<void> => {
     if (!inputMessage.trim()) return;
@@ -221,29 +185,9 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
   if (!isVisible) return null;
 
   return (
-    <div className="relative flex">
-      {/* Resize Handle */}
-      <div
-        ref={resizeRef}
-        onMouseDown={startResize}
-        className={`w-[1px] ${isCollapsed ? 'hidden': ''} bg-[var(--bg-primary)] hover:bg-[var(--accent)] cursor-ew-resize transition-colors ${
-          isResizing ? 'bg-[var(--accent)]' : ''
-        }`}
-        style={{ height: '100vh' }}
-      />
-      <div
-        ref={resizeRef}
-        onMouseDown={startResize}
-        className={`w-[1px] ${isCollapsed ? 'hidden': ''} bg-[var(--border)] hover:bg-[var(--accent)] cursor-ew-resize transition-colors ${
-          isResizing ? 'bg-[var(--accent)]' : ''
-        }`}
-        style={{ height: '100vh' }}
-      />
-      
-      <aside
-        className="bg-[var(--bg-primary)] text-[var(--text-primary)] transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] border-l border-[var(--border)] flex flex-col overflow"
-        style={{ width: `${width}px` }}
-      >
+    <aside
+      className={`w-full bg-[var(--bg-primary)] text-[var(--text-primary)] transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] border-l border-[var(--border)] flex flex-col overflow`}
+    >
       {/* Header */}
       <div className="flex items-center justify-between p-3 border-b border-[var(--border)]">
         <button
@@ -430,7 +374,7 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
           <div className="flex-1 overflow-y-auto p-3 space-y-3">
             {!isCollapsed ? (
               <>
-                {/* Quick Actions */} 
+                {/* Quick Actions */}
                 <div className="grid grid-cols-2 gap-1.5 mb-3">
                   <button className="p-2 bg-[var(--bg-secondary)] hover:bg-[var(--bg-hover)] rounded-lg transition-colors flex flex-col items-center space-y-0.5">
                     <Zap size={14} className="text-[var(--neutral)]" />
@@ -530,7 +474,6 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
         </div>
       )}
     </aside>
-    </div>
   );
 };
 

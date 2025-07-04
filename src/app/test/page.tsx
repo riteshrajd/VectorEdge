@@ -1,5 +1,7 @@
 'use client';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import SidebarLeft from '../components/SidebarLeft2';
+import SidebarRight from '../components/SidebarRight2';
 
 const themes = ['theme-dark', 'theme-blue', ''];
 
@@ -45,7 +47,7 @@ export default function Page() {
     document.body.style.cursor = 'col-resize';
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseup', handleMouseUp);
     return () => {
@@ -71,10 +73,10 @@ export default function Page() {
       <div className="flex flex-1">
         {/* Left Sidebar */}
         <aside
-          className={`p-4 bg-[var(--bg-sidebar)] border-r border-[var(--border-color)]`}
+          className={`bg-[var(--bg-sidebar)] border-r border-[var(--border-color)]`}
           style={{ width: `${leftWidth}px`, minWidth: `${Math.max(leftWidth, 300)}px`}}
         >
-          <p>Left Sidebar</p>
+          <SidebarLeft />
         </aside>
         {/* Left Resizer */}
         <div
@@ -95,10 +97,10 @@ export default function Page() {
 
         {/* Right Sidebar */}
         <aside
-          className={`p-4 bg-[var(--bg-sidebar)] min-w-[400px] border-l border-[var(--border-color)]`}
+          className={`bg-[var(--bg-sidebar)] min-w-[400px] border-l border-[var(--border-color)]`}
           style={{ width: `${rightWidth}px`, maxWidth: `${Math.max(rightWidth, 200)}px`}}
         >
-          <p>Right Sidebar</p>
+          <SidebarRight />
         </aside>
       </div>
     </div>

@@ -30,7 +30,7 @@ const MainContent: React.FC<MainContentProps> = ({ selectedInstrument }) => {
   useEffect(() => {
     const contentElement = contentRef.current;
     if (!contentElement) return;
-
+    
     const handleScroll = () => {
       const scrollTop = contentElement.scrollTop;
       // Enable compact mode after 50px scroll
@@ -41,7 +41,7 @@ const MainContent: React.FC<MainContentProps> = ({ selectedInstrument }) => {
     return () => contentElement.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Reset compact mode and scroll when instrument changes
+  // Reset compact mode when instrument changes
   useEffect(() => {
     setIsCompact(false);
     if (contentRef.current) {
@@ -51,14 +51,15 @@ const MainContent: React.FC<MainContentProps> = ({ selectedInstrument }) => {
 
   useEffect(() => {
     console.log(`useEffect ran`);
-  }, []);
+  }, [])
+
 
   // If no instrument is selected, show welcome screen
   if (!selectedInstrument) {
     return (
-      <div className="h-full flex items-center justify-center">
+      <div className="h-full flex items-center justify-center bg-void-950">
         <div className="text-center">
-          <div className="w-24 h-24 mx-auto mb-6 rounded-full flex items-center justify-center">
+          <div className="w-24 h-24 mx-auto mb-6 bg-void-800 rounded-full flex items-center justify-center">
             <BarChart3 className="w-12 h-12 text-void-500" />
           </div>
           <h2 className="text-2xl font-semibold text-white mb-2">
@@ -97,17 +98,22 @@ const MainContent: React.FC<MainContentProps> = ({ selectedInstrument }) => {
     { id: "social", label: "Social Signals", icon: Users },
   ];
 
+  
   return (
-    <div className="h-full w-full flex justify-center">
-      <div className="h-full w-full max-w-[1000px] min-w-[100px] flex flex-col z-10">
+    <div className="h-full w-full bg-void-900 flex justify-center">
+      <div className="h-full w-full max-w-[1000px] min-w-[100px] flex flex-col relative z-10">
         {/* Sticky Header Section */}
-        <div
-          className={`sticky top-0 z-20 backdrop-blur-2xl bg-amber-50/5 rounded-b-2xl transition-all duration-300 ${
-            isCompact ? "py-2 shadow-lg" : "py-4"
+        <div 
+          className={`sticky top-0 z-20 bg-void-900 transition-all duration-300 ${
+            isCompact ? "border-b border-void-800 shadow-lg" : ""
           }`}
         >
-          <div className="px-6 transition-all duration-300">
-            <div className="flex items-center justify-between">
+          <div 
+            className={`transition-all duration-300 ${
+              isCompact ? "p-3" : "p-6 border-b border-void-800"
+            }`}
+          >
+            <div className={`flex items-center justify-between ${isCompact ? "mb-2" : "mb-4"}`}>
               <div className="flex items-center space-x-4">
                 <div
                   className={`rounded-full flex items-center justify-center text-white font-bold ${
@@ -118,11 +124,7 @@ const MainContent: React.FC<MainContentProps> = ({ selectedInstrument }) => {
                   {selectedInstrument.symbol.substring(0, 2)}
                 </div>
                 <div>
-                  <h1
-                    className={`font-bold text-white ${
-                      isCompact ? "text-lg" : "text-2xl"
-                    }`}
-                  >
+                  <h1 className={`font-bold text-white ${isCompact ? "text-lg" : "text-2xl"}`}>
                     {selectedInstrument.symbol}
                   </h1>
                   {!isCompact && (
@@ -151,13 +153,9 @@ const MainContent: React.FC<MainContentProps> = ({ selectedInstrument }) => {
             </div>
 
             {/* Price Information */}
-            <div className="flex items-center space-x-8 mt-2">
+            <div className="flex items-center space-x-8">
               <div>
-                <div
-                  className={`font-bold text-white ${
-                    isCompact ? "text-lg" : "text-2xl"
-                  }`}
-                >
+                <div className={`font-bold text-white ${isCompact ? "text-xl" : "text-3xl mb-1"}`}>
                   {selectedInstrument.symbol.includes("USD") ||
                   selectedInstrument.symbol.includes("SPX")
                     ? `$${selectedInstrument.price.toLocaleString("en-US", {
@@ -169,7 +167,7 @@ const MainContent: React.FC<MainContentProps> = ({ selectedInstrument }) => {
                 </div>
                 <div
                   className={`flex items-center space-x-2 ${changeData.colorClass} ${
-                    isCompact ? "text-xs" : "text-sm"
+                    isCompact ? "text-sm" : ""
                   }`}
                 >
                   {selectedInstrument.change >= 0 ? (
@@ -222,25 +220,21 @@ const MainContent: React.FC<MainContentProps> = ({ selectedInstrument }) => {
           </div>
 
           {/* Navigation Tabs */}
-          <div
-            className={`border-t border-void-800 px-6 transition-all duration-300 overflow-scroll ${
-              isCompact ? "py-1" : "py-3"
-            }`}
-          >
-            <div className="flex space-x-6">
+          <div className="border-b border-void-800">
+            <div className="flex space-x-8 px-6">
               {tabs.map((tab) => {
                 const Icon = tab.icon;
                 return (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center space-x-1 px-1 border-b-2 transition-colors ${
+                    className={`flex items-center space-x-2 px-1 border-b-2 transition-colors ${
                       activeTab === tab.id
                         ? "border-blue-500 text-blue-400"
                         : "border-transparent text-void-400 hover:text-white"
-                    } ${isCompact ? "py-1 text-sm" : "py-2 text-base"}`}
+                    } ${isCompact ? "py-2" : "py-4"}`}
                   >
-                    <Icon className={`w-4 h-4 ${isCompact ? "w-3 h-3" : ""}`} />
+                    <Icon className="w-4 h-4" />
                     <span className="font-medium">{tab.label}</span>
                   </button>
                 );
@@ -250,23 +244,28 @@ const MainContent: React.FC<MainContentProps> = ({ selectedInstrument }) => {
         </div>
 
         {/* Content Area */}
-        <div
+        <div 
           ref={contentRef}
-          className="flex-1 overflow-y-auto bg-void-900"
-          style={{ minHeight: "calc(100vh - 200px)" }} // Ensure enough scrollable height
+          className="flex-1 overflow-y-auto"
         >
           <div className="p-6">
             {activeTab === "overview" && (
               <OverviewTab instrument={selectedInstrument} />
             )}
             {activeTab === "technical" && (
-              <TechnicalTab instrument={selectedInstrument} />
+              <div className="text-center py-12">
+                <TechnicalTab instrument={selectedInstrument} />
+              </div>
             )}
             {activeTab === "fundamental" && (
-              <FundamentalTab instrument={selectedInstrument} />
+              <div className="text-center py-12">
+                <FundamentalTab instrument={selectedInstrument} />
+              </div>
             )}
             {activeTab === "news" && (
-              <NewsSentimentsTab instrument={selectedInstrument} />
+              <div className="text-center py-12">
+                <NewsSentimentsTab instrument={selectedInstrument} />
+              </div>
             )}
             {activeTab === "social" && (
               <div className="text-center py-12">
