@@ -152,9 +152,9 @@
 :root {
   /* Backgrounds */
   --bg-primary: hsl(0, 0%, 15%);       /* Primary background color */
-  --bg-secondary: hsl(0, 0%, 20%);     /* Secondary background color */
+  --bg-secondary: hsl(0, 0%, 25%);     /* Secondary background color */
   --bg-tertiary: hsl(0, 0%, 10%);      /* Tertiary background */
-  --bg-hover: hsl(0, 0%, 25%);         /* Hover state background */
+  --bg-hover: hsl(0, 0%, 28%);         /* Hover state background */
   --bg-quaternary: hsl(0, 0%, 5%);     /* Additional background level */
   
   /* Text */
@@ -169,8 +169,9 @@
   
   /* Accents & Status */
   --accent: hsl(0, 0%, 50%);            /* Primary accent color */
-  --accent-ai: hsl(181, 50%, 55%);            /* Primary accent color */
-  --accent-secondary-ai: hsl(201, 55%, 45%);  /* Secondary accent */
+  --accent-hard: hsl(0, 0%, 90%);            /* Primary accent color */
+  --accent-ai: hsl(205, 100%, 50%);            /* Primary accent color */
+  --accent-secondary-ai: hsl(147, 61%, 47%);  /* Secondary accent */
   --accent-secondary: hsl(0, 0%, 40%);  /* Secondary accent */
   --accent-hover: hsl(0, 0%, 45%);      /* Accent hover state */
   --positive: hsl(120, 40%, 50%);       /* Positive state (green) */

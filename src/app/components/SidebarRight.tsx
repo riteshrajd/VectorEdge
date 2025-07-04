@@ -48,7 +48,7 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
   isVisible = true 
 }) => {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
-  const [width, setWidth] = useState<number>(300);
+  const [width, setWidth] = useState<number>(360);
   const [isResizing, setIsResizing] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<TabType>('chat');
   const resizeRef = useRef<HTMLDivElement>(null);
@@ -100,7 +100,7 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
     if (!isResizing) return;
     
     const newWidth = window.innerWidth - e.clientX;
-    const minWidth = isCollapsed ? 60 : 260;
+    const minWidth = isCollapsed ? 56 : 260;
     const maxWidth = 500;
 
     if (newWidth >= minWidth && newWidth <= maxWidth) {
@@ -134,7 +134,7 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
 
   const toggleSidebar = useCallback((): void => {
     setIsCollapsed(!isCollapsed);
-    setWidth(isCollapsed ? 300 : 60);
+    setWidth(isCollapsed ? 360 : 56);
   }, [isCollapsed]);
 
   const handleSendMessage = useCallback(async (): Promise<void> => {
@@ -226,7 +226,15 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
       <div
         ref={resizeRef}
         onMouseDown={startResize}
-        className={`w-[1px] bg-[var(--border)] hover:bg-[var(--accent)] cursor-ew-resize transition-colors ${
+        className={`w-[1px] ${isCollapsed ? 'hidden': ''} bg-[var(--bg-primary)] hover:bg-[var(--accent)] cursor-ew-resize transition-colors ${
+          isResizing ? 'bg-[var(--accent)]' : ''
+        }`}
+        style={{ height: '100vh' }}
+      />
+      <div
+        ref={resizeRef}
+        onMouseDown={startResize}
+        className={`w-[1px] ${isCollapsed ? 'hidden': ''} bg-[var(--border)] hover:bg-[var(--accent)] cursor-ew-resize transition-colors ${
           isResizing ? 'bg-[var(--accent)]' : ''
         }`}
         style={{ height: '100vh' }}
@@ -251,7 +259,7 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
             <div className="w-7 h-7 bg-gradient-to-br from-[var(--accent-ai)] to-[var(--accent-secondary-ai)] rounded-lg flex items-center justify-center">
               <Brain size={14} className="text-white" />
             </div>
-            <span className="font-bold text-base">AI Assistant</span>
+            <span className="font-semibold text-base">Vector AI</span>
           </div>
         )}
       </div>
@@ -263,7 +271,7 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
             onClick={() => setActiveTab('chat')}
             className={`flex-1 py-2 px-3 text-xs font-medium transition-colors flex items-center justify-center space-x-1 ${
               activeTab === 'chat'
-                ? "bg-[var(--bg-secondary)] text-[var(--text-primary)] border-b-2 border-[var(--accent)]"
+                ? "bg-[var(--bg-secondary)] text-[var(--text-primary)] border-b-2 border-[var(--accent-hard)]"
                 : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-hover)]"
             }`}
           >
@@ -274,7 +282,7 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
             onClick={() => setActiveTab('analysis')}
             className={`flex-1 py-2 px-3 text-xs font-medium transition-colors flex items-center justify-center space-x-1 ${
               activeTab === 'analysis'
-                ? "bg-[var(--bg-secondary)] text-[var(--text-primary)] border-b-2 border-[var(--accent)]"
+                ? "bg-[var(--bg-secondary)] text-[var(--text-primary)] border-b-2 border-[var(--accent-hard)]"
                 : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-hover)]"
             }`}
           >
@@ -394,7 +402,7 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
 
             {/* Input */}
             {!isCollapsed && (
-              <div className="p-3 border-t border-[var(--border)]">
+              <div className="p-4 border-t border-[var(--border)]">
                 <div className="flex space-x-1.5">
                   <input
                     ref={inputRef}
@@ -403,12 +411,12 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
                     onChange={(e) => setInputMessage(e.target.value)}
                     onKeyDown={handleKeyPress}
                     placeholder="Ask about market analysis..."
-                    className="flex-1 px-2.5 py-1.5 bg-[var(--bg-secondary)] border border-[var(--border-secondary)] rounded-lg text-xs focus:outline-none focus:border-[var(--accent)] transition-colors"
+                    className="flex-1 px-2.5 py-1.5 bg-[var(--bg-secondary)] border border-[var(--border-secondary)] rounded-lg text-md focus:outline-none focus:border-[var(--accent)] transition-colors"
                   />
                   <button
                     onClick={handleSendMessage}
                     disabled={!inputMessage.trim()}
-                    className="px-2.5 py-1.5 bg-[var(--accent)] hover:bg-[var(--accent-hover)] disabled:bg-[var(--disabled)] disabled:cursor-not-allowed rounded-lg transition-colors flex items-center justify-center"
+                    className="px-3.5 py-1.5 bg-[var(--accent)] hover:bg-[var(--accent-hover)] disabled:bg-[var(--disabled)] disabled:cursor-not-allowed rounded-lg transition-colors flex items-center justify-center"
                   >
                     <Send size={14} />
                   </button>

@@ -120,7 +120,7 @@ const SidebarLeft: React.FC<SidebarLeftProps> = ({ onItemSelect }) => {
   return (
     <aside
       className={`${
-        isCollapsed ? "w-14" : "w-60"
+        isCollapsed ? "w-14" : "w-62"
       } bg-[var(--bg-primary)] text-[var(--text-primary)] transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] border-r border-[var(--border)] flex flex-col overflow-clip`}
     >
       {/* Header with toggle */}
@@ -188,7 +188,7 @@ const SidebarLeft: React.FC<SidebarLeftProps> = ({ onItemSelect }) => {
             onClick={() => handleTabChange("stocks")}
             className={`flex-1 py-2 px-3 text-sm font-medium transition-colors ${
               activeTab === "stocks"
-                ? "bg-[var(--bg-secondary)] text-[var(--text-primary)] border-b-2 border-[var(--accent)]"
+                ? "bg-[var(--bg-secondary)] text-[var(--text-primary)] border-b-2 border-[var(--accent-hard)]"
                 : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-hover)]"
             }`}
           >
@@ -198,7 +198,7 @@ const SidebarLeft: React.FC<SidebarLeftProps> = ({ onItemSelect }) => {
             onClick={() => handleTabChange("futures")}
             className={`flex-1 py-2 px-3 text-sm font-medium transition-colors ${
               activeTab === "futures"
-                ? "bg-[var(--bg-secondary)] text-[var(--text-primary)] border-b-2 border-[var(--accent)]"
+                ? "bg-[var(--bg-secondary)] text-[var(--text-primary)] border-b-2 border-[var(--accent-hard)]"
                 : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-hover)]"
             }`}
           >
