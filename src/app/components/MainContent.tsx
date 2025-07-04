@@ -1,5 +1,8 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 // components/MainContent.tsx
+=======
+>>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
 =======
 >>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
 "use client";
@@ -12,7 +15,10 @@ import {
   Users,
   Globe,
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
   DollarSign,
   Clock,
 >>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
@@ -23,6 +29,7 @@ import {
   Bell,
   Share2,
 <<<<<<< HEAD
+<<<<<<< HEAD
 } from "lucide-react";
 import { MainContentProps, Instrument, ChangeData } from "../types";
 import TechnicalTab from "./main-content-tabs/TechnicalTab";
@@ -30,6 +37,8 @@ import FundamentalTab from "./main-content-tabs/FundamentalTab";
 import NewsSentimentsTab from "./main-content-tabs/NewsSentimentsTab";
 import OverviewTab from "./main-content-tabs/OverviewTab";
 =======
+=======
+>>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
   Volume2,
   Building2
 } from 'lucide-react';
@@ -39,6 +48,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+<<<<<<< HEAD
+>>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
+=======
 >>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
 
 const MainContent: React.FC<MainContentProps> = ({ selectedInstrument }) => {
@@ -77,24 +89,35 @@ const MainContent: React.FC<MainContentProps> = ({ selectedInstrument }) => {
   if (!selectedInstrument) {
     return (
 <<<<<<< HEAD
+<<<<<<< HEAD
       <div className="h-full flex items-center justify-center">
         <div className="text-center">
           <div className="w-24 h-24 mx-auto mb-6 bg-void-800 rounded-full flex items-center justify-center">
             <BarChart3 className="w-12 h-12 text-void-500" />
 =======
+=======
+>>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
       <div className="h-full flex items-center justify-center bg-background">
         <div className="text-center max-w-md mx-auto p-8">
           <div className="w-24 h-24 mx-auto mb-6 bg-muted rounded-full flex items-center justify-center">
             <BarChart3 className="w-12 h-12 text-muted-foreground" />
+<<<<<<< HEAD
+>>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
+=======
 >>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
           </div>
           <h2 className="text-3xl font-bold text-foreground mb-4 font-quicksand">
             Welcome to VectorEdge Pro
           </h2>
 <<<<<<< HEAD
+<<<<<<< HEAD
           <p className="text-void-400 max-w-md mx-auto">
             Select an instrument from the sidebar to view detailed analysis,
             charts, and market data.
+=======
+          <p className="text-muted-foreground leading-relaxed">
+            Select an instrument from the sidebar to view detailed analysis, charts, and market data with our advanced trading tools.
+>>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
 =======
           <p className="text-muted-foreground leading-relaxed">
             Select an instrument from the sidebar to view detailed analysis, charts, and market data with our advanced trading tools.
@@ -117,6 +140,9 @@ const MainContent: React.FC<MainContentProps> = ({ selectedInstrument }) => {
       change: `${isPositive ? '+' : ''}${change.toFixed(2)}`,
       changePercent: `${isPositive ? '+' : ''}${changePercent.toFixed(2)}%`,
       colorClass: isPositive ? 'text-green-500' : 'text-red-500'
+<<<<<<< HEAD
+>>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
+=======
 >>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
     };
   };
@@ -136,6 +162,7 @@ const MainContent: React.FC<MainContentProps> = ({ selectedInstrument }) => {
   ];
 
   return (
+<<<<<<< HEAD
 <<<<<<< HEAD
     <div className="h-full w-full flex justify-center">
       <div className="h-full w-full max-w-[1000px] min-w-[100px] flex flex-col z-10">
@@ -341,6 +368,29 @@ const MainContent: React.FC<MainContentProps> = ({ selectedInstrument }) => {
                 </p>
               </div>
             </div>
+=======
+    <div className="h-full flex flex-col bg-background">
+      {/* Header Section */}
+      <div className="border-b border-border bg-muted/20 backdrop-blur-sm">
+        <div className="p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center space-x-4">
+              <div 
+                className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg"
+                style={{ backgroundColor: selectedInstrument.color }}
+              >
+                {selectedInstrument.symbol.substring(0, 2)}
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold text-foreground font-quicksand">
+                  {selectedInstrument.symbol}
+                </h1>
+                <p className="text-muted-foreground">
+                  {selectedInstrument.name}
+                </p>
+              </div>
+            </div>
+>>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
             
             {/* Action Buttons */}
             <div className="flex items-center space-x-2">
@@ -480,6 +530,9 @@ const MainContent: React.FC<MainContentProps> = ({ selectedInstrument }) => {
               </div>
             </TabsContent>
           </Tabs>
+<<<<<<< HEAD
+>>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
+=======
 >>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
         </div>
       </div>

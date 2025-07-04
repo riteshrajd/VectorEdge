@@ -12,6 +12,7 @@ import {
   Bot,
   User,
 <<<<<<< HEAD
+<<<<<<< HEAD
   AlertTriangle,
   Trash2,
   Zap,
@@ -21,6 +22,8 @@ import {
 } from 'lucide-react';
 import { Instrument } from '../types';
 =======
+=======
+>>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
   Target,
   AlertTriangle,
   Trash2,
@@ -32,6 +35,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+<<<<<<< HEAD
+>>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
+=======
 >>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
 
 // Types
@@ -230,9 +236,15 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
   const getAnalysisColor = (type: string): string => {
     switch (type) {
 <<<<<<< HEAD
+<<<<<<< HEAD
       case 'bullish': return 'text-[var(--positive)]';
       case 'bearish': return 'text-[var(--negative)]';
       default: return 'text-[var(--neutral)]';
+=======
+      case 'bullish': return 'text-green-500';
+      case 'bearish': return 'text-red-500';
+      default: return 'text-yellow-500';
+>>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
 =======
       case 'bullish': return 'text-green-500';
       case 'bearish': return 'text-red-500';
@@ -258,6 +270,7 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
         ref={resizeRef}
         onMouseDown={startResize}
 <<<<<<< HEAD
+<<<<<<< HEAD
         className={`w-[1px] ${isCollapsed ? 'hidden': ''} bg-[var(--bg-primary)] hover:bg-[var(--accent)] cursor-ew-resize transition-colors ${
           isResizing ? 'bg-[var(--accent)]' : ''
         }`}
@@ -272,11 +285,16 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
         className={`w-1 bg-border hover:bg-primary cursor-ew-resize transition-colors ${
           isResizing ? 'bg-primary' : ''
 >>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
+=======
+        className={`w-1 bg-border hover:bg-primary cursor-ew-resize transition-colors ${
+          isResizing ? 'bg-primary' : ''
+>>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
         }`}
         style={{ height: '100vh' }}
       />
       
       <aside
+<<<<<<< HEAD
 <<<<<<< HEAD
         className="bg-[var(--bg-primary)] text-[var(--text-primary)] transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] border-l border-[var(--border)] flex flex-col overflow"
         style={{ width: `${width}px` }}
@@ -319,6 +337,29 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
               </div>
               <span className="font-bold text-lg font-quicksand">AI Assistant</span>
             </div>
+=======
+        className="bg-background text-foreground transition-all duration-300 ease-in-out border-l border-border flex flex-col overflow-hidden"
+        style={{ width: `${width}px` }}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between p-4 border-b border-border bg-muted/20">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleSidebar}
+            className="h-8 w-8"
+          >
+            {isCollapsed ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
+          </Button>
+          
+          {!isCollapsed && (
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary/80 rounded-lg flex items-center justify-center">
+                <Brain size={16} className="text-primary-foreground" />
+              </div>
+              <span className="font-bold text-lg font-quicksand">AI Assistant</span>
+            </div>
+>>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
           )}
         </div>
 
@@ -356,6 +397,7 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
             >
               <BarChart3 size={16} />
             </Button>
+<<<<<<< HEAD
 >>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
           </div>
         )}
@@ -503,6 +545,23 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
                       <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                       <span className="text-sm text-muted-foreground">AI Online</span>
                     </div>
+=======
+          </div>
+        )}
+
+        {/* Content */}
+        <div className="flex-1 flex flex-col overflow-hidden">
+          {activeTab === 'chat' && (
+            <>
+              {/* Chat Header */}
+              {!isCollapsed && (
+                <div className="p-4 border-b border-border bg-muted/10">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <span className="text-sm text-muted-foreground">AI Online</span>
+                    </div>
+>>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
                     <div className="flex space-x-1">
                       <Tooltip>
                         <TooltipTrigger asChild>
@@ -529,12 +588,16 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
                           <p>Settings</p>
                         </TooltipContent>
                       </Tooltip>
+<<<<<<< HEAD
+>>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
+=======
 >>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
                     </div>
                   </div>
                 </div>
               )}
 
+<<<<<<< HEAD
 <<<<<<< HEAD
             {/* Input */}
             {!isCollapsed && (
@@ -689,6 +752,50 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
                     </div>
                   </div>
                 ))}
+=======
+              {/* Messages */}
+              <div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-4">
+                {messages.map((message) => (
+                  <div
+                    key={message.id}
+                    className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                  >
+                    <div
+                      className={`max-w-[80%] ${
+                        isCollapsed ? 'max-w-[90%]' : ''
+                      } flex ${message.sender === 'user' ? 'flex-row-reverse' : 'flex-row'} items-start space-x-2`}
+                    >
+                      <div
+                        className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 ${
+                          message.sender === 'user' 
+                            ? 'bg-primary' 
+                            : 'bg-gradient-to-br from-primary/80 to-primary'
+                        }`}
+                      >
+                        {message.sender === 'user' ? (
+                          <User size={14} className="text-primary-foreground" />
+                        ) : (
+                          <Bot size={14} className="text-primary-foreground" />
+                        )}
+                      </div>
+                      <Card
+                        className={`${
+                          message.sender === 'user'
+                            ? 'bg-primary text-primary-foreground'
+                            : 'bg-muted'
+                        } border-0`}
+                      >
+                        <CardContent className="p-3">
+                          <p className="text-sm">{message.content}</p>
+                          <span className="text-xs opacity-60 mt-1 block">
+                            {formatTime(message.timestamp)}
+                          </span>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </div>
+                ))}
+>>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
                 
                 {isTyping && (
                   <div className="flex justify-start">
@@ -709,6 +816,9 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
                   </div>
                 )}
                 <div ref={messagesEndRef} />
+<<<<<<< HEAD
+>>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
+=======
 >>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
               </div>
 
@@ -861,6 +971,7 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
           </div>
         )}
 <<<<<<< HEAD
+<<<<<<< HEAD
       </div>
       }
       {/* Collapsed state bottom buttons */}
@@ -877,6 +988,9 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
         </div>
       )}
     </aside>
+=======
+      </aside>
+>>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
 =======
       </aside>
 >>>>>>> 83434d5ea574734c562d2d820931a0f62c6b4611
