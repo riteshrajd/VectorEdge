@@ -50,7 +50,7 @@ const TechnicalTab: React.FC<OverviewTabProps> = ({ instrument }) => {
   return (
     <div className="space-y-6">
       {/* Chart Section */}
-      <div className="bg-zinc-900 rounded-lg p-6">
+      <div className="bg-[var(--bg-tertiary)] rounded-lg p-6">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-lg font-semibold text-white">Price Chart</h3>
           <div className="flex items-center space-x-2">
@@ -133,7 +133,7 @@ const TechnicalTab: React.FC<OverviewTabProps> = ({ instrument }) => {
 
       {/* Statistics Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-zinc-900 rounded-lg p-4">
+        <div className="bg-[var(--bg-tertiary)] rounded-lg p-4">
           <div className="flex items-center justify-between">
             <div>
               <div className="text-zinc-400 text-sm">Open</div>
@@ -145,7 +145,7 @@ const TechnicalTab: React.FC<OverviewTabProps> = ({ instrument }) => {
           </div>
         </div>
 
-        <div className="bg-zinc-900 rounded-lg p-4">
+        <div className="bg-[var(--bg-tertiary)] rounded-lg p-4">
           <div className="flex items-center justify-between">
             <div>
               <div className="text-zinc-400 text-sm">Previous Close</div>
@@ -157,7 +157,7 @@ const TechnicalTab: React.FC<OverviewTabProps> = ({ instrument }) => {
           </div>
         </div>
 
-        <div className="bg-zinc-900 rounded-lg p-4">
+        <div className="bg-[var(--bg-tertiary)] rounded-lg p-4">
           <div className="flex items-center justify-between">
             <div>
               <div className="text-zinc-400 text-sm">Volume</div>
@@ -167,7 +167,7 @@ const TechnicalTab: React.FC<OverviewTabProps> = ({ instrument }) => {
           </div>
         </div>
 
-        <div className="bg-zinc-900 rounded-lg p-4">
+        <div className="bg-[var(--bg-tertiary)] rounded-lg p-4">
           <div className="flex items-center justify-between">
             <div>
               <div className="text-zinc-400 text-sm">Market Cap</div>
@@ -181,7 +181,7 @@ const TechnicalTab: React.FC<OverviewTabProps> = ({ instrument }) => {
       {/* Additional Information Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Key Metrics */}
-        <div className="bg-zinc-900 rounded-lg p-6">
+        <div className="bg-[var(--bg-tertiary)] rounded-lg p-6">
           <h3 className="text-lg font-semibold mb-4 text-white">Key Metrics</h3>
           <div className="space-y-3">
             <div className="flex justify-between items-center">
@@ -216,7 +216,7 @@ const TechnicalTab: React.FC<OverviewTabProps> = ({ instrument }) => {
         </div>
 
         {/* Market Summary */}
-        <div className="bg-zinc-900 rounded-lg p-6">
+        <div className="bg-[var(--bg-tertiary)] rounded-lg p-6">
           <h3 className="text-lg font-semibold mb-4 text-white">Market Summary</h3>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
@@ -247,7 +247,7 @@ const TechnicalTab: React.FC<OverviewTabProps> = ({ instrument }) => {
       </div>
 
       {/* Recent Performance */}
-      <div className="bg-zinc-900 rounded-lg p-6">
+      <div className="bg-[var(--bg-tertiary)] rounded-lg p-6">
         <h3 className="text-lg font-semibold mb-4 text-white">Recent Performance</h3>
         <div className="grid grid-cols-3 gap-4">
           <div className="text-center">

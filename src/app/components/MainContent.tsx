@@ -1,15 +1,24 @@
 // components/MainContent.tsx
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
+  TrendingUp,
+  TrendingDown,
   BarChart3,
   Activity,
   FileText,
   Users,
   Globe,
+  Calendar,
+  DollarSign,
+  Percent,
+  Volume2,
+  Building2,
+  Clock,
   ArrowUp,
   ArrowDown,
+  Maximize2,
   MoreHorizontal,
   Star,
   Bell,
@@ -19,39 +28,41 @@ import { MainContentProps, Instrument, ChangeData } from "../types";
 import TechnicalTab from "./main-content-tabs/TechnicalTab";
 import FundamentalTab from "./main-content-tabs/FundamentalTab";
 import NewsSentimentsTab from "./main-content-tabs/NewsSentimentsTab";
+import Image from "next/image";
 import OverviewTab from "./main-content-tabs/OverviewTab";
 
 const MainContent: React.FC<MainContentProps> = ({ selectedInstrument }) => {
   const [activeTab, setActiveTab] = useState<string>("overview");
-  const [isCompact, setIsCompact] = useState(false);
+  const [isHeaderCompact, setIsHeaderCompact] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
 
-  // Scroll handler for compact header
+  // Handle scroll to transform header
   useEffect(() => {
-    const contentElement = contentRef.current;
-    if (!contentElement) return;
-
     const handleScroll = () => {
-      const scrollTop = contentElement.scrollTop;
-      // Enable compact mode after 50px scroll
-      setIsCompact(scrollTop > 50);
+      if (contentRef.current) {
+        const scrollTop = contentRef.current.scrollTop;
+        const shouldBeCompact = scrollTop > 10; // Transform after 50px of scroll
+        
+        if (shouldBeCompact !== isHeaderCompact) {
+          setIsHeaderCompact(shouldBeCompact);
+        }
+      }
     };
 
-    contentElement.addEventListener("scroll", handleScroll);
-    return () => contentElement.removeEventListener("scroll", handleScroll);
-  }, []);
+    const contentElement = contentRef.current;
+    if (contentElement) {
+      contentElement.addEventListener("scroll", handleScroll);
+      return () => contentElement.removeEventListener("scroll", handleScroll);
+    }
+  }, [isHeaderCompact]);
 
-  // Reset compact mode and scroll when instrument changes
+  // Reset header state when tab changes
   useEffect(() => {
-    setIsCompact(false);
+    setIsHeaderCompact(false);
     if (contentRef.current) {
       contentRef.current.scrollTop = 0;
     }
-  }, [selectedInstrument]);
-
-  useEffect(() => {
-    console.log(`useEffect ran`);
-  }, []);
+  }, [activeTab]);
 
   // If no instrument is selected, show welcome screen
   if (!selectedInstrument) {
@@ -97,189 +108,276 @@ const MainContent: React.FC<MainContentProps> = ({ selectedInstrument }) => {
     { id: "social", label: "Social Signals", icon: Users },
   ];
 
+  // Mock chart data - in real app this would come from API
+  const chartData = Array.from({ length: 50 }, (_, i) => ({
+    time: i,
+    price: selectedInstrument.price + (Math.random() - 0.5) * 100,
+  }));
+
   return (
     <div className="h-full w-full flex justify-center">
-      <div className="h-full w-full max-w-[1000px] min-w-[100px] flex flex-col z-10">
-        {/* Sticky Header Section */}
-        <div
-          className={`sticky top-0 z-20 backdrop-blur-2xl bg-amber-50/5 rounded-b-2xl transition-all duration-300 ${
-            isCompact ? "py-2 shadow-lg" : "py-4"
+      <div className="h-full w-full max-w-[1000px] min-w-[100px] flex flex-col text-white relative z-10 overflow-hidden">
+        {/* Animated Header Section */}
+        <div 
+          className={`border-b border-void-800 flex-shrink-0 transition-all duration-300 ease-in-out ${
+            isHeaderCompact ? 'p-3' : 'p-6'
           }`}
         >
-          <div className="px-6 transition-all duration-300">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div
-                  className={`rounded-full flex items-center justify-center text-white font-bold ${
-                    isCompact ? "w-8 h-8 text-sm" : "w-12 h-12 text-lg"
-                  }`}
-                  style={{ backgroundColor: selectedInstrument.color }}
-                >
-                  {selectedInstrument.symbol.substring(0, 2)}
-                </div>
+          <div className={`flex items-center justify-between transition-all duration-300 ease-in-out ${
+            isHeaderCompact ? 'space-y-0' : 'mb-4'
+          }`}>
+            {/* Left: Symbol and Info */}
+            <div className={`flex items-center transition-all duration-300 ease-in-out ${
+              isHeaderCompact ? 'space-x-3' : 'space-x-4'
+            }`}>
+              <div
+                className={`rounded-full flex items-center justify-center text-white font-bold transition-all duration-300 ease-in-out ${
+                  isHeaderCompact 
+                    ? 'w-8 h-8 text-xs' 
+                    : 'w-12 h-12 text-sm'
+                }`}
+                style={{ backgroundColor: selectedInstrument.color }}
+              >
+                {selectedInstrument.symbol.substring(0, 2)}
+              </div>
+              <div className={`transition-all duration-300 ease-in-out ${
+                isHeaderCompact ? 'flex items-center space-x-4' : 'block'
+              }`}>
                 <div>
-                  <h1
-                    className={`font-bold text-white ${
-                      isCompact ? "text-lg" : "text-2xl"
-                    }`}
-                  >
+                  <h1 className={`font-bold text-white leading-tight transition-all duration-300 ease-in-out ${
+                    isHeaderCompact ? 'text-lg' : 'text-2xl'
+                  }`}>
                     {selectedInstrument.symbol}
                   </h1>
-                  {!isCompact && (
-                    <p className="text-void-400 text-sm">
-                      {selectedInstrument.name}
-                    </p>
-                  )}
+                  <p className={`text-void-400 transition-all duration-300 ease-in-out ${
+                    isHeaderCompact ? 'text-xs' : 'text-sm'
+                  }`}>
+                    {selectedInstrument.name}
+                  </p>
                 </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex items-center space-x-2">
-                <button className="p-2 hover:bg-void-800 rounded-lg transition-colors">
-                  <Star className="w-5 h-5 text-void-400 hover:text-yellow-400" />
-                </button>
-                <button className="p-2 hover:bg-void-800 rounded-lg transition-colors">
-                  <Bell className="w-5 h-5 text-void-400" />
-                </button>
-                <button className="p-2 hover:bg-void-800 rounded-lg transition-colors">
-                  <Share2 className="w-5 h-5 text-void-400" />
-                </button>
-                <button className="p-2 hover:bg-void-800 rounded-lg transition-colors">
-                  <MoreHorizontal className="w-5 h-5 text-void-400" />
-                </button>
+                
+                {/* Price info - moves inline when compact */}
+                <div className={`transition-all duration-300 ease-in-out ${
+                  isHeaderCompact ? 'flex items-center space-x-3' : 'mt-2'
+                }`}>
+                  <div className={`font-bold text-white transition-all duration-300 ease-in-out ${
+                    isHeaderCompact ? 'text-lg' : 'text-3xl mb-1'
+                  }`}>
+                    {selectedInstrument.symbol.includes("USD") ||
+                    selectedInstrument.symbol.includes("SPX")
+                      ? `$${selectedInstrument.price.toLocaleString("en-US", {
+                          minimumFractionDigits: 2,
+                        })}`
+                      : `₹${selectedInstrument.price.toLocaleString("en-IN", {
+                          minimumFractionDigits: 2,
+                        })}`}
+                  </div>
+                  <div
+                    className={`flex items-center space-x-1 transition-all duration-300 ease-in-out ${changeData.colorClass}`}
+                  >
+                    {selectedInstrument.change >= 0 ? (
+                      <ArrowUp className={`transition-all duration-300 ease-in-out ${
+                        isHeaderCompact ? 'w-3 h-3' : 'w-4 h-4'
+                      }`} />
+                    ) : (
+                      <ArrowDown className={`transition-all duration-300 ease-in-out ${
+                        isHeaderCompact ? 'w-3 h-3' : 'w-4 h-4'
+                      }`} />
+                    )}
+                    <span className={`font-medium transition-all duration-300 ease-in-out ${
+                      isHeaderCompact ? 'text-sm' : 'text-base'
+                    }`}>
+                      {changeData.change} ({changeData.changePercent})
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Price Information */}
-            <div className="flex items-center space-x-8 mt-2">
-              <div>
-                <div
-                  className={`font-bold text-white ${
-                    isCompact ? "text-lg" : "text-2xl"
-                  }`}
-                >
-                  {selectedInstrument.symbol.includes("USD") ||
-                  selectedInstrument.symbol.includes("SPX")
-                    ? `$${selectedInstrument.price.toLocaleString("en-US", {
-                        minimumFractionDigits: 2,
-                      })}`
-                    : `₹${selectedInstrument.price.toLocaleString("en-IN", {
-                        minimumFractionDigits: 2,
-                      })}`}
-                </div>
-                <div
-                  className={`flex items-center space-x-2 ${changeData.colorClass} ${
-                    isCompact ? "text-xs" : "text-sm"
-                  }`}
-                >
-                  {selectedInstrument.change >= 0 ? (
-                    <ArrowUp className="w-4 h-4" />
-                  ) : (
-                    <ArrowDown className="w-4 h-4" />
-                  )}
-                  <span className="font-medium">
-                    {changeData.change} ({changeData.changePercent})
-                  </span>
-                </div>
-              </div>
-
-              {/* Key Metrics - Hidden in compact mode */}
-              {!isCompact && (
-                <div className="grid grid-cols-4 gap-6 text-sm">
-                  <div>
-                    <div className="text-void-400">High</div>
-                    <div className="font-medium">
-                      {selectedInstrument.symbol.includes("USD") ||
-                      selectedInstrument.symbol.includes("SPX")
-                        ? `$${selectedInstrument.high.toLocaleString()}`
-                        : `₹${selectedInstrument.high.toLocaleString()}`}
-                    </div>
-                  </div>
-                  <div>
-                    <div className="text-void-400">Low</div>
-                    <div className="font-medium">
-                      {selectedInstrument.symbol.includes("USD") ||
-                      selectedInstrument.symbol.includes("SPX")
-                        ? `$${selectedInstrument.low.toLocaleString()}`
-                        : `₹${selectedInstrument.low.toLocaleString()}`}
-                    </div>
-                  </div>
-                  <div>
-                    <div className="text-void-400">Volume</div>
-                    <div className="font-medium">
-                      {selectedInstrument.volume}
-                    </div>
-                  </div>
-                  <div>
-                    <div className="text-void-400">Market Cap</div>
-                    <div className="font-medium">
-                      {selectedInstrument.marketCap}
-                    </div>
-                  </div>
-                </div>
-              )}
+            {/* Action Buttons */}
+            <div className={`flex items-center transition-all duration-300 ease-in-out ${
+              isHeaderCompact ? 'space-x-1' : 'space-x-2'
+            }`}>
+              <button className={`hover:bg-void-800 rounded-lg transition-all duration-300 ease-in-out ${
+                isHeaderCompact ? 'p-1.5' : 'p-2'
+              }`}>
+                <Star className={`text-void-400 hover:text-yellow-400 transition-all duration-300 ease-in-out ${
+                  isHeaderCompact ? 'w-4 h-4' : 'w-5 h-5'
+                }`} />
+              </button>
+              <button className={`hover:bg-void-800 rounded-lg transition-all duration-300 ease-in-out ${
+                isHeaderCompact ? 'p-1.5' : 'p-2'
+              }`}>
+                <Bell className={`text-void-400 transition-all duration-300 ease-in-out ${
+                  isHeaderCompact ? 'w-4 h-4' : 'w-5 h-5'
+                }`} />
+              </button>
+              <button className={`hover:bg-void-800 rounded-lg transition-all duration-300 ease-in-out ${
+                isHeaderCompact ? 'p-1.5' : 'p-2'
+              }`}>
+                <Share2 className={`text-void-400 transition-all duration-300 ease-in-out ${
+                  isHeaderCompact ? 'w-4 h-4' : 'w-5 h-5'
+                }`} />
+              </button>
+              <button className={`hover:bg-void-800 rounded-lg transition-all duration-300 ease-in-out ${
+                isHeaderCompact ? 'p-1.5' : 'p-2'
+              }`}>
+                <MoreHorizontal className={`text-void-400 transition-all duration-300 ease-in-out ${
+                  isHeaderCompact ? 'w-4 h-4' : 'w-5 h-5'
+                }`} />
+              </button>
             </div>
           </div>
 
-          {/* Navigation Tabs */}
-          <div
-            className={`border-t border-void-800 px-6 transition-all duration-300 ${
-              isCompact ? "py-1" : "py-3"
-            }`}
-          >
-            <div className="flex space-x-6">
-              {tabs.map((tab) => {
-                const Icon = tab.icon;
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center space-x-1 px-1 border-b-2 transition-colors ${
-                      activeTab === tab.id
-                        ? "border-blue-500 text-blue-400"
-                        : "border-transparent text-void-400 hover:text-white"
-                    } ${isCompact ? "py-1 text-sm" : "py-2 text-base"}`}
-                  >
-                    <Icon className={`w-4 h-4 ${isCompact ? "w-3 h-3" : ""}`} />
-                    <span className="font-medium">{tab.label}</span>
-                  </button>
-                );
-              })}
+          {/* Key Metrics - Hidden when compact, shown when expanded */}
+          <div className={`transition-all duration-300 ease-in-out overflow-hidden ${
+            isHeaderCompact 
+              ? 'max-h-0 opacity-0 transform -translate-y-2' 
+              : 'max-h-20 opacity-100 transform translate-y-0'
+          }`}>
+            <div className="flex items-center space-x-8 text-sm pt-2">
+              <div>
+                <div className="text-void-400">High</div>
+                <div className="font-medium">
+                  {selectedInstrument.symbol.includes("USD") ||
+                  selectedInstrument.symbol.includes("SPX")
+                    ? `$${selectedInstrument.high.toLocaleString()}`
+                    : `₹${selectedInstrument.high.toLocaleString()}`}
+                </div>
+              </div>
+              <div>
+                <div className="text-void-400">Low</div>
+                <div className="font-medium">
+                  {selectedInstrument.symbol.includes("USD") ||
+                  selectedInstrument.symbol.includes("SPX")
+                    ? `$${selectedInstrument.low.toLocaleString()}`
+                    : `₹${selectedInstrument.low.toLocaleString()}`}
+                </div>
+              </div>
+              <div>
+                <div className="text-void-400">Volume</div>
+                <div className="font-medium">{selectedInstrument.volume}</div>
+              </div>
+              <div>
+                <div className="text-void-400">Market Cap</div>
+                <div className="font-medium">
+                  {selectedInstrument.marketCap}
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Content Area */}
-        <div
-          ref={contentRef}
-          className="flex-1 overflow-y-auto bg-void-900"
-          style={{ minHeight: "calc(100vh - 200px)" }} // Ensure enough scrollable height
-        >
-          <div className="p-6">
-            {activeTab === "overview" && (
-              <OverviewTab instrument={selectedInstrument} />
-            )}
-            {activeTab === "technical" && (
-              <TechnicalTab instrument={selectedInstrument} />
-            )}
-            {activeTab === "fundamental" && (
-              <FundamentalTab instrument={selectedInstrument} />
-            )}
-            {activeTab === "news" && (
-              <NewsSentimentsTab instrument={selectedInstrument} />
-            )}
-            {activeTab === "social" && (
-              <div className="text-center py-12">
-                <Users className="w-16 h-16 text-void-600 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-void-400 mb-2">
-                  Social Signals
-                </h3>
-                <p className="text-void-500">
-                  Social media sentiment and signals will be displayed here.
-                </p>
-              </div>
-            )}
+        {/* Navigation Tabs */}
+        <div className="border-b border-void-800 flex-shrink-0">
+          <div className={`flex transition-all duration-300 ease-in-out ${
+            isHeaderCompact ? 'space-x-4 px-4' : 'space-x-8 px-6'
+          }`}>
+            {tabs.map((tab) => {
+              const Icon = tab.icon;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex items-center space-x-2 border-b-2 transition-all duration-300 ease-in-out ${
+                    isHeaderCompact ? 'py-2 px-1' : 'py-4 px-1'
+                  } ${
+                    activeTab === tab.id
+                      ? "border-blue-500 text-blue-400"
+                      : "border-transparent text-void-400 hover:text-white"
+                  }`}
+                >
+                  <Icon className={`transition-all duration-300 ease-in-out ${
+                    isHeaderCompact ? 'w-3 h-3' : 'w-4 h-4'
+                  }`} />
+                  <span className={`font-medium transition-all duration-300 ease-in-out ${
+                    isHeaderCompact ? 'text-xs' : 'text-sm'
+                  }`}>
+                    {tab.label}
+                  </span>
+                </button>
+              );
+            })}
           </div>
+        </div>
+
+        {/* Content Area - Scrollable */}
+        <div 
+          ref={contentRef}
+          className="flex-1 overflow-y-auto p-6 scroll-smooth"
+          style={{ scrollBehavior: 'smooth' }}
+        >
+          {activeTab === "overview" && (
+            <div>
+              <OverviewTab instrument={selectedInstrument} />
+              <div className="mt-6">
+                <FundamentalTab instrument={selectedInstrument} />
+              </div>
+              <div className="mt-6">
+                <FundamentalTab instrument={selectedInstrument} />
+              </div>
+              <div className="mt-6">
+                <FundamentalTab instrument={selectedInstrument} />
+              </div>
+            </div>
+          )}
+
+          {activeTab === "technical" && (
+            <div>
+              <TechnicalTab instrument={selectedInstrument} />
+              <div className="mt-6">
+                <FundamentalTab instrument={selectedInstrument} />
+              </div>
+              <div className="mt-6">
+                <FundamentalTab instrument={selectedInstrument} />
+              </div>
+              <div className="mt-6">
+                <FundamentalTab instrument={selectedInstrument} />
+              </div>
+            </div>
+          )}
+
+          {activeTab === "fundamental" && (
+            <div>
+              <FundamentalTab instrument={selectedInstrument} />
+              <div className="mt-6">
+                <FundamentalTab instrument={selectedInstrument} />
+              </div>
+              <div className="mt-6">
+                <FundamentalTab instrument={selectedInstrument} />
+              </div>
+              <div className="mt-6">
+                <FundamentalTab instrument={selectedInstrument} />
+              </div>
+            </div>
+          )}
+
+          {activeTab === "news" && (
+            <div>
+              <NewsSentimentsTab instrument={selectedInstrument} />
+              <div className="mt-6">
+                <FundamentalTab instrument={selectedInstrument} />
+              </div>
+              <div className="mt-6">
+                <FundamentalTab instrument={selectedInstrument} />
+              </div>
+              <div className="mt-6">
+                <FundamentalTab instrument={selectedInstrument} />
+              </div>
+            </div>
+          )}
+
+          {activeTab === "social" && (
+            <div className="text-center py-12">
+              <Users className="w-16 h-16 text-void-600 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-void-400 mb-2">
+                Social Signals
+              </h3>
+              <p className="text-void-500">
+                Social media sentiment and signals will be displayed here.
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>

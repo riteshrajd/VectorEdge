@@ -18,17 +18,17 @@ export default function Home(): JSX.Element {
   };
 
   return (
-    <div className="flex flex-col h-screen font-sans overflow-clip">
+    <div className="flex flex-col h-screen font-sans overflow-clip bg-[var(--bg-main)]">
       <div className="w-full z-10">{/* <Header /> */}</div>
       <div className="flex flex-1 min-h-0 relative">
-        <Image
+        {/* <Image
           alt="Background gradient"
           fill
-          src="/assets/images/image_bg10.png"
-          className="absolute inset-0 object-cover -z-10" // Added inset-0 and -z-10
+          src="/assets/images/image_bg_grid.png"
+          className="absolute inset-0 object-cover -z-10 brightness-20" // Added inset-0 and -z-10
           priority
           quality={100}
-        />
+        /> */}
         <SidebarLeft onItemSelect={handleInstrumentSelect} />
         <main className="flex-1 min-w-0 text-white">
           <MainContent selectedInstrument={selectedInstrument} />

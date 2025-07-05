@@ -149,11 +149,18 @@
   --font-roboto: Roboto, sans-serif;
 }
 
+/* -------------------------------- Animations ----------------------------------------- */
+
+
+
+
+/*--------------------------------- Theme Colors --------------------------------------- */
 :root {
   /* Backgrounds */
   --bg-primary: hsl(0, 0%, 15%);       /* Primary background color */
   --bg-secondary: hsl(0, 0%, 25%);     /* Secondary background color */
   --bg-tertiary: hsl(0, 0%, 10%);      /* Tertiary background */
+  --bg-main: hsl(0, 0%, 0%);             /* Master Background */
   --bg-hover: hsl(0, 0%, 28%);         /* Hover state background */
   --bg-quaternary: hsl(0, 0%, 5%);     /* Additional background level */
   

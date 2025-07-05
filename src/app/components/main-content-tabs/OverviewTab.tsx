@@ -17,13 +17,13 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ instrument }) => {
   // Mock chart data - in real app this would come from API
   const chartData = Array.from({ length: 50 }, (_, i) => ({
     time: i,
-    price: instrument.price + (Math.random() - 0.5) * 100,
+    price: (Math.random())*100,
   }));
 
   return (
     <div className="space-y-6">
       {/* Chart Placeholder */}
-      <div className="bg-void-900 rounded-lg p-6 h-96">
+      <div className="bg-[var(--bg-tertiary)] rounded-lg p-6 h-96">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold text-white">Price Chart</h3>
           <div className="flex items-center space-x-2">
@@ -54,7 +54,7 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ instrument }) => {
               style={{
                 height: `${Math.max(
                   10,
-                  (point.price / instrument.price) * 100
+                  (point.price) 
                 )}%`,
               }}
             />
@@ -64,7 +64,7 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ instrument }) => {
 
       {/* Statistics Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-void-900 rounded-lg p-4">
+        <div className="bg-[var(--bg-tertiary)] rounded-lg p-4">
           <div className="flex items-center justify-between">
             <div>
               <div className="text-void-400 text-sm">Open</div>
@@ -79,7 +79,7 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ instrument }) => {
           </div>
         </div>
 
-        <div className="bg-void-900 rounded-lg p-4">
+        <div className="bg-[var(--bg-tertiary)] rounded-lg p-4">
           <div className="flex items-center justify-between">
             <div>
               <div className="text-void-400 text-sm">Previous Close</div>
@@ -95,7 +95,7 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ instrument }) => {
         </div>
 
         {instrument.pe > 0 && (
-          <div className="bg-void-900 rounded-lg p-4">
+          <div className="bg-[var(--bg-tertiary)] rounded-lg p-4">
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-void-400 text-sm">P/E Ratio</div>
@@ -108,7 +108,7 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ instrument }) => {
           </div>
         )}
 
-        <div className="bg-void-900 rounded-lg p-4">
+        <div className="bg-[var(--bg-tertiary)] rounded-lg p-4">
           <div className="flex items-center justify-between">
             <div>
               <div className="text-void-400 text-sm">Sector</div>
@@ -121,7 +121,7 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ instrument }) => {
 
       {/* Additional Info for Futures */}
       {"expiryDate" in instrument && (
-        <div className="bg-void-900 rounded-lg p-4">
+        <div className="bg-[var(--bg-tertiary)] rounded-lg p-4">
           <h3 className="text-lg font-semibold mb-4">Futures Information</h3>
           <div className="grid grid-cols-3 gap-4">
             <div>

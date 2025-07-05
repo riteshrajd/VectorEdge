@@ -416,7 +416,7 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
                   <button
                     onClick={handleSendMessage}
                     disabled={!inputMessage.trim()}
-                    className="px-3.5 py-1.5 bg-[var(--accent)] hover:bg-[var(--accent-hover)] disabled:bg-[var(--disabled)] disabled:cursor-not-allowed rounded-lg transition-colors flex items-center justify-center"
+                    className="px-3.5 py-1.5 bg-gradient-to-br from:-[var(--accent-ai)] to:-[var(--accent-secondary-ai)] hover:bg-[var(--accent-hover)] disabled:bg-[var(--disabled)] disabled:cursor-not-allowed rounded-lg transition-colors flex items-center justify-center"
                   >
                     <Send size={14} />
                   </button>
