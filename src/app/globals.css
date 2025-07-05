@@ -153,14 +153,13 @@
 
 
 
-
 /*--------------------------------- Theme Colors --------------------------------------- */
 :root {
   /* Backgrounds */
   --bg-primary: hsl(0, 0%, 15%);       /* Primary background color */
   --bg-secondary: hsl(0, 0%, 25%);     /* Secondary background color */
   --bg-tertiary: hsl(0, 0%, 10%);      /* Tertiary background */
-  --bg-main: hsl(0, 0%, 0%);             /* Master Background */
+  --bg-main: hsl(240, 1%, 14%);           /* Master Background */
   --bg-hover: hsl(0, 0%, 28%);         /* Hover state background */
   --bg-quaternary: hsl(0, 0%, 5%);     /* Additional background level */
   
@@ -176,19 +175,26 @@
   
   /* Accents & Status */
   --accent: hsl(0, 0%, 50%);            /* Primary accent color */
-  --accent-hard: hsl(0, 0%, 90%);            /* Primary accent color */
-  --accent-ai: hsl(205, 100%, 50%);            /* Primary accent color */
+  --accent-hard: hsl(0, 0%, 90%);       /* Primary accent color */
+  --accent-ai: hsl(205, 100%, 50%);     /* Primary accent color */
   --accent-secondary-ai: hsl(147, 61%, 47%);  /* Secondary accent */
+  --accent-send: hsl(179, 81%, 35%);     /* Primary accent color */
+  --accent-send-hover: hsl(179, 79%, 30%);     /* Primary accent color */
+  --accent-secondary-chat: hsl(220, 72%, 55%);  /* Secondary accent */
+  --accent-main: hsl(205, 100%, 50%);     /* Primary accent color */
+  --accent-secondary-main: hsl(147, 61%, 47%);  /* Secondary accent */
   --accent-secondary: hsl(0, 0%, 40%);  /* Secondary accent */
   --accent-hover: hsl(0, 0%, 45%);      /* Accent hover state */
   --positive: hsl(120, 40%, 50%);       /* Positive state (green) */
   --negative: hsl(0, 60%, 50%);         /* Negative state (red) */
   --neutral: hsl(60, 70%, 50%);         /* Neutral state (yellow) */
   --disabled: hsl(0, 0%, 30%);          /* Disabled state */
-  
+
   /* UI Elements */
-  --user-bubble: hsl(0, 0%, 25%);       /* User chat bubble */
+  --user-bubble: hsl(0, 0%, 46%);       /* User chat bubble */
   --ai-bubble: hsl(0, 0%, 20%);         /* AI chat bubble */
+  --user-chat-bubble: hsl(191, 60%, 35%);       /* User chat bubble */
+  --ai-chat-bubble: hsl(0, 0%, 20%);         /* AI chat bubble */
   --star-fill: hsl(60, 70%, 50%);       /* Favorite star color */
   
   /* Instrument colors */

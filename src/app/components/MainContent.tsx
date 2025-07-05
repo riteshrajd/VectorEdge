@@ -1,24 +1,15 @@
 // components/MainContent.tsx
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import {
-  TrendingUp,
-  TrendingDown,
   BarChart3,
   Activity,
   FileText,
   Users,
   Globe,
-  Calendar,
-  DollarSign,
-  Percent,
-  Volume2,
-  Building2,
-  Clock,
   ArrowUp,
   ArrowDown,
-  Maximize2,
   MoreHorizontal,
   Star,
   Bell,
@@ -28,54 +19,25 @@ import { MainContentProps, Instrument, ChangeData } from "../types";
 import TechnicalTab from "./main-content-tabs/TechnicalTab";
 import FundamentalTab from "./main-content-tabs/FundamentalTab";
 import NewsSentimentsTab from "./main-content-tabs/NewsSentimentsTab";
-import Image from "next/image";
 import OverviewTab from "./main-content-tabs/OverviewTab";
 
 const MainContent: React.FC<MainContentProps> = ({ selectedInstrument }) => {
   const [activeTab, setActiveTab] = useState<string>("overview");
-  const [isHeaderCompact, setIsHeaderCompact] = useState(false);
-  const contentRef = useRef<HTMLDivElement>(null);
-
-  // Handle scroll to transform header
-  useEffect(() => {
-    const handleScroll = () => {
-      if (contentRef.current) {
-        const scrollTop = contentRef.current.scrollTop;
-        const shouldBeCompact = scrollTop > 10; // Transform after 50px of scroll
-        
-        if (shouldBeCompact !== isHeaderCompact) {
-          setIsHeaderCompact(shouldBeCompact);
-        }
-      }
-    };
-
-    const contentElement = contentRef.current;
-    if (contentElement) {
-      contentElement.addEventListener("scroll", handleScroll);
-      return () => contentElement.removeEventListener("scroll", handleScroll);
-    }
-  }, [isHeaderCompact]);
-
-  // Reset header state when tab changes
-  useEffect(() => {
-    setIsHeaderCompact(false);
-    if (contentRef.current) {
-      contentRef.current.scrollTop = 0;
-    }
-  }, [activeTab]);
 
   // If no instrument is selected, show welcome screen
   if (!selectedInstrument) {
     return (
-      <div className="h-full flex items-center justify-center">
+      <div className="h-full flex items-center justify-center bg-[var(--bg-main)]">
         <div className="text-center">
-          <div className="w-24 h-24 mx-auto mb-6 bg-void-800 rounded-full flex items-center justify-center">
-            <BarChart3 className="w-12 h-12 text-void-500" />
+          <div 
+            className="w-30 h-30 mx-auto mb-6 rounded-full flex items-center justify-center bg-[var(--bg-tertiary)]"
+          >
+            <BarChart3 className="w-16 h-16 text-[var(--text-muted)]" />
           </div>
-          <h2 className="text-2xl font-semibold text-white mb-2">
+          <h2 className="text-2xl font-semibold mb-2 text-[var(--text-primary)]">
             Welcome to Trading Dashboard
           </h2>
-          <p className="text-void-400 max-w-md mx-auto">
+          <p className="max-w-md mx-auto text-[var(--text-secondary)]">
             Select an instrument from the sidebar to view detailed analysis,
             charts, and market data.
           </p>
@@ -83,14 +45,13 @@ const MainContent: React.FC<MainContentProps> = ({ selectedInstrument }) => {
       </div>
     );
   }
-
-  // Format change data with color
+  
   const formatChange = (change: number, changePercent: number): ChangeData => {
     const isPositive = change >= 0;
     return {
       change: `${isPositive ? "+" : ""}${change.toFixed(2)}`,
       changePercent: `${isPositive ? "+" : ""}${changePercent.toFixed(2)}%`,
-      colorClass: isPositive ? "text-green-400" : "text-red-400",
+      colorClass: isPositive ? "text-[var(--positive)]" : "text-[var(--negative)]",
     };
   };
 
@@ -108,61 +69,39 @@ const MainContent: React.FC<MainContentProps> = ({ selectedInstrument }) => {
     { id: "social", label: "Social Signals", icon: Users },
   ];
 
-  // Mock chart data - in real app this would come from API
-  const chartData = Array.from({ length: 50 }, (_, i) => ({
-    time: i,
-    price: selectedInstrument.price + (Math.random() - 0.5) * 100,
-  }));
-
   return (
-    <div className="h-full w-full flex justify-center">
-      <div className="h-full w-full max-w-[1000px] min-w-[100px] flex flex-col text-white relative z-10 overflow-hidden">
-        {/* Animated Header Section */}
+    <div className="h-full w-full flex justify-center bg-[var(--bg-main)]">
+      <div className="h-full w-full max-w-[1000px] min-w-[100px] flex flex-col relative z-10 overflow-hidden text-[var(--text-primary)]">
+        {/* Compact Header Section */}
         <div 
-          className={`border-b border-void-800 flex-shrink-0 transition-all duration-300 ease-in-out ${
-            isHeaderCompact ? 'p-3' : 'p-6'
-          }`}
+          className="flex-shrink-0 p-3 border-b border-[var(--border)]"
+          style={{ backgroundColor: 'var(--bg-primary)' }}
         >
-          <div className={`flex items-center justify-between transition-all duration-300 ease-in-out ${
-            isHeaderCompact ? 'space-y-0' : 'mb-4'
-          }`}>
+          <div className="flex items-center justify-between">
             {/* Left: Symbol and Info */}
-            <div className={`flex items-center transition-all duration-300 ease-in-out ${
-              isHeaderCompact ? 'space-x-3' : 'space-x-4'
-            }`}>
+            <div className="flex items-center space-x-3">
               <div
-                className={`rounded-full flex items-center justify-center text-white font-bold transition-all duration-300 ease-in-out ${
-                  isHeaderCompact 
-                    ? 'w-8 h-8 text-xs' 
-                    : 'w-12 h-12 text-sm'
-                }`}
-                style={{ backgroundColor: selectedInstrument.color }}
+                className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs"
+                style={{ 
+                  backgroundColor: selectedInstrument.color,
+                  color: 'var(--text-primary)'
+                }}
               >
                 {selectedInstrument.symbol.substring(0, 2)}
               </div>
-              <div className={`transition-all duration-300 ease-in-out ${
-                isHeaderCompact ? 'flex items-center space-x-4' : 'block'
-              }`}>
+              <div className="flex items-center space-x-4">
                 <div>
-                  <h1 className={`font-bold text-white leading-tight transition-all duration-300 ease-in-out ${
-                    isHeaderCompact ? 'text-lg' : 'text-2xl'
-                  }`}>
+                  <h1 className="text-lg font-bold leading-tight">
                     {selectedInstrument.symbol}
                   </h1>
-                  <p className={`text-void-400 transition-all duration-300 ease-in-out ${
-                    isHeaderCompact ? 'text-xs' : 'text-sm'
-                  }`}>
+                  <p className="text-xs text-[var(--text-secondary)]">
                     {selectedInstrument.name}
                   </p>
                 </div>
                 
-                {/* Price info - moves inline when compact */}
-                <div className={`transition-all duration-300 ease-in-out ${
-                  isHeaderCompact ? 'flex items-center space-x-3' : 'mt-2'
-                }`}>
-                  <div className={`font-bold text-white transition-all duration-300 ease-in-out ${
-                    isHeaderCompact ? 'text-lg' : 'text-3xl mb-1'
-                  }`}>
+                {/* Price info - inline layout */}
+                <div className="flex items-center space-x-3">
+                  <div className="text-lg font-bold">
                     {selectedInstrument.symbol.includes("USD") ||
                     selectedInstrument.symbol.includes("SPX")
                       ? `$${selectedInstrument.price.toLocaleString("en-US", {
@@ -172,21 +111,13 @@ const MainContent: React.FC<MainContentProps> = ({ selectedInstrument }) => {
                           minimumFractionDigits: 2,
                         })}`}
                   </div>
-                  <div
-                    className={`flex items-center space-x-1 transition-all duration-300 ease-in-out ${changeData.colorClass}`}
-                  >
+                  <div className={`flex items-center space-x-1 ${changeData.colorClass}`}>
                     {selectedInstrument.change >= 0 ? (
-                      <ArrowUp className={`transition-all duration-300 ease-in-out ${
-                        isHeaderCompact ? 'w-3 h-3' : 'w-4 h-4'
-                      }`} />
+                      <ArrowUp className="w-3 h-3" />
                     ) : (
-                      <ArrowDown className={`transition-all duration-300 ease-in-out ${
-                        isHeaderCompact ? 'w-3 h-3' : 'w-4 h-4'
-                      }`} />
+                      <ArrowDown className="w-3 h-3" />
                     )}
-                    <span className={`font-medium transition-all duration-300 ease-in-out ${
-                      isHeaderCompact ? 'text-sm' : 'text-base'
-                    }`}>
+                    <span className="text-sm font-medium">
                       {changeData.change} ({changeData.changePercent})
                     </span>
                   </div>
@@ -195,104 +126,54 @@ const MainContent: React.FC<MainContentProps> = ({ selectedInstrument }) => {
             </div>
 
             {/* Action Buttons */}
-            <div className={`flex items-center transition-all duration-300 ease-in-out ${
-              isHeaderCompact ? 'space-x-1' : 'space-x-2'
-            }`}>
-              <button className={`hover:bg-void-800 rounded-lg transition-all duration-300 ease-in-out ${
-                isHeaderCompact ? 'p-1.5' : 'p-2'
-              }`}>
-                <Star className={`text-void-400 hover:text-yellow-400 transition-all duration-300 ease-in-out ${
-                  isHeaderCompact ? 'w-4 h-4' : 'w-5 h-5'
-                }`} />
+            <div className="flex items-center space-x-1">
+              <button 
+                className="p-1.5 rounded-lg transition-colors duration-200 hover:bg-[var(--bg-hover)]"
+              >
+                <Star 
+                  className="w-4 h-4 transition-colors duration-200 text-[var(--text-secondary)] hover:text-[var(--star-fill)]" 
+                />
               </button>
-              <button className={`hover:bg-void-800 rounded-lg transition-all duration-300 ease-in-out ${
-                isHeaderCompact ? 'p-1.5' : 'p-2'
-              }`}>
-                <Bell className={`text-void-400 transition-all duration-300 ease-in-out ${
-                  isHeaderCompact ? 'w-4 h-4' : 'w-5 h-5'
-                }`} />
+              <button 
+                className="p-1.5 rounded-lg transition-colors duration-200 hover:bg-[var(--bg-hover)]"
+              >
+                <Bell className="w-4 h-4 text-[var(--text-secondary)]" />
               </button>
-              <button className={`hover:bg-void-800 rounded-lg transition-all duration-300 ease-in-out ${
-                isHeaderCompact ? 'p-1.5' : 'p-2'
-              }`}>
-                <Share2 className={`text-void-400 transition-all duration-300 ease-in-out ${
-                  isHeaderCompact ? 'w-4 h-4' : 'w-5 h-5'
-                }`} />
+              <button 
+                className="p-1.5 rounded-lg transition-colors duration-200 hover:bg-[var(--bg-hover)]"
+              >
+                <Share2 className="w-4 h-4 text-[var(--text-secondary)]" />
               </button>
-              <button className={`hover:bg-void-800 rounded-lg transition-all duration-300 ease-in-out ${
-                isHeaderCompact ? 'p-1.5' : 'p-2'
-              }`}>
-                <MoreHorizontal className={`text-void-400 transition-all duration-300 ease-in-out ${
-                  isHeaderCompact ? 'w-4 h-4' : 'w-5 h-5'
-                }`} />
+              <button 
+                className="p-1.5 rounded-lg transition-colors duration-200 hover:bg-[var(--bg-hover)]"
+              >
+                <MoreHorizontal className="w-4 h-4 text-[var(--text-secondary)]" />
               </button>
-            </div>
-          </div>
-
-          {/* Key Metrics - Hidden when compact, shown when expanded */}
-          <div className={`transition-all duration-300 ease-in-out overflow-hidden ${
-            isHeaderCompact 
-              ? 'max-h-0 opacity-0 transform -translate-y-2' 
-              : 'max-h-20 opacity-100 transform translate-y-0'
-          }`}>
-            <div className="flex items-center space-x-8 text-sm pt-2">
-              <div>
-                <div className="text-void-400">High</div>
-                <div className="font-medium">
-                  {selectedInstrument.symbol.includes("USD") ||
-                  selectedInstrument.symbol.includes("SPX")
-                    ? `$${selectedInstrument.high.toLocaleString()}`
-                    : `₹${selectedInstrument.high.toLocaleString()}`}
-                </div>
-              </div>
-              <div>
-                <div className="text-void-400">Low</div>
-                <div className="font-medium">
-                  {selectedInstrument.symbol.includes("USD") ||
-                  selectedInstrument.symbol.includes("SPX")
-                    ? `$${selectedInstrument.low.toLocaleString()}`
-                    : `₹${selectedInstrument.low.toLocaleString()}`}
-                </div>
-              </div>
-              <div>
-                <div className="text-void-400">Volume</div>
-                <div className="font-medium">{selectedInstrument.volume}</div>
-              </div>
-              <div>
-                <div className="text-void-400">Market Cap</div>
-                <div className="font-medium">
-                  {selectedInstrument.marketCap}
-                </div>
-              </div>
             </div>
           </div>
         </div>
 
         {/* Navigation Tabs */}
-        <div className="border-b border-void-800 flex-shrink-0">
-          <div className={`flex transition-all duration-300 ease-in-out ${
-            isHeaderCompact ? 'space-x-4 px-4' : 'space-x-8 px-6'
-          }`}>
+        <div 
+          className="flex-shrink-0 border-b border-[var(--border)]"
+          style={{ backgroundColor: 'var(--bg-primary)' }}
+        >
+          <div className="flex space-x-4 px-4">
             {tabs.map((tab) => {
               const Icon = tab.icon;
+              const isActive = activeTab === tab.id;
               return (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center space-x-2 border-b-2 transition-all duration-300 ease-in-out ${
-                    isHeaderCompact ? 'py-2 px-1' : 'py-4 px-1'
-                  } ${
-                    activeTab === tab.id
-                      ? "border-blue-500 text-blue-400"
-                      : "border-transparent text-void-400 hover:text-white"
+                  className={`flex items-center space-x-2 py-2 px-1 border-b-2 transition-colors duration-200 ${
+                    isActive 
+                      ? "border-[var(--accent-main)] text-[var(--accent-main)]" 
+                      : "border-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                   }`}
                 >
-                  <Icon className={`transition-all duration-300 ease-in-out ${
-                    isHeaderCompact ? 'w-3 h-3' : 'w-4 h-4'
-                  }`} />
-                  <span className={`font-medium transition-all duration-300 ease-in-out ${
-                    isHeaderCompact ? 'text-xs' : 'text-sm'
-                  }`}>
+                  <Icon className="w-3 h-3" />
+                  <span className="text-xs font-medium">
                     {tab.label}
                   </span>
                 </button>
@@ -302,78 +183,30 @@ const MainContent: React.FC<MainContentProps> = ({ selectedInstrument }) => {
         </div>
 
         {/* Content Area - Scrollable */}
-        <div 
-          ref={contentRef}
-          className="flex-1 overflow-y-auto p-6 scroll-smooth"
-          style={{ scrollBehavior: 'smooth' }}
-        >
+        <div className="flex-1 overflow-y-auto p-6 bg-[var(--bg-main)]">
           {activeTab === "overview" && (
-            <div>
-              <OverviewTab instrument={selectedInstrument} />
-              <div className="mt-6">
-                <FundamentalTab instrument={selectedInstrument} />
-              </div>
-              <div className="mt-6">
-                <FundamentalTab instrument={selectedInstrument} />
-              </div>
-              <div className="mt-6">
-                <FundamentalTab instrument={selectedInstrument} />
-              </div>
-            </div>
+            <OverviewTab instrument={selectedInstrument} />
           )}
 
           {activeTab === "technical" && (
-            <div>
-              <TechnicalTab instrument={selectedInstrument} />
-              <div className="mt-6">
-                <FundamentalTab instrument={selectedInstrument} />
-              </div>
-              <div className="mt-6">
-                <FundamentalTab instrument={selectedInstrument} />
-              </div>
-              <div className="mt-6">
-                <FundamentalTab instrument={selectedInstrument} />
-              </div>
-            </div>
+            <TechnicalTab instrument={selectedInstrument} />
           )}
 
           {activeTab === "fundamental" && (
-            <div>
-              <FundamentalTab instrument={selectedInstrument} />
-              <div className="mt-6">
-                <FundamentalTab instrument={selectedInstrument} />
-              </div>
-              <div className="mt-6">
-                <FundamentalTab instrument={selectedInstrument} />
-              </div>
-              <div className="mt-6">
-                <FundamentalTab instrument={selectedInstrument} />
-              </div>
-            </div>
+            <FundamentalTab instrument={selectedInstrument} />
           )}
 
           {activeTab === "news" && (
-            <div>
-              <NewsSentimentsTab instrument={selectedInstrument} />
-              <div className="mt-6">
-                <FundamentalTab instrument={selectedInstrument} />
-              </div>
-              <div className="mt-6">
-                <FundamentalTab instrument={selectedInstrument} />
-              </div>
-              <div className="mt-6">
-                <FundamentalTab instrument={selectedInstrument} />
-              </div>
-            </div>
+            <NewsSentimentsTab instrument={selectedInstrument} />
           )}
 
           {activeTab === "social" && (
             <div className="text-center py-12">
-              <Users className="w-16 h-16 text-void-600 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-void-400 mb-2">
+              <Users className="w-16 h-16 mx-auto mb-4 text-[var(--text-muted)]" />
+              <h3 className="text-xl font-semibold mb-2 text-[var(--text-secondary)]">
                 Social Signals
               </h3>
-              <p className="text-void-500">
+              <p className="text-[var(--text-muted)]">
                 Social media sentiment and signals will be displayed here.
               </p>
             </div>

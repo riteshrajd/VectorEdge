@@ -23,7 +23,7 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ instrument }) => {
   return (
     <div className="space-y-6">
       {/* Chart Placeholder */}
-      <div className="bg-[var(--bg-tertiary)] rounded-lg p-6 h-96">
+      <div className="bg-[var(--bg-tertiary)] rounded-lg p-6 pb-16 h-96">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold text-white">Price Chart</h3>
           <div className="flex items-center space-x-2">

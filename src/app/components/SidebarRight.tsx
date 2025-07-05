@@ -368,8 +368,8 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
                     <div
                       className={`rounded-lg p-2 text-sm ${
                         message.sender === 'user'
-                          ? 'bg-[var(--user-bubble)] text-[var(--text-primary)]'
-                          : 'bg-[var(--ai-bubble)] text-[var(--text-primary)]'
+                          ? 'bg-[var(--user-chat-bubble)] text-[var(--text-primary)]'
+                          : 'bg-[var(--ai-chat-bubble)] text-[var(--text-primary)]'
                       }`}
                     >
                       <p>{message.content}</p>
@@ -384,7 +384,7 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
               {isTyping && (
                 <div className="flex justify-start">
                   <div className="flex items-start space-x-2">
-                    <div className="w-6 h-6 bg-gradient-to-br from-[var(--accent)] to-[var(--accent-secondary-ai)] rounded-full flex items-center justify-center">
+                    <div className="w-6 h-6 bg-gradient-to-br from-[var(--accent-ai)] to-[var(--accent-secondary-ai)] rounded-full flex items-center justify-center">
                       <Bot size={12} />
                     </div>
                     <div className="bg-[var(--ai-bubble)] rounded-lg p-2">
@@ -416,7 +416,7 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
                   <button
                     onClick={handleSendMessage}
                     disabled={!inputMessage.trim()}
-                    className="px-3.5 py-1.5 bg-gradient-to-br from:-[var(--accent-ai)] to:-[var(--accent-secondary-ai)] hover:bg-[var(--accent-hover)] disabled:bg-[var(--disabled)] disabled:cursor-not-allowed rounded-lg transition-colors flex items-center justify-center"
+                    className="px-3.5 bg-[var(--accent-send)] py-1.5 hover:bg-[var(--accent-send-hover)] rounded-lg transition-colors flex items-center justify-center"
                   >
                     <Send size={14} />
                   </button>
