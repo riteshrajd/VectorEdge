@@ -7,6 +7,7 @@ import SidebarLeft from "./components/SidebarLeft";
 import SidebarRight from "./components/SidebarRight";
 import { Instrument } from "./types";
 import Image from "next/image";
+import ThemeSelector from "./components/ThemeSelector";
 
 export default function Home(): JSX.Element {
   const [selectedInstrument, setSelectedInstrument] =
@@ -19,7 +20,8 @@ export default function Home(): JSX.Element {
 
   return (
     <div className="flex flex-col h-screen font-sans overflow-clip bg-[var(--bg-main)]">
-      <div className="w-full z-10">{/* <Header /> */}</div>
+      {/* <div className="w-full z-10"><Header /></div> */}
+      {/* <div className="w-full z-10"><ThemeSelector /></div> */}
       <div className="flex flex-1 min-h-0 relative">
         {/* <Image
           alt="Background gradient"

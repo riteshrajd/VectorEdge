@@ -271,7 +271,7 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
             onClick={() => setActiveTab('chat')}
             className={`flex-1 py-2 px-3 text-xs font-medium transition-colors flex items-center justify-center space-x-1 ${
               activeTab === 'chat'
-                ? "bg-[var(--bg-secondary)] text-[var(--text-primary)] border-b-2 border-[var(--accent-hard)]"
+                ? "bg-[var(--bg-secondary)] text-[var(--text-primary)] border-b-2 border-[var(--accent-main)]"
                 : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-hover)]"
             }`}
           >
@@ -282,7 +282,7 @@ const SidebarRight: React.FC<SidebarRightProps> = ({
             onClick={() => setActiveTab('analysis')}
             className={`flex-1 py-2 px-3 text-xs font-medium transition-colors flex items-center justify-center space-x-1 ${
               activeTab === 'analysis'
-                ? "bg-[var(--bg-secondary)] text-[var(--text-primary)] border-b-2 border-[var(--accent-hard)]"
+                ? "bg-[var(--bg-secondary)] text-[var(--text-primary)] border-b-2 border-[var(--accent-main)]"
                 : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-hover)]"
             }`}
           >

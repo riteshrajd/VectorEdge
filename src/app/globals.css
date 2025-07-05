@@ -158,14 +158,17 @@
   /* Backgrounds */
   --bg-primary: hsl(0, 0%, 15%);       /* Primary background color */
   --bg-secondary: hsl(0, 0%, 25%);     /* Secondary background color */
-  --bg-tertiary: hsl(0, 0%, 10%);      /* Tertiary background */
-  --bg-main: hsl(240, 1%, 14%);           /* Master Background */
+  --bg-tertiary: hsl(0, 0%, 13%);      /* Tertiary background */
+  --bg-main: hsl(0, 0%, 10%);           /* Master Background */
   --bg-hover: hsl(0, 0%, 28%);         /* Hover state background */
   --bg-quaternary: hsl(0, 0%, 5%);     /* Additional background level */
+  --bg-card-primary: hsl(0, 0%, 13%);  /* Cards */
+  --bg-card-secondary: hsl(0, 0%, 17%);
+  --bg-card-tertiary: hsl(0, 0%, 23%); 
   
   /* Text */
   --text-primary: #ffffff;              /* Primary text color */
-  --text-secondary: hsl(0, 0%, 70%);    /* Secondary text color */
+  --text-secondary: hsl(0, 0%, 60%);    /* Secondary text color */
   --text-muted: hsl(0, 0%, 50%);       /* Muted text color */
   --text-accent: hsl(0, 0%, 80%);      /* Accent text */
   
@@ -175,22 +178,21 @@
   
   /* Accents & Status */
   --accent: hsl(0, 0%, 50%);            /* Primary accent color */
-  --accent-hard: hsl(0, 0%, 90%);       /* Primary accent color */
-  --accent-ai: hsl(205, 100%, 50%);     /* Primary accent color */
-  --accent-secondary-ai: hsl(147, 61%, 47%);  /* Secondary accent */
-  --accent-send: hsl(179, 81%, 35%);     /* Primary accent color */
-  --accent-send-hover: hsl(179, 79%, 30%);     /* Primary accent color */
-  --accent-secondary-chat: hsl(220, 72%, 55%);  /* Secondary accent */
-  --accent-main: hsl(205, 100%, 50%);     /* Primary accent color */
-  --accent-secondary-main: hsl(147, 61%, 47%);  /* Secondary accent */
-  --accent-secondary: hsl(0, 0%, 40%);  /* Secondary accent */
+  --accent-main: hsl(0, 0%, 90%);       /* Primary accent color */
   --accent-hover: hsl(0, 0%, 45%);      /* Accent hover state */
-  --positive: hsl(120, 40%, 50%);       /* Positive state (green) */
+  --positive: hsl(120, 70%, 54%);       /* Positive state (green) */
   --negative: hsl(0, 60%, 50%);         /* Negative state (red) */
   --neutral: hsl(60, 70%, 50%);         /* Neutral state (yellow) */
   --disabled: hsl(0, 0%, 30%);          /* Disabled state */
+  
+  /* chat accent*/
+  --accent-ai: hsl(205, 100%, 50%);     /* Primary accent color */
+  --accent-secondary-ai: hsl(147, 61%, 47%);  /* Secondary accent */
+  --accent-send: hsl(179, 54%, 38%);     /* Primary accent color */
+  --accent-send-hover: hsl(179, 70%, 29%);     /* Primary accent color */
 
   /* UI Elements */
+
   --user-bubble: hsl(0, 0%, 46%);       /* User chat bubble */
   --ai-bubble: hsl(0, 0%, 20%);         /* AI chat bubble */
   --user-chat-bubble: hsl(191, 60%, 35%);       /* User chat bubble */
@@ -201,4 +203,254 @@
   --instrument-1: hsl(240, 20%, 70%);
   --instrument-2: hsl(40, 20%, 60%);
   --instrument-3: hsl(160, 20%, 40%);
+}
+
+:root.light-theme {
+  /* Backgrounds */
+  --bg-primary: hsl(0, 0%, 92%);       /* Slightly off-white primary background */
+  --bg-secondary: hsl(0, 0%, 88%);     /* Slightly darker secondary background */
+  --bg-tertiary: hsl(0, 0%, 95%);      /* Light tertiary background */
+  --bg-main: hsl(0, 0%, 90%);          /* Light master background */
+  --bg-hover: hsl(0, 0%, 85%);         /* Subtle hover state */
+  --bg-quaternary: hsl(0, 0%, 98%);    /* Very light additional background */
+  --bg-card-primary: hsl(0, 0%, 92%);  /* Light cards */
+  --bg-card-secondary: hsl(0, 0%, 87%);
+  --bg-card-tertiary: hsl(0, 0%, 82%);
+  
+  /* Text */
+  --text-primary: hsl(0, 0%, 15%);     /* Darker primary text for better contrast */
+  --text-secondary: hsl(0, 0%, 35%);   /* Darker secondary text */
+  --text-muted: hsl(0, 0%, 55%);       /* Medium muted text */
+  --text-accent: hsl(0, 0%, 25%);      /* Darker accent text */
+  
+  /* Borders */
+  --border: hsl(0, 0%, 75%);           /* Softer light border */
+  --border-secondary: hsl(0, 0%, 85%); /* Lighter secondary border */
+  
+  /* Accents & Status */
+  --accent: hsl(205, 70%, 50%);        /* Blue accent for distinction */
+  --accent-main: hsl(205, 70%, 40%);   /* Consistent blue main accent */
+  --accent-hover: hsl(205, 70%, 55%);  /* Hover with blue tint */
+  --positive: hsl(120, 70%, 45%);      /* Softer green with better contrast */
+  --negative: hsl(0, 65%, 50%);        /* Red with slight adjustment */
+  --neutral: hsl(60, 70%, 45%);        /* Softer yellow */
+  --disabled: hsl(0, 0%, 65%);         /* Lighter disabled */
+  
+  /* Chat Accents */
+  --accent-ai: hsl(192, 90%, 46%);     /* Softer AI blue */
+  --accent-secondary-ai: hsl(147, 62%, 44%); /* Softer green */
+  --accent-send: hsl(179, 54%, 45%);   /* Lighter cyan */
+  --accent-send-hover: hsl(179, 70%, 50%); /* Lighter cyan hover */
+  
+  /* UI Elements */
+  --user-bubble: hsl(205, 70%, 90%);   /* Light blue user bubble */
+  --ai-bubble: hsl(0, 0%, 95%);        /* Very light AI bubble */
+  --user-chat-bubble: hsl(192, 62%, 70%); /* Light cyan chat bubble */
+  --ai-chat-bubble: hsl(0, 0%, 95%);   /* Very light AI chat bubble */
+  --star-fill: hsl(60, 70%, 45%);      /* Softer yellow star */
+  
+  /* Instrument colors */
+  --instrument-1: hsl(240, 20%, 35%);
+  --instrument-2: hsl(40, 20%, 45%);
+  --instrument-3: hsl(160, 20%, 65%);
+}
+
+:root.solarized-theme {
+  /* Backgrounds */
+  --bg-primary: hsl(30, 20%, 15%);     /* Warm base */
+  --bg-secondary: hsl(30, 20%, 25%);   /* Slightly lighter warm */
+  --bg-tertiary: hsl(30, 20%, 10%);    /* Deeper warm */
+  --bg-main: hsl(30, 30%, 15%);        /* Rich warm base */
+  --bg-hover: hsl(30, 20%, 30%);       /* Hover with warm tint */
+  --bg-quaternary: hsl(30, 20%, 5%);   /* Deep warm */
+  --bg-card-primary: hsl(29, 21%, 19%); /* Warm cards */
+  --bg-card-secondary: hsl(30, 22%, 25%);
+  --bg-card-tertiary: hsl(30, 20%, 25%);
+  
+  /* Text */
+  --text-primary: hsl(0, 0%, 95%);     /* Light gray text */
+  --text-secondary: hsl(30, 20%, 70%); /* Warm gray */
+  --text-muted: hsl(30, 20%, 50%);     /* Muted warm gray */
+  --text-accent: hsl(30, 20%, 80%);    /* Light warm accent */
+  
+  /* Borders */
+  --border: hsl(30, 20%, 20%);         /* Warm border */
+  --border-secondary: hsl(30, 20%, 15%); /* Darker warm border */
+  
+  /* Accents & Status */
+  --accent: hsl(30, 60%, 50%);         /* Warm orange */
+  --accent-main: hsl(30, 60%, 70%);    /* Lighter orange */
+  --accent-hover: hsl(30, 60%, 55%);   /* Lighter orange hover */
+  --positive: hsl(120, 40%, 50%);      /* Green */
+  --negative: hsl(0, 70%, 50%);        /* Red */
+  --neutral: hsl(60, 70%, 50%);        /* Yellow */
+  --disabled: hsl(30, 20%, 30%);       /* Dark warm gray */
+  
+  /* Chat Accents */
+  --accent-ai: hsl(180, 50%, 50%);     /* Cool cyan */
+  --accent-secondary-ai: hsl(120, 40%, 50%); /* Green */
+  --accent-send: hsl(200, 60%, 50%);   /* Cool blue */
+  --accent-send-hover: hsl(200, 60%, 55%); /* Brighter blue */
+  
+  /* UI Elements */
+  --user-bubble: hsl(200, 40%, 50%);   /* Cool blue user bubble */
+  --ai-bubble: hsl(30, 20%, 25%);      /* Warm AI bubble */
+  --user-chat-bubble: hsl(200, 40%, 50%); /* Cool blue chat */
+  --ai-chat-bubble: hsl(30, 20%, 25%); /* Warm AI chat */
+  --star-fill: hsl(60, 70%, 50%);      /* Yellow star */
+  
+  /* Instrument colors */
+  --instrument-1: hsl(180, 40%, 60%);
+  --instrument-2: hsl(30, 40%, 50%);
+  --instrument-3: hsl(120, 40%, 40%);
+}
+
+:root.high-contrast-theme {
+  /* Backgrounds */
+  --bg-primary: hsl(0, 0%, 0%);        /* Pure black background */
+  --bg-secondary: hsl(0, 0%, 10%);     /* Very dark gray */
+  --bg-tertiary: hsl(0, 0%, 5%);       /* Almost black */
+  --bg-main: hsl(0, 0%, 3%);           /* Deep black */
+  --bg-hover: hsl(0, 0%, 20%);         /* Dark hover */
+  --bg-quaternary: hsl(0, 0%, 2%);     /* Near-black */
+  --bg-card-primary: hsl(0, 0%, 5%);   /* Dark cards */
+  --bg-card-secondary: hsl(0, 0%, 8%);
+  --bg-card-tertiary: hsl(0, 0%, 12%);
+  
+  /* Text */
+  --text-primary: hsl(0, 0%, 100%);    /* Pure white */
+  --text-secondary: hsl(0, 0%, 75%);   /* Bright gray */
+  --text-muted: hsl(0, 0%, 70%);       /* Medium gray */
+  --text-accent: hsl(0, 0%, 95%);      /* Near-white accent */
+  
+  /* Borders */
+  --border: hsl(0, 0%, 30%);           /* Dark border */
+  --border-secondary: hsl(0, 0%, 25%); /* Darker secondary border */
+  
+  /* Accents & Status */
+  --accent: hsl(0, 0%, 80%);           /* Neutral gray accent */
+  --accent-main: hsl(0, 0%, 100%);      /* Darker accent */
+  --accent-hover: hsl(0, 0%, 70%);     /* Lighter hover */
+  --positive: hsl(120, 80%, 70%);      /* Bright green */
+  --negative: hsl(0, 80%, 70%);        /* Bright red */
+  --neutral: hsl(60, 80%, 70%);        /* Bright yellow */
+  --disabled: hsl(0, 0%, 40%);         /* Dark disabled */
+  
+  /* Chat Accents */
+  --accent-ai: hsl(205, 100%, 70%);    /* Bright AI blue */
+  --accent-secondary-ai: hsl(147, 61%, 67%); /* Bright green */
+  --accent-send: hsl(179, 81%, 65%);   /* Bright cyan */
+  --accent-send-hover: hsl(179, 70%, 70%); /* Brighter cyan */
+  
+  /* UI Elements */
+  --user-bubble: hsl(0, 0%, 80%);      /* Light user bubble */
+  --ai-bubble: hsl(0, 0%, 15%);        /* Dark AI bubble */
+  --user-chat-bubble: hsl(191, 60%, 85%); /* Bright user chat */
+  --ai-chat-bubble: hsl(0, 0%, 15%);   /* Dark AI chat */
+  --star-fill: hsl(60, 80%, 70%);      /* Bright star */
+  
+  /* Instrument colors */
+  --instrument-1: hsl(240, 80%, 70%);
+  --instrument-2: hsl(40, 80%, 60%);
+  --instrument-3: hsl(160, 80%, 40%);
+}
+
+:root.neon-theme {
+  /* Backgrounds */
+  --bg-primary: hsl(240, 10%, 10%);    /* Deep blue background */
+  --bg-secondary: hsl(240, 10%, 15%);  /* Slightly lighter blue */
+  --bg-tertiary: hsl(240, 10%, 5%);    /* Deeper blue */
+  --bg-main: hsl(240, 20%, 10%);       /* Rich blue */
+  --bg-hover: hsl(240, 10%, 20%);      /* Hover with blue tint */
+  --bg-quaternary: hsl(240, 10%, 3%);  /* Deepest blue */
+  --bg-card-primary: hsl(240, 10%, 12%); /* Blue cards */
+  --bg-card-secondary: hsl(240, 10%, 15%);
+  --bg-card-tertiary: hsl(240, 10%, 20%);
+  
+  /* Text */
+  --text-primary: hsl(0, 0%, 95%);     /* Light gray text */
+  --text-secondary: hsl(240, 10%, 70%); /* Blue-gray */
+  --text-muted: hsl(240, 10%, 50%);    /* Muted blue-gray */
+  --text-accent: hsl(240, 10%, 80%);   /* Light blue accent */
+  
+  /* Borders */
+  --border: hsl(240, 10%, 20%);        /* Blue border */
+  --border-secondary: hsl(240, 10%, 15%); /* Darker blue border */
+  
+  /* Accents & Status */
+  --accent: hsl(180, 80%, 50%);        /* Neon cyan */
+  --accent-main: hsl(180, 80%, 70%);   /* Lighter neon cyan */
+  --accent-hover: hsl(180, 80%, 55%);  /* Lighter neon cyan hover */
+  --positive: hsl(120, 80%, 50%);      /* Neon green */
+  --negative: hsl(0, 80%, 50%);        /* Neon red */
+  --neutral: hsl(60, 80%, 50%);        /* Neon yellow */
+  --disabled: hsl(240, 10%, 30%);      /* Dark blue-gray */
+  
+  /* Chat Accents */
+  --accent-ai: hsl(120, 80%, 50%);     /* Neon green */
+  --accent-secondary-ai: hsl(300, 80%, 50%); /* Neon purple */
+  --accent-send: hsl(180, 80%, 50%);   /* Neon cyan */
+  --accent-send-hover: hsl(180, 80%, 55%); /* Brighter neon cyan */
+  
+  /* UI Elements */
+  --user-bubble: hsl(180, 80%, 40%);   /* Neon cyan user bubble */
+  --ai-bubble: hsl(240, 10%, 15%);     /* Dark blue AI bubble */
+  --user-chat-bubble: hsl(180, 80%, 40%); /* Neon cyan chat */
+  --ai-chat-bubble: hsl(240, 10%, 15%); /* Dark blue AI chat */
+  --star-fill: hsl(60, 80%, 50%);      /* Neon yellow star */
+  
+  /* Instrument colors */
+  --instrument-1: hsl(180, 80%, 60%);
+  --instrument-2: hsl(300, 80%, 50%);
+  --instrument-3: hsl(120, 80%, 40%);
+}
+
+:root.tokyo-night-theme {
+  /* Backgrounds */
+  --bg-primary: hsl(240, 17%, 10%);    /* Deep blue */
+  --bg-secondary: hsl(240, 17%, 15%);  /* Slightly lighter blue */
+  --bg-tertiary: hsl(240, 17%, 8%);    /* Deeper blue */
+  --bg-main: hsl(240, 20%, 10%);       /* Rich midnight blue */
+  --bg-hover: hsl(240, 17%, 20%);      /* Hover with blue tint */
+  --bg-quaternary: hsl(240, 17%, 5%);  /* Deepest blue */
+  --bg-card-primary: hsl(240, 17%, 12%); /* Blue cards */
+  --bg-card-secondary: hsl(240, 17%, 15%);
+  --bg-card-tertiary: hsl(240, 17%, 20%);
+  
+  /* Text */
+  --text-primary: hsl(0, 0%, 90%);     /* Light gray text */
+  --text-secondary: hsl(240, 17%, 70%); /* Blue-gray */
+  --text-muted: hsl(240, 17%, 50%);    /* Muted blue-gray */
+  --text-accent: hsl(240, 17%, 80%);   /* Light blue accent */
+  
+  /* Borders */
+  --border: hsl(240, 17%, 20%);        /* Blue border */
+  --border-secondary: hsl(240, 17%, 15%); /* Darker blue border */
+  
+  /* Accents & Status */
+  --accent: hsl(270, 50%, 50%);        /* Deep purple */
+  --accent-main: hsl(270, 50%, 70%);   /* Lighter purple */
+  --accent-hover: hsl(270, 50%, 55%);  /* Lighter purple hover */
+  --positive: hsl(120, 50%, 50%);      /* Deep green */
+  --negative: hsl(0, 70%, 50%);        /* Deep red */
+  --neutral: hsl(60, 70%, 50%);        /* Yellow */
+  --disabled: hsl(240, 17%, 20%);      /* Dark blue-gray */
+  
+  /* Chat Accents */
+  --accent-ai: hsl(205, 70%, 50%);     /* Bright blue */
+  --accent-secondary-ai: hsl(147, 50%, 45%); /* Deep green */
+  --accent-send: hsl(179, 70%, 35%);   /* Deep cyan */
+  --accent-send-hover: hsl(179, 70%, 40%); /* Brighter cyan */
+  
+  /* UI Elements */
+  --user-bubble: hsl(191, 50%, 40%);   /* Cyan user bubble */
+  --ai-bubble: hsl(240, 17%, 15%);     /* Dark blue AI bubble */
+  --user-chat-bubble: hsl(191, 50%, 40%); /* Cyan user chat */
+  --ai-chat-bubble: hsl(240, 17%, 15%); /* Dark blue AI chat */
+  --star-fill: hsl(60, 70%, 50%);      /* Yellow star */
+  
+  /* Instrument colors */
+  --instrument-1: hsl(205, 40%, 60%);
+  --instrument-2: hsl(270, 40%, 50%);
+  --instrument-3: hsl(147, 40%, 40%);
 }

@@ -155,10 +155,10 @@ const MainContent: React.FC<MainContentProps> = ({ selectedInstrument }) => {
 
         {/* Navigation Tabs */}
         <div 
-          className="flex-shrink-0 border-b border-[var(--border)]"
+          className="flex-shrink-0 border-b border-[var(--border)] rounded-b-2xl"
           style={{ backgroundColor: 'var(--bg-primary)' }}
         >
-          <div className="flex space-x-4 px-4">
+          <div className="flex space-x-4 px-4 overflow-x-auto">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
