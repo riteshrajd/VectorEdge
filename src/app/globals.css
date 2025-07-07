@@ -260,11 +260,11 @@
   --bg-primary: hsl(30, 20%, 15%);     /* Warm base */
   --bg-secondary: hsl(30, 20%, 25%);   /* Slightly lighter warm */
   --bg-tertiary: hsl(30, 20%, 10%);    /* Deeper warm */
-  --bg-main: hsl(30, 30%, 15%);        /* Rich warm base */
+  --bg-main: hsl(30, 30%, 11%);        /* Rich warm base */
   --bg-hover: hsl(30, 20%, 30%);       /* Hover with warm tint */
   --bg-quaternary: hsl(30, 20%, 5%);   /* Deep warm */
-  --bg-card-primary: hsl(29, 21%, 19%); /* Warm cards */
-  --bg-card-secondary: hsl(30, 22%, 25%);
+  --bg-card-primary: hsl(29, 21%, 15%); /* Warm cards */
+  --bg-card-secondary: hsl(30, 22%, 19%);
   --bg-card-tertiary: hsl(30, 20%, 25%);
   
   /* Text */
@@ -313,7 +313,7 @@
   --bg-main: hsl(0, 0%, 3%);           /* Deep black */
   --bg-hover: hsl(0, 0%, 20%);         /* Dark hover */
   --bg-quaternary: hsl(0, 0%, 2%);     /* Near-black */
-  --bg-card-primary: hsl(0, 0%, 5%);   /* Dark cards */
+  --bg-card-primary: hsl(0, 0%, 6%);   /* Dark cards */
   --bg-card-secondary: hsl(0, 0%, 8%);
   --bg-card-tertiary: hsl(0, 0%, 12%);
   
@@ -339,13 +339,13 @@
   /* Chat Accents */
   --accent-ai: hsl(205, 100%, 70%);    /* Bright AI blue */
   --accent-secondary-ai: hsl(147, 61%, 67%); /* Bright green */
-  --accent-send: hsl(179, 81%, 65%);   /* Bright cyan */
+  --accent-send: hsl(179, 47%, 49%);   /* Bright cyan */
   --accent-send-hover: hsl(179, 70%, 70%); /* Brighter cyan */
   
   /* UI Elements */
   --user-bubble: hsl(0, 0%, 80%);      /* Light user bubble */
   --ai-bubble: hsl(0, 0%, 15%);        /* Dark AI bubble */
-  --user-chat-bubble: hsl(191, 60%, 85%); /* Bright user chat */
+  --user-chat-bubble: hsl(192, 49%, 54%); /* Bright user chat */
   --ai-chat-bubble: hsl(0, 0%, 15%);   /* Dark AI chat */
   --star-fill: hsl(60, 80%, 70%);      /* Bright star */
   
