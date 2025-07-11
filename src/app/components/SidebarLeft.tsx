@@ -16,9 +16,7 @@ import {
   Settings,
   Filter,
   LucideIcon,
-  Zap,
-  Info,
-  Tv2
+
 } from 'lucide-react';
 
 // Import types and data
@@ -27,9 +25,10 @@ import {
   Instrument, 
   TabType, 
   ChangeData 
-} from '../types';
-import { stocksData, futuresData } from '../data/tradingData';
+} from '@/types';
+import { stocksData, futuresData } from '@/data/tradingData';
 import Image from 'next/image';
+
 
 // Icon mapping type
 type IconMap = Record<string, LucideIcon>;
@@ -129,14 +128,14 @@ const SidebarLeft: React.FC<SidebarLeftProps> = ({ onItemSelect }) => {
           <div className="flex items-center space-x-2">
             <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-[var(--bg-secondary)]">
               <Image
-                src={"/assets/images/logo.png"}
+                src={"/assets/images/logo1.png"}
                 alt="VectorEdge Pro Logo"
-                width={16}
-                height={16}
+                width={22}
+                height={22}
                 className="block shrink-0"
               />
             </div>
-            <span className="font-bold text-base shrink-0">VectorEdge 
+            <span className="font-bold text-base shrink-0 pb-1">VectorEdge 
               <span className=
                 {`${sub==='Lite' ? 'text-[var(--text-muted)] rounded-xl font-quicksand text-sm font-light px-1' : ''}
                 ${sub==='Plus' ? 'border border-[var(--border)] ml-1 text-[var(--text-primary)] rounded-xl font-roboto font-light px-1' : ''}

@@ -13,7 +13,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <title>VectorEdge</title>
+      <head>
+        <title>VectorEdge</title>
+      </head>
       <body className="">
         {children}
       </body>

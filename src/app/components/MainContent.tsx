@@ -15,7 +15,7 @@ import {
   Bell,
   Share2,
 } from "lucide-react";
-import { MainContentProps, Instrument, ChangeData } from "../types";
+import { MainContentProps, Instrument, ChangeData } from "../../types";
 import TechnicalTab from "./main-content-tabs/TechnicalTab";
 import FundamentalTab from "./main-content-tabs/FundamentalTab";
 import NewsSentimentsTab from "./main-content-tabs/NewsSentimentsTab";

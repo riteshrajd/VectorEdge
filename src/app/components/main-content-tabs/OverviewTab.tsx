@@ -7,7 +7,7 @@ import {
   Building2,
   Maximize2,
 } from "lucide-react";
-import { Instrument } from "../types";
+import { Instrument } from '@/types';
 
 interface OverviewTabProps {
   instrument: Instrument;

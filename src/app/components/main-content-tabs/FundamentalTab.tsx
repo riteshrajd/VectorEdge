@@ -15,8 +15,8 @@ import {
   Award,
   Target
 } from 'lucide-react';
-import { Instrument } from '../../types';
-import { fundamentalData } from '../../data/expandedTradingData';
+import { Instrument } from '../../../types';
+import { fundamentalData } from '../../../data/expandedTradingData';
 
 interface FundamentalTabProps {
   instrument: Instrument;

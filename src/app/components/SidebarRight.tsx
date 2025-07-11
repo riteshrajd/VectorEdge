@@ -16,7 +16,7 @@ import {
   Settings,
   History
 } from 'lucide-react';
-import { Instrument } from '../types';
+import { Instrument } from '../../types';
 
 // Types
 interface Message {

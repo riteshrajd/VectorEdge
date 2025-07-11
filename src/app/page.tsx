@@ -1,11 +1,11 @@
 "use client";
 
-import { JSX, useState } from "react";
+import { JSX, useCallback, useEffect, useState } from "react";
 import Header from "./components/Header";
 import MainContent from "./components/MainContent";
 import SidebarLeft from "./components/SidebarLeft";
 import SidebarRight from "./components/SidebarRight";
-import { Instrument } from "./types";
+import { Instrument } from "../types";
 import Image from "next/image";
 import ThemeSelector from "./components/ThemeSelector";
 
@@ -17,6 +17,19 @@ export default function Home(): JSX.Element {
     setSelectedInstrument(instrument);
     console.log("Selected instrument:", instrument);
   };
+
+  const setTheme = useCallback((theme: string) => {
+    document.documentElement.className = theme;
+    localStorage.setItem("theme", theme);
+  }, []);
+
+  // On initial load
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") || "";
+    if (savedTheme) {
+      setTheme(savedTheme);
+    }
+  }, [setTheme]);
 
   return (
     <div className="flex flex-col h-screen font-sans overflow-clip bg-[var(--bg-main)]">
