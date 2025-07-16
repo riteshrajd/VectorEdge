@@ -151,7 +151,23 @@
 
 /* -------------------------------- Animations ----------------------------------------- */
 
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
 
+.ai-overview {
+  background: radial-gradient(circle at center, var(--accent-ai), var(--accent-secondary-ai));
+  background-size: 200% 200%;
+  animation: gradientAnimation 4s ease infinite;
+}
 
 /*--------------------------------- Theme Colors --------------------------------------- */
 :root {

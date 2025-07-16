@@ -1,0 +1,502 @@
+{
+  "ticker": "GOOGL",
+  "last_updated": "2025-07-14T21:44:40.251Z",
+  "overview": {
+    "current_price": 181.56,
+    "change": 1.37,
+    "percent_change": "+(0.76%)",
+    "previous_close": 180.19,
+    "open": 180.99,
+    "bid": 171.85,
+    "ask": 181.81,
+    "day_range": "179.68 - 183.67",
+    "52_week_range": "140.53 - 207.05",
+    "volume": "32,469,744",
+    "avg_volume": "40,401,533",
+    "market_cap": "2.209T",
+    "beta": 1.01,
+    "pe_ratio": 20.26,
+    "eps": 8.96,
+    "earnings_date": "Jul 23, 2025",
+    "forward_dividend_yield": "0.84 (0.48%)",
+    "ex_dividend_date": "Jun 9, 2025",
+    "1y_target_est": 201.47
+  },
+  "fundamental": {
+    "valuation_measures": {
+      "current": {
+        "market_cap": 2190000000000,
+        "enterprise_value": 2120000000000,
+        "trailing_pe": 20.11,
+        "forward_pe": 19.01,
+        "peg_ratio": 1.36,
+        "price_sales": 6.14,
+        "price_book": 6.33,
+        "enterprise_value_revenue": 5.9,
+        "enterprise_value_ebitda": 14.15
+      },
+      "3/31/2025": {
+        "market_cap": 1890000000000,
+        "enterprise_value": 1820000000000,
+        "trailing_pe": 19.23,
+        "forward_pe": 17.36,
+        "peg_ratio": 1.11,
+        "price_sales": 5.5,
+        "price_book": 5.78,
+        "enterprise_value_revenue": 5.19,
+        "enterprise_value_ebitda": 12.45
+      },
+      "12/31/2024": {
+        "market_cap": 2320000000000,
+        "enterprise_value": 2250000000000,
+        "trailing_pe": 25.11,
+        "forward_pe": 21.32,
+        "peg_ratio": 1.23,
+        "price_sales": 6.97,
+        "price_book": 7.36,
+        "enterprise_value_revenue": 6.62,
+        "enterprise_value_ebitda": 17.77
+      },
+      "9/30/2024": {
+        "market_cap": 2040000000000,
+        "enterprise_value": 1970000000000,
+        "trailing_pe": 23.79,
+        "forward_pe": 18.94,
+        "peg_ratio": 1.12,
+        "price_sales": 6.36,
+        "price_book": 6.76,
+        "enterprise_value_revenue": 6,
+        "enterprise_value_ebitda": 17.05
+      },
+      "6/30/2024": {
+        "market_cap": 2260000000000,
+        "enterprise_value": 2180000000000,
+        "trailing_pe": 27.94,
+        "forward_pe": 24.21,
+        "peg_ratio": 1.64,
+        "price_sales": 7.24,
+        "price_book": 7.66,
+        "enterprise_value_revenue": 6.85,
+        "enterprise_value_ebitda": 20.01
+      },
+      "3/31/2024": {
+        "market_cap": 1880000000000,
+        "enterprise_value": 1800000000000,
+        "trailing_pe": 26.02,
+        "forward_pe": 22.27,
+        "peg_ratio": 1.58,
+        "price_sales": 6.25,
+        "price_book": 6.59,
+        "enterprise_value_revenue": 5.86,
+        "enterprise_value_ebitda": 18.39
+      }
+    },
+    "financial_highlights": {
+      "fiscal_year_ends": "12/31/2024",
+      "most_recent_quarter": "3/31/2025",
+      "profitability": {
+        "profit_margin": "30.86%",
+        "operating_margin": "33.92%"
+      },
+      "management_effectiveness": {
+        "return_on_assets": "16.90%",
+        "return_on_equity": "34.79%"
+      },
+      "income_statement": {
+        "revenue_ttm": "359.71B",
+        "revenue_per_share_ttm": "29.34",
+        "quarterly_revenue_growth": "12.00%",
+        "gross_profit_ttm": "210.76B",
+        "ebitda": "135.71B",
+        "net_income_ttm": "111B",
+        "diluted_eps_ttm": "8.96",
+        "quarterly_earnings_growth": "46.00%"
+      },
+      "balance_sheet": {
+        "total_cash": "95.33B",
+        "total_cash_per_share": "7.86",
+        "total_debt": "28.5B",
+        "total_debt_equity": "8.25%",
+        "current_ratio": "1.77",
+        "book_value_per_share": "28.41"
+      },
+      "cash_flow_statement": {
+        "operating_cash_flow": "132.6B",
+        "levered_free_cash_flow": "60.68B"
+      }
+    },
+    "trading_information": {
+      "beta": "1.01",
+      "52_week_change": "-3.40%",
+      "52_week_high": "207.05",
+      "52_week_low": "140.53",
+      "50_day_moving_average": "169.63",
+      "200_day_moving_average": "173.13",
+      "avg_vol_3month": "40.4M",
+      "avg_vol_10day": "43.94M",
+      "shares_outstanding": "5.82B",
+      "float": "10.88B",
+      "percent_held_by_insiders": "0.25%",
+      "percent_held_by_institutions": "81.03%",
+      "shares_short": "67.94M",
+      "short_ratio": "1.67",
+      "short_percent_of_float": "1.17%",
+      "short_percent_of_shares_outstanding": "0.56%",
+      "shares_short_prior_month": "74.3M"
+    }
+  },
+  "analysis": {
+    "earnings_estimates": {
+      "Current Qtr": {
+        "avg_estimate": 2.17,
+        "low_estimate": 1.99,
+        "high_estimate": 2.42,
+        "year_ago_eps": 1.89
+      },
+      "Next Qtr": {
+        "avg_estimate": 2.24,
+        "low_estimate": 2.01,
+        "high_estimate": 2.46,
+        "year_ago_eps": 2.12
+      },
+      "Current Year": {
+        "avg_estimate": 9.6,
+        "low_estimate": 8.8,
+        "high_estimate": 10.34,
+        "year_ago_eps": 8.04
+      },
+      "Next Year": {
+        "avg_estimate": 10.19,
+        "low_estimate": 9.48,
+        "high_estimate": 11.29,
+        "year_ago_eps": 9.6
+      }
+    },
+    "revenue_estimates": {
+      "Current Qtr": {
+        "avg_estimate": "93.73B",
+        "low_estimate": "91.69B",
+        "high_estimate": "95.17B",
+        "year_ago_sales": "84.74B",
+        "sales_growth": "10.61%"
+      },
+      "Next Qtr": {
+        "avg_estimate": "97.16B",
+        "low_estimate": "92.56B",
+        "high_estimate": "99.22B",
+        "year_ago_sales": "88.27B",
+        "sales_growth": "10.07%"
+      },
+      "Current Year": {
+        "avg_estimate": "387.82B",
+        "low_estimate": "379.23B",
+        "high_estimate": "393.4B",
+        "year_ago_sales": "350.02B",
+        "sales_growth": "10.80%"
+      },
+      "Next Year": {
+        "avg_estimate": "428.9B",
+        "low_estimate": "408.49B",
+        "high_estimate": "445.6B",
+        "year_ago_sales": "387.82B",
+        "sales_growth": "10.59%"
+      }
+    },
+    "earnings_history": {
+      "6/30/2024": {
+        "eps_estimate": 1.85,
+        "eps_actual": 1.89,
+        "difference": 0.04,
+        "surprise_percent": "2.40%"
+      },
+      "9/30/2024": {
+        "eps_estimate": 1.85,
+        "eps_actual": 2.12,
+        "difference": 0.27,
+        "surprise_percent": "14.83%"
+      },
+      "12/31/2024": {
+        "eps_estimate": 2.13,
+        "eps_actual": 2.15,
+        "difference": 0.02,
+        "surprise_percent": "1.18%"
+      },
+      "3/31/2025": {
+        "eps_estimate": 2.01,
+        "eps_actual": 2.81,
+        "difference": 0.8,
+        "surprise_percent": "40.10%"
+      }
+    },
+    "analyst_ratings": {
+      "current_rating": null,
+      "price_target_avg": 201.47,
+      "price_target_low": 160,
+      "price_target_high": 250,
+      "number_of_analysts": null,
+      "ratings": [
+        {
+          "firm": "Wedbush",
+          "rating": "OUTPERFORM",
+          "price_target": 190,
+          "date": "2025-04-16"
+        },
+        {
+          "firm": "Roth MKM",
+          "rating": "BUY",
+          "price_target": 220,
+          "date": "2025-03-19"
+        },
+        {
+          "firm": "Evercore ISI Group",
+          "rating": "OUTPERFORM",
+          "price_target": 205,
+          "date": "2024-10-30"
+        },
+        {
+          "firm": "JP Morgan",
+          "rating": "OVERWEIGHT",
+          "price_target": 180,
+          "date": "2025-04-08"
+        },
+        {
+          "firm": "Susquehanna",
+          "rating": "POSITIVE",
+          "price_target": 220,
+          "date": "2025-04-25"
+        },
+        {
+          "firm": "B of A Securities",
+          "rating": "BUY",
+          "price_target": 200,
+          "date": "2025-04-26"
+        },
+        {
+          "firm": "Oppenheimer",
+          "rating": "OUTPERFORM",
+          "price_target": 200,
+          "date": "2025-04-26"
+        },
+        {
+          "firm": "Keybanc",
+          "rating": "OVERWEIGHT",
+          "price_target": 195,
+          "date": "2025-04-25"
+        },
+        {
+          "firm": "Raymond James",
+          "rating": "OUTPERFORM",
+          "price_target": 205,
+          "date": "2025-02-06"
+        },
+        {
+          "firm": "Truist Securities",
+          "rating": "BUY",
+          "price_target": 200,
+          "date": "2025-07-02"
+        }
+      ]
+    }
+  },
+  "technicals": {
+    "summary": {
+      "oscillators": {
+        "sell": 2,
+        "neutral": 7,
+        "buy": 2,
+        "overall": "Neutral"
+      },
+      "moving_averages": {
+        "sell": 0,
+        "neutral": 1,
+        "buy": 14,
+        "overall": "Buy"
+      }
+    },
+    "oscillators": [
+      {
+        "name": "Relative Strength Index (14)",
+        "value": 62.01,
+        "action": "Neutral"
+      },
+      {
+        "name": "Stochastic %K (14, 3, 3)",
+        "value": 87.61,
+        "action": "Neutral"
+      },
+      {
+        "name": "Commodity Channel Index (20)",
+        "value": 146.14,
+        "action": "Neutral"
+      },
+      {
+        "name": "Average Directional Index (14)",
+        "value": 18.95,
+        "action": "Neutral"
+      },
+      {
+        "name": "Awesome Oscillator",
+        "value": 4.08,
+        "action": "Buy"
+      },
+      {
+        "name": "Momentum (10)",
+        "value": 3.03,
+        "action": "Sell"
+      },
+      {
+        "name": "MACD Level (12, 26)",
+        "value": 2.57,
+        "action": "Buy"
+      },
+      {
+        "name": "Stochastic RSI Fast (3, 3, 14, 14)",
+        "value": 90.3,
+        "action": "Neutral"
+      },
+      {
+        "name": "Williams Percent Range (14)",
+        "value": "-12.03",
+        "action": "Sell"
+      },
+      {
+        "name": "Bull Bear Power",
+        "value": 9.36,
+        "action": "Neutral"
+      },
+      {
+        "name": "Ultimate Oscillator (7, 14, 28)",
+        "value": 59.04,
+        "action": "Neutral"
+      }
+    ],
+    "moving_averages": [
+      {
+        "name": "Exponential Moving Average (10)",
+        "value": 177.66,
+        "action": "Buy"
+      },
+      {
+        "name": "Simple Moving Average (10)",
+        "value": 177.74,
+        "action": "Buy"
+      },
+      {
+        "name": "Exponential Moving Average (20)",
+        "value": 175.67,
+        "action": "Buy"
+      },
+      {
+        "name": "Simple Moving Average (20)",
+        "value": 174.97,
+        "action": "Buy"
+      },
+      {
+        "name": "Exponential Moving Average (30)",
+        "value": 173.99,
+        "action": "Buy"
+      },
+      {
+        "name": "Simple Moving Average (30)",
+        "value": 174.14,
+        "action": "Buy"
+      },
+      {
+        "name": "Exponential Moving Average (50)",
+        "value": 171.74,
+        "action": "Buy"
+      },
+      {
+        "name": "Simple Moving Average (50)",
+        "value": 170.09,
+        "action": "Buy"
+      },
+      {
+        "name": "Exponential Moving Average (100)",
+        "value": 170.65,
+        "action": "Buy"
+      },
+      {
+        "name": "Simple Moving Average (100)",
+        "value": 166.38,
+        "action": "Buy"
+      },
+      {
+        "name": "Exponential Moving Average (200)",
+        "value": 169.78,
+        "action": "Buy"
+      },
+      {
+        "name": "Simple Moving Average (200)",
+        "value": 173.23,
+        "action": "Buy"
+      },
+      {
+        "name": "Ichimoku Base Line (9, 26, 52, 26)",
+        "value": 172.83,
+        "action": "Neutral"
+      },
+      {
+        "name": "Volume Weighted Moving Average (20)",
+        "value": 174.45,
+        "action": "Buy"
+      },
+      {
+        "name": "Hull Moving Average (9)",
+        "value": 179.57,
+        "action": "Buy"
+      }
+    ],
+    "pivots": {
+      "Classic": {
+        "R3": 211.61,
+        "R2": 192.38,
+        "R1": 184.31,
+        "P": 173.15,
+        "S1": 165.08,
+        "S2": 153.92,
+        "S3": 134.69
+      },
+      "Fibonacci": {
+        "R3": 192.38,
+        "R2": 185.04,
+        "R1": 180.5,
+        "P": 173.15,
+        "S1": 165.81,
+        "S2": 161.27,
+        "S3": 153.92
+      },
+      "Camarilla": {
+        "R3": 181.52,
+        "R2": 179.76,
+        "R1": 177.99,
+        "P": 173.15,
+        "S1": 174.47,
+        "S2": 172.7,
+        "S3": 170.94
+      },
+      "Woodie": {
+        "R3": 204.58,
+        "R2": 192.91,
+        "R1": 185.35,
+        "P": 173.68,
+        "S1": 166.12,
+        "S2": 154.45,
+        "S3": 146.89
+      },
+      "DM": {
+        "R3": null,
+        "R2": null,
+        "R1": 188.35,
+        "P": 175.17,
+        "S1": 169.12,
+        "S2": null,
+        "S3": null
+      }
+    }
+  },
+  "insights": {
+    "summary": "Preliminary analysis suggests potential growth based on available data.",
+    "key_metric": "Check latest price against 1-year target estimate."
+  }
+}
