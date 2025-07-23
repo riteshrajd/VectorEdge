@@ -1,39 +1,39 @@
 {
   "ticker": "AAPL",
-  "last_updated": "2025-07-16T06:32:32.238Z",
+  "last_updated": "2025-07-23T06:44:23.276Z",
   "overview": {
-    "current_price": 209.11,
-    "change": 0.49,
-    "percent_change": "0.23%",
-    "previous_close": 208.62,
-    "open": 209.15,
-    "bid": "208.88 x 600",
-    "ask": "209.16 x 500",
-    "day_range": "208.92 - 211.89",
+    "current_price": 214.4,
+    "change": 1.92,
+    "percent_change": "+(0.90%)",
+    "previous_close": 212.48,
+    "open": 213.24,
+    "bid": 214.11,
+    "ask": 214.47,
+    "day_range": "212.23 - 214.65",
     "52_week_range": "169.21 - 260.10",
-    "volume": "42,071,894",
-    "avg_volume": "53,371,650",
-    "market_cap": "3.123T",
-    "beta": 1.21,
-    "pe_ratio": 32.57,
-    "eps": 6.42,
+    "volume": "44,917,713",
+    "avg_volume": "53,124,567",
+    "market_cap": "3.202T",
+    "beta": 1.2,
+    "pe_ratio": 33.45,
+    "eps": 6.41,
     "earnings_date": "Jul 31, 2025",
-    "forward_dividend_yield": "1.04 (0.51%)",
+    "forward_dividend_yield": "1.04 (0.49%)",
     "ex_dividend_date": "May 12, 2025",
-    "1y_target_est": 228.6
+    "1y_target_est": 229.55
   },
   "fundamental": {
     "valuation_measures": {
       "current": {
-        "market_cap": 3120000000000,
-        "enterprise_value": 3170000000000,
-        "trailing_pe": 32.57,
-        "forward_pe": 26.81,
-        "peg_ratio": 1.95,
-        "price_sales": 7.94,
-        "price_book": 46.76,
-        "enterprise_value_revenue": 7.92,
-        "enterprise_value_ebitda": 22.85
+        "market_cap": 3200000000000,
+        "enterprise_value": 3250000000000,
+        "trailing_pe": 33.4,
+        "forward_pe": 27.47,
+        "peg_ratio": 2,
+        "price_sales": 8.14,
+        "price_book": 47.94,
+        "enterprise_value_revenue": 8.12,
+        "enterprise_value_ebitda": 23.42
       },
       "3/31/2025": {
         "market_cap": 3320000000000,
@@ -109,7 +109,7 @@
         "gross_profit_ttm": "186.7B",
         "ebitda": "138.87B",
         "net_income_ttm": "97.29B",
-        "diluted_eps_ttm": "6.42",
+        "diluted_eps_ttm": "6.41",
         "quarterly_earnings_growth": "4.80%"
       },
       "balance_sheet": {
@@ -126,23 +126,23 @@
       }
     },
     "trading_information": {
-      "beta": "1.21",
-      "52_week_change": "-8.64%",
+      "beta": "1.20",
+      "52_week_change": "-1.89%",
       "52_week_high": "260.10",
       "52_week_low": "169.21",
-      "50_day_moving_average": "203.78",
-      "200_day_moving_average": "222.63",
-      "avg_vol_3month": "53.37M",
-      "avg_vol_10day": "48.88M",
+      "50_day_moving_average": "205.01",
+      "200_day_moving_average": "222.21",
+      "avg_vol_3month": "53.12M",
+      "avg_vol_10day": "45.63M",
       "shares_outstanding": "14.94B",
       "float": "14.91B",
       "percent_held_by_insiders": "2.09%",
-      "percent_held_by_institutions": "62.84%",
-      "shares_short": "100.23M",
-      "short_ratio": "1.91",
-      "short_percent_of_float": "0.67%",
-      "short_percent_of_shares_outstanding": "0.67%",
-      "shares_short_prior_month": "105.17M"
+      "percent_held_by_institutions": "62.87%",
+      "shares_short": "110.1M",
+      "short_ratio": "1.97",
+      "short_percent_of_float": "0.74%",
+      "short_percent_of_shares_outstanding": "0.74%",
+      "shares_short_prior_month": "94.83M"
     }
   },
   "analysis": {
@@ -150,56 +150,56 @@
       "Current Qtr": {
         "avg_estimate": 1.42,
         "low_estimate": 1.32,
-        "high_estimate": 1.47,
+        "high_estimate": 1.46,
         "year_ago_eps": 1.4
       },
       "Next Qtr": {
         "avg_estimate": 1.66,
-        "low_estimate": 1.49,
+        "low_estimate": 1.51,
         "high_estimate": 1.84,
         "year_ago_eps": 0.97
       },
       "Current Year": {
-        "avg_estimate": 7.17,
+        "avg_estimate": 7.19,
         "low_estimate": 6.82,
-        "high_estimate": 7.5,
+        "high_estimate": 7.84,
         "year_ago_eps": 6.08
       },
       "Next Year": {
-        "avg_estimate": 7.81,
+        "avg_estimate": 7.82,
         "low_estimate": 6.83,
         "high_estimate": 9,
-        "year_ago_eps": 7.17
+        "year_ago_eps": 7.19
       }
     },
     "revenue_estimates": {
       "Current Qtr": {
-        "avg_estimate": "88.64B",
+        "avg_estimate": "88.89B",
         "low_estimate": "86.92B",
-        "high_estimate": "90.1B",
+        "high_estimate": "90.57B",
         "year_ago_sales": "85.78B",
-        "sales_growth": "3.34%"
+        "sales_growth": "3.63%"
       },
       "Next Qtr": {
-        "avg_estimate": "97.82B",
+        "avg_estimate": "97.91B",
         "low_estimate": "93.35B",
         "high_estimate": "103.54B",
         "year_ago_sales": "94.93B",
-        "sales_growth": "3.05%"
+        "sales_growth": "3.14%"
       },
       "Current Year": {
-        "avg_estimate": "407.4B",
+        "avg_estimate": "407.45B",
         "low_estimate": "398.62B",
         "high_estimate": "431.78B",
         "year_ago_sales": "391.04B",
-        "sales_growth": "4.19%"
+        "sales_growth": "4.20%"
       },
       "Next Year": {
-        "avg_estimate": "431B",
+        "avg_estimate": "431.33B",
         "low_estimate": "408.1B",
         "high_estimate": "477.46B",
-        "year_ago_sales": "407.4B",
-        "sales_growth": "5.79%"
+        "year_ago_sales": "407.45B",
+        "sales_growth": "5.86%"
       }
     },
     "earnings_history": {
@@ -230,8 +230,8 @@
     },
     "analyst_ratings": {
       "current_rating": null,
-      "price_target_avg": 228.6,
-      "price_target_low": 170.62,
+      "price_target_avg": 229.55,
+      "price_target_low": 173,
       "price_target_high": 300,
       "number_of_analysts": null,
       "ratings": [
@@ -294,6 +294,96 @@
           "rating": "BUY",
           "price_target": 245,
           "date": "2025-04-14"
+        },
+        {
+          "firm": "JP Morgan",
+          "rating": "OVERWEIGHT",
+          "price_target": 250,
+          "date": "2025-07-17"
+        },
+        {
+          "firm": "DA Davidson",
+          "rating": "BUY",
+          "price_target": 250,
+          "date": "2025-05-03"
+        },
+        {
+          "firm": "Susquehanna",
+          "rating": "POSITIVE",
+          "price_target": 210,
+          "date": "2024-11-21"
+        },
+        {
+          "firm": "Evercore ISI Group",
+          "rating": "OUTPERFORM",
+          "price_target": 275,
+          "date": "2025-03-19"
+        },
+        {
+          "firm": "Jefferies",
+          "rating": "HOLD",
+          "price_target": 188.32,
+          "date": "2025-07-02"
+        },
+        {
+          "firm": "CFRA",
+          "rating": "BUY",
+          "price_target": 260,
+          "date": "2024-10-22"
+        },
+        {
+          "firm": "Oppenheimer",
+          "rating": "PERFORM",
+          "price_target": null,
+          "date": "2025-01-30"
+        },
+        {
+          "firm": "Goldman Sachs",
+          "rating": "BUY",
+          "price_target": 256,
+          "date": "2025-04-23"
+        },
+        {
+          "firm": "B of A Securities",
+          "rating": "BUY",
+          "price_target": 235,
+          "date": "2025-06-11"
+        },
+        {
+          "firm": "Loop Capital",
+          "rating": "HOLD",
+          "price_target": 215,
+          "date": "2025-04-30"
+        },
+        {
+          "firm": "Bernstein",
+          "rating": "OUTPERFORM",
+          "price_target": 260,
+          "date": "2025-01-03"
+        },
+        {
+          "firm": "Barclays",
+          "rating": "UNDERWEIGHT",
+          "price_target": 173,
+          "date": "2025-04-30"
+        },
+        {
+          "firm": "HSBC",
+          "rating": "HOLD",
+          "price_target": 160,
+          "date": "2024-12-04"
+        },
+        {
+          "firm": "Rosenblatt",
+          "rating": "NEUTRAL",
+          "price_target": 217,
+          "date": "2025-05-03"
+        },
+        {
+          "firm": "Keybanc",
+          "rating": "SECTOR WEIGHT",
+          "price_target": null,
+          "date": "2025-04-15"
         }
       ]
     }
@@ -301,134 +391,134 @@
   "technicals": {
     "summary": {
       "oscillators": {
-        "sell": 1,
+        "sell": 0,
         "neutral": 9,
-        "buy": 1,
+        "buy": 2,
         "overall": "Neutral"
       },
       "moving_averages": {
-        "sell": 6,
+        "sell": 1,
         "neutral": 1,
-        "buy": 8,
+        "buy": 13,
         "overall": "Buy"
       }
     },
     "oscillators": [
       {
         "name": "Relative Strength Index (14)",
-        "value": 55.85,
+        "value": 64.84,
         "action": "Neutral"
       },
       {
         "name": "Stochastic %K (14, 3, 3)",
-        "value": 61.28,
+        "value": 70.92,
         "action": "Neutral"
       },
       {
         "name": "Commodity Channel Index (20)",
-        "value": 58.42,
+        "value": 98.27,
         "action": "Neutral"
       },
       {
         "name": "Average Directional Index (14)",
-        "value": 16.62,
+        "value": 17.74,
         "action": "Neutral"
       },
       {
         "name": "Awesome Oscillator",
-        "value": 6.65,
+        "value": 6.49,
         "action": "Neutral"
       },
       {
         "name": "Momentum (10)",
-        "value": 3.94,
-        "action": "Sell"
+        "value": 4.39,
+        "action": "Buy"
       },
       {
         "name": "MACD Level (12, 26)",
-        "value": 2.33,
+        "value": 2.49,
         "action": "Buy"
       },
       {
         "name": "Stochastic RSI Fast (3, 3, 14, 14)",
-        "value": 44.11,
+        "value": 55.84,
         "action": "Neutral"
       },
       {
         "name": "Williams Percent Range (14)",
-        "value": "-41.96",
+        "value": "-20.31",
         "action": "Neutral"
       },
       {
         "name": "Bull Bear Power",
-        "value": 3.99,
+        "value": 6.51,
         "action": "Neutral"
       },
       {
         "name": "Ultimate Oscillator (7, 14, 28)",
-        "value": 46.24,
+        "value": 42.66,
         "action": "Neutral"
       }
     ],
     "moving_averages": [
       {
         "name": "Exponential Moving Average (10)",
-        "value": 209.11,
+        "value": 211,
         "action": "Buy"
       },
       {
         "name": "Simple Moving Average (10)",
-        "value": 210.62,
-        "action": "Sell"
+        "value": 211.07,
+        "action": "Buy"
       },
       {
         "name": "Exponential Moving Average (20)",
-        "value": 207.05,
+        "value": 208.95,
         "action": "Buy"
       },
       {
         "name": "Simple Moving Average (20)",
-        "value": 205.42,
+        "value": 208.68,
         "action": "Buy"
       },
       {
         "name": "Exponential Moving Average (30)",
-        "value": 206.01,
+        "value": 207.65,
         "action": "Buy"
       },
       {
         "name": "Simple Moving Average (30)",
-        "value": 203.98,
+        "value": 205.51,
         "action": "Buy"
       },
       {
         "name": "Exponential Moving Average (50)",
-        "value": 206.11,
+        "value": 207.13,
         "action": "Buy"
       },
       {
         "name": "Simple Moving Average (50)",
-        "value": 203.78,
+        "value": 205.01,
         "action": "Buy"
       },
       {
         "name": "Exponential Moving Average (100)",
-        "value": 210.2,
-        "action": "Sell"
+        "value": 210.34,
+        "action": "Buy"
       },
       {
         "name": "Simple Moving Average (100)",
-        "value": 210.09,
-        "action": "Sell"
+        "value": 208.41,
+        "action": "Buy"
       },
       {
         "name": "Exponential Moving Average (200)",
-        "value": 213.64,
-        "action": "Sell"
+        "value": 213.54,
+        "action": "Buy"
       },
       {
         "name": "Simple Moving Average (200)",
-        "value": 222.63,
+        "value": 222.21,
         "action": "Sell"
       },
       {
@@ -438,13 +528,13 @@
       },
       {
         "name": "Volume Weighted Moving Average (20)",
-        "value": 205.19,
+        "value": 208.29,
         "action": "Buy"
       },
       {
         "name": "Hull Moving Average (9)",
-        "value": 209.79,
-        "action": "Sell"
+        "value": 212.77,
+        "action": "Buy"
       }
     ],
     "pivots": {
@@ -495,45 +585,49 @@
       }
     }
   },
+  "insights": {
+    "summary": "Preliminary analysis suggests potential growth based on available data.",
+    "key_metric": "Check latest price against 1-year target estimate."
+  },
   "ai_insights": {
-    "summary": "AAPL is currently trading at $209.11 with a high P/E ratio, indicating a potentially overvalued stock. However, strong revenue growth and positive analyst sentiment suggest continued potential.",
+    "summary": "AAPL is currently trading near its analyst target, supported by solid revenue growth and strong profit margins. However, its high P/E ratio and debt levels warrant careful consideration.",
     "recommendation": {
       "action": "Hold",
       "confidence": 65,
-      "reasoning": "The high P/E ratio and debt/equity ratio raise concerns, but positive revenue growth and analyst ratings support holding the stock."
+      "reasoning": "While revenue growth and analyst sentiment are positive, the elevated P/E ratio and debt/equity ratio present potential downside risks."
     },
     "key_takeaways": [
-      "P/E ratio of 32.57 indicates a premium valuation.",
+      "P/E ratio of 33.45 indicates a relatively high valuation.",
       "Quarterly revenue growth of 5.10% demonstrates continued expansion.",
-      "Analyst price target of $228.6 suggests potential upside.",
-      "High Total Debt/Equity ratio of 146.99% warrants monitoring.",
-      "Moving averages indicate a buy signal (8/15)."
+      "Moving averages suggest a bullish trend (13/15).",
+      "Analyst price target of $229.55 implies potential upside.",
+      "High Total Debt/Equity ratio of 146.99% raises concerns about financial leverage."
     ],
     "visualization_data": {
       "price_trend": [
         {
-          "x": "2025-07-11",
-          "y": 208.5
+          "x": "2025-07-19",
+          "y": 213.8
         },
         {
-          "x": "2025-07-12",
-          "y": 209
+          "x": "2025-07-20",
+          "y": 214.1
         },
         {
-          "x": "2025-07-13",
-          "y": 209.2
+          "x": "2025-07-21",
+          "y": 214.3
         },
         {
-          "x": "2025-07-14",
-          "y": 209.1
+          "x": "2025-07-22",
+          "y": 214.5
         },
         {
-          "x": "2025-07-15",
-          "y": 209.11
+          "x": "2025-07-23",
+          "y": 214.4
         }
       ],
-      "bullishness_meter": 68,
-      "risk_score": 62
+      "bullishness_meter": 70,
+      "risk_score": 65
     }
   }
 }

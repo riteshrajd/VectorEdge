@@ -1,4 +1,4 @@
-import { TickerInfo } from "../types/types";
+import { TickerInfo } from "../../types/types";
 
 export const tickers: TickerInfo[] = [
   // ——— MEGA-CAP TECH (MAGNIFICENT 7) ———

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { CombinedData } from "@/lib/types/types";
+import { CombinedData } from "@/types/types";
 
 // Define the fixed structure for AI insights
 interface AIInsights {

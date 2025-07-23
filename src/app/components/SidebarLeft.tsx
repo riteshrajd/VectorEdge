@@ -1,130 +1,56 @@
-import React, { useState, useCallback } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { 
   ChevronLeft, 
   ChevronRight, 
   Search, 
-  TrendingUp, 
-  BarChart3, 
-  PieChart, 
-  Activity,
-  DollarSign,
-  Globe,
-  Building2,
-  Fuel,
-  Landmark,
-  Star,
   Settings,
-  Filter,
-  LucideIcon,
+  Filter
 
 } from 'lucide-react';
 
-// Import types and data
-import { 
-  SidebarLeftProps, 
-  Instrument, 
-  TabType, 
-  ChangeData 
-} from '@/types';
-import { stocksData, futuresData } from '@/data/tradingData';
 import Image from 'next/image';
-
+import InstrumentHistoryList from './sidebar-left-components/InstrumentHistoryList';
+import { useStore } from '@/store/store';
+import InstrumentSearchList from './sidebar-left-components/InstrumentSearchList';
 
 // Icon mapping type
-type IconMap = Record<string, LucideIcon>;
+const SidebarLeft = () => {
+  const sub: string = 'Lite';
+  const store = useStore();
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
-const SidebarLeft: React.FC<SidebarLeftProps> = ({ onItemSelect }) => {
-  const sub : string = 'Lite';
-
-  const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  const [activeTab, setActiveTab] = useState<TabType>('stocks');
-  const [favorites, setFavorites] = useState<Set<string>>(new Set());
-  const toggleSidebar = useCallback((): void => {
-    setIsCollapsed(!isCollapsed);
-  }, [isCollapsed]);
-
-  const toggleFavorite = useCallback((symbol: string): void => {
-    const newFavorites = new Set(favorites);
-    if (newFavorites.has(symbol)) {
-      newFavorites.delete(symbol);
-    } else {
-      newFavorites.add(symbol);
+  const handleSearchClick = useCallback(() => {
+    if (store.isLeftCollapsed) {
+      store.setIsLeftCollapsed();
     }
-    setFavorites(newFavorites);
-  }, [favorites]);
+    setTimeout(() => {
+      searchInputRef.current?.focus();
+    }, 300); // Delay to ensure the sidebar has expanded
+  }, [store])
 
-  const getIconForSymbol = useCallback((symbol: string, category: TabType): LucideIcon => {
-    const iconMap: IconMap = {
-      // Stocks
-      'NIFTY': TrendingUp,
-      'BANKNIFTY': Building2,
-      'SENSEX': BarChart3,
-      'CNXIT': Globe,
-      'SPX': DollarSign,
-      'RELIANCE': Fuel,
-      'AXISBANK': Landmark,
-      'HDFCBANK': Landmark,
-      'ICICIBANK': Landmark,
-      'BAJFINANCE': Building2,
-      // Futures
-      'NIFTYFUT': Activity,
-      'BANKNIFTYFUT': Building2,
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.altKey && e.key === 'k') {
+        e.preventDefault();
+        handleSearchClick();
+      }
     };
-    
-    return iconMap[symbol] || PieChart;
-  }, []);
 
-  const filteredData = useCallback((): Instrument[] => {
-    const data = activeTab === 'stocks' ? stocksData : futuresData;
-    return data.filter((item: Instrument) => 
-      item.symbol.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [activeTab, searchTerm]);
-
-  const formatPrice = useCallback((price: number): string => {
-    return new Intl.NumberFormat('en-IN', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    }).format(price);
-  }, []);
-
-  const formatChange = useCallback((change: number, changePercent: number): ChangeData => {
-    const isPositive = change >= 0;
-    return {
-      change: isPositive ? `+${change.toFixed(2)}` : change.toFixed(2),
-      changePercent: isPositive ? `+${changePercent.toFixed(2)}%` : `${changePercent.toFixed(2)}%`,
-      colorClass: isPositive ? 'text-[var(--positive)]' : 'text-[var(--negative)]'
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
-
-  const handleItemClick = useCallback((item: Instrument): void => {
-    onItemSelect?.(item);
-  }, [onItemSelect]);
-
-  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>): void => {
-    setSearchTerm(e.target.value);
-  }, []);
-
-  const handleTabChange = useCallback((tab: TabType): void => {
-    setActiveTab(tab);
-  }, []);
-
-  const handleFavoriteClick = useCallback((e: React.MouseEvent, symbol: string): void => {
-    e.stopPropagation();
-    toggleFavorite(symbol);
-  }, [toggleFavorite]);
-
+  }, [handleSearchClick]);
+  
   return (
     <aside
       className={`${
-        isCollapsed ? "w-14" : "w-62"
+        store.isLeftCollapsed ? "w-14" : "w-62"
       } bg-[var(--bg-primary)] text-[var(--text-primary)] transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] border-r border-[var(--border)] flex flex-col overflow-clip`}
     >
       {/* Header with toggle */}
       <div className="flex items-center justify-between p-3 border-b border-[var(--border)]">
-        {!isCollapsed && (
+        {!store.isLeftCollapsed && (
           <div className="flex items-center space-x-2">
             <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-[var(--bg-secondary)]">
               <Image
@@ -138,28 +64,29 @@ const SidebarLeft: React.FC<SidebarLeftProps> = ({ onItemSelect }) => {
             <span className="font-bold text-base shrink-0 pb-1">VectorEdge 
               <span className=
                 {`${sub==='Lite' ? 'text-[var(--text-muted)] rounded-xl font-quicksand text-sm font-light px-1' : ''}
-                ${sub==='Plus' ? 'border border-[var(--border)] ml-1 text-[var(--text-primary)] rounded-xl font-roboto font-light px-1' : ''}
-                ${sub==='Pro' ? 'border border-[var(--accent)] text-[var(--accent)] rounded-lg ml-1 pb-0.5 px-1' : ''}`}>
+                ${sub==='Plus' ? 'border border-[var(--text-muted)] ml-1 text-[var(--text-primary)] rounded-xl font-roboto font-light px-1' : ''}
+                ${sub==='Pro' ? 'border-2 border-[var(--text-muted)] text-[var(--text-Primary)] rounded-lg ml-1 pb-0.5 px-1' : ''}`}>
                 {sub}
               </span>
             </span>
           </div>
         )}
         <button
-          onClick={toggleSidebar}
+          onClick={store.setIsLeftCollapsed}
           className="p-1.5 hover:bg-[var(--bg-hover)] rounded-lg transition-colors"
-          aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          aria-label={store.isLeftCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
-          {isCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+          {store.isLeftCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
         </button>
       </div>
 
       {/* Search Bar */}
-      <div className="p-3 border-b border-[var(--border)]">
-        {isCollapsed ? (
+      <div className={`p-3 border-b border-[var(--border)]`}>
+        {store.isLeftCollapsed ? (
           <button
-            className="w-full p-1.5 hover:bg-[var(--bg-hover)] rounded-lg transition-colors flex justify-center"
+            className="w-full p-1 hover:bg-[var(--bg-hover)] rounded-lg transition-colors flex justify-center"
             aria-label="Search"
+            onClick={handleSearchClick}
           >
             <Search size={16} />
           </button>
@@ -170,141 +97,38 @@ const SidebarLeft: React.FC<SidebarLeftProps> = ({ onItemSelect }) => {
               size={14}
             />
             <input
+              ref={searchInputRef}
               type="text"
-              placeholder="Search instruments..."
-              value={searchTerm}
-              onChange={handleSearchChange}
+              placeholder="Search (alt+k)"
+              value={store.searchTerm}
+              onChange={(e) => store.setSearchTerm(e.target.value)}
               className="w-full pl-9 pr-3 py-2 bg-[var(--bg-secondary)] border border-[var(--border-secondary)] rounded-lg text-sm focus:outline-none focus:border-[var(--accent)] focus:border-opacity-50 transition-colors"
             />
           </div>
         )}
       </div>
 
-      {/* Tabs */}
-      {!isCollapsed ? (
-        <div className="flex border-b border-[var(--border)]">
+      <div className='flex-1 w-full overflow-hidden'>
+        { store.searchTerm.trim() ? <InstrumentSearchList /> : <InstrumentHistoryList /> }
+      </div>
+
+      {/* Collapsed state bottom buttons */}
+      <div className={` flex p-1.5 border-t border-[var(--border)] pl-3`}>
+        <div className="flex flex-col space-y-1.5">
           <button
-            onClick={() => handleTabChange("stocks")}
-            className={`flex-1 py-2 px-3 text-sm font-medium transition-colors ${
-              activeTab === "stocks"
-                ? "bg-[var(--bg-secondary)] text-[var(--text-primary)] border-b-2 border-[var(--accent-main)]"
-                : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-hover)]"
-            }`}
+            className="p-1.5 hover:bg-[var(--bg-hover)] rounded-lg transition-colors flex justify-center"
+            aria-label="Settings"
           >
-            Stocks
+            <Settings size={16} />
           </button>
           <button
-            onClick={() => handleTabChange("futures")}
-            className={`flex-1 py-2 px-3 text-sm font-medium transition-colors ${
-              activeTab === "futures"
-                ? "bg-[var(--bg-secondary)] text-[var(--text-primary)] border-b-2 border-[var(--accent-main)]"
-                : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-hover)]"
-            }`}
-          >
-            Futures
-          </button>
-        </div>
-      ) : (
-        <div className="flex justify-center border-b border-[var(--border)] min-h-10">
-          <button
-            className="p-1.5 my-4 hover:bg-[var(--bg-hover)] rounded-lg transition-colors"
+            className="p-1.5 hover:bg-[var(--bg-hover)] rounded-lg transition-colors flex justify-center"
             aria-label="Filter"
           >
             <Filter size={16} />
           </button>
         </div>
-      )}
-
-      {/* Instruments List */}
-      <div className="flex-1 overflow-y-auto">
-        {filteredData().map((item: Instrument) => {
-          const IconComponent = getIconForSymbol(item.symbol, activeTab);
-          const changeData = formatChange(item.change, item.changePercent);
-          const isFavorite = favorites.has(item.symbol);
-
-          return (
-            <div
-              key={item.symbol}
-              onClick={() => handleItemClick(item)}
-              className={`flex items-center p-2 ${!isCollapsed ? 'pr-3':''} hover:bg-[var(--bg-hover)] cursor-pointer border-b border-[var(--border-secondary)] transition-colors group`}
-            >
-              {/* Icon */}
-              <div
-                className={`${
-                  isCollapsed ? "mx-auto" : "mr-2"
-                } w-7 h-7 rounded-full flex items-center justify-center`}
-                style={{ backgroundColor: item.color }}
-              >
-                <IconComponent size={16} className="text-[var(--text-primary)]" />
-              </div>
-
-              {!isCollapsed && (
-                <>
-                  {/* Symbol and Name */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between">
-                      <span className="font-medium text-sm truncate">
-                        {item.symbol}
-                      </span>
-                      <button
-                        onClick={(e) => handleFavoriteClick(e, item.symbol)}
-                        className="opacity-0 group-hover:opacity-100 transition-opacity"
-                        aria-label={
-                          isFavorite
-                            ? "Remove from favorites"
-                            : "Add to favorites"
-                        }
-                      >
-                        <Star
-                          size={14}
-                          className={
-                            isFavorite
-                              ? "fill-[var(--star-fill)] text-[var(--star-fill)]"
-                              : "text-[var(--text-muted)]"
-                          }
-                        />
-                      </button>
-                    </div>
-                    <p className="text-xs text-[var(--text-muted)] truncate leading-tight">
-                      {item.name}
-                    </p>
-                  </div>
-
-                  {/* Price and Change */}
-                  <div className="text-right ml-1">
-                    <div className="text-sm font-medium font-mono">
-                      {formatPrice(item.price)}
-                    </div>
-                    <div
-                      className={`text-xs font-mono ${changeData.colorClass}`}
-                    >
-                      {changeData.change}
-                    </div>
-                  </div>
-                </>
-              )}
-            </div>
-          );
-        })}
       </div>
-
-      {/* Collapsed state bottom buttons */}
-        <div className={` flex p-1.5 border-t border-[var(--border)] pl-3`}>
-          <div className="flex flex-col space-y-1.5">
-            <button
-              className="p-1.5 hover:bg-[var(--bg-hover)] rounded-lg transition-colors flex justify-center"
-              aria-label="Settings"
-            >
-              <Settings size={16} />
-            </button>
-            <button
-              className="p-1.5 hover:bg-[var(--bg-hover)] rounded-lg transition-colors flex justify-center"
-              aria-label="Filter"
-            >
-              <Filter size={16} />
-            </button>
-          </div>
-        </div>
     </aside>
   );
 };

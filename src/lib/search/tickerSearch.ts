@@ -1,6 +1,6 @@
 import { similarity } from "../utils/scoreSimilarity";
-import { tickers } from "../store/tickerData";
-import { TickerInfo } from "../types/types";
+import { tickers } from "../database/tickerData";
+import { TickerInfo } from "../../types/types";
 
 // const tickersOld: TickerInfo[] = [
 //   { name: "Apple", symbol: "AAPL", exchange: "NASDAQ" },

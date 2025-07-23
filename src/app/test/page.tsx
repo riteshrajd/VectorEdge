@@ -1,9 +1,10 @@
 'use client';
 import { parseISO, format, formatDistanceToNow, differenceInMinutes } from "date-fns";
 import { useState, useEffect } from 'react';
-import { CombinedData, TickerInfo } from '@/lib/types/types';
+import { CombinedData, TickerInfo } from '@/types/types';
 import SuggestionList from './components/SuggestionList';
-import StockAnalysisReport from "./StockAnalysisReport";
+import StockAnalysisReport from "./StockAnalysisReport2";
+import { useStore } from "@/store/store";
 
 export default function Home() {
   const [data, setData] = useState<CombinedData | null>(null);
@@ -15,6 +16,7 @@ export default function Home() {
   const [minutesSinceUpdate, setMinutesSinceUpdate] = useState<number | null>(null);
   const [formattedTimeAgo, setFormattedTimeAgo] = useState<string>("N/A");
   const [showButton, setShowButton] = useState<boolean>(true);
+  const store = useStore();
 
   useEffect(() => {
     if (data && data.last_updated) {
@@ -76,6 +78,7 @@ export default function Home() {
       if (!response.ok) throw new Error('Failed to fetch data');
       const result: CombinedData = await response.json();
       setData(result);
+      store.setData(result);
       setTicker(''); // Clear input after search
     } catch (error) {
       console.error('Error fetching data:', error);

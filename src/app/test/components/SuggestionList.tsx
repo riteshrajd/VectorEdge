@@ -1,5 +1,5 @@
 import React from 'react';
-import { TickerInfo } from '@/lib/types/types';
+import { TickerInfo } from '@/types/types';
 
 interface SuggestionListProps {
   suggestions: TickerInfo[];

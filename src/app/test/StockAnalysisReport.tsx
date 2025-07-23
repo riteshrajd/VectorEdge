@@ -1,5 +1,5 @@
 import React from 'react';
-import { CombinedData } from '@/lib/types/types';
+import { CombinedData } from '@/types/types';
 
 interface StockReportProps {
   data: CombinedData;

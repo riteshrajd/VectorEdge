@@ -2,7 +2,7 @@ import { scrapeYahooOverview } from './overview/scrapeYahooOverview';
 import { scrapeYahooFundamental } from './fundamental/scrapeYahooFundamental';
 import { scrapeYahooAnalysis } from './analysis/scrapeYahooAnalysis';
 import { scrapeTradingViewTechnicals } from './technical/scrapeTradingViewTechnicals';
-import { CombinedData } from '@/lib/types/types';
+import { CombinedData } from '@/types/types';
 
 export async function aggregateData(ticker: string): Promise<any> {
   const urls = {

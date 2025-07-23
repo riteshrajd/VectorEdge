@@ -44,9 +44,9 @@ export default function Home(): JSX.Element {
           priority
           quality={100}
         /> */}
-        <SidebarLeft onItemSelect={handleInstrumentSelect} />
+        <SidebarLeft />
         <main className="flex-1 min-w-0 text-white">
-          <MainContent selectedInstrument={selectedInstrument} />
+          <MainContent />
         </main>
         <SidebarRight />
       </div>

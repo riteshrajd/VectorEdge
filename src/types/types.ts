@@ -124,11 +124,11 @@ export interface Technicals {
 export interface CombinedData {
   ticker: string;
   last_updated: string;
-  overview: Overview;
-  fundamental: Fundamental;
-  analysis: Analysis;
-  technicals: Technicals;
-  ai_insights: {
+  overview?: Overview;
+  fundamental?: Fundamental;
+  analysis?: Analysis;
+  technicals?: Technicals;
+  ai_insights?: {
     summary: string;
     recommendation: {
       action: 'Buy' | 'Sell' | 'Hold';
@@ -151,4 +151,12 @@ export interface TickerInfo {
   yf: string;
   tv: string;
   score?: number;
+}
+
+export interface InstrumentCoverInfo {
+  name: string;
+  symbol: string;
+  isFavorite?: boolean;
+  recomendation?: string;
+  icon?: string;
 }
