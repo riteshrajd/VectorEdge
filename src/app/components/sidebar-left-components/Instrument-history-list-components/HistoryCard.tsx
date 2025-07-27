@@ -1,10 +1,10 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { InstrumentCoverInfo } from '@/types/types';
 import { Activity, BarChart3, Building2, DollarSign, Fuel, Globe, Landmark, PieChart, TrendingUp, Star } from 'lucide-react';
 import { useStore } from '@/store/store';
 
 export default function HistoryCard({ instrument }: { instrument: InstrumentCoverInfo }) {
-  const { setInstrumentHistoryList, instrumentHistoryList, setSelectedInstrument, isLeftCollapsed } = useStore();
+  const { setInstrumentHistoryList, instrumentHistoryList, setSelectedInstrument, isLeftCollapsed, selectedInstrument } = useStore();
 
   const getIconForSymbol = useCallback((instrument: InstrumentCoverInfo) => {
     const icons = [Activity, BarChart3, Building2, DollarSign, Fuel, Globe, Landmark, PieChart, TrendingUp];
@@ -34,7 +34,7 @@ export default function HistoryCard({ instrument }: { instrument: InstrumentCove
   return (
     <div
       onClick={()=>setSelectedInstrument(instrument)}
-      className={`flex items-center py-1 ${!isLeftCollapsed ? 'pl-1 pr-2' : ''} hover:bg-[var(--bg-hover)] cursor-pointer border-b border-[var(--border-secondary)] transition-colors group duration-200`}
+      className={`flex items-center py-1 ${!isLeftCollapsed ? 'pl-1 pr-2' : ''} hover:rounded-md hover:bg-[var(--bg-hover)] cursor-pointer border-b border-[var(--border-secondary)] transition-colors group duration-200`}
     >
       {/* Icon */}
       <div
@@ -42,7 +42,7 @@ export default function HistoryCard({ instrument }: { instrument: InstrumentCove
       >
         <Icon size={16} className="text-[var(--text-primary)]" />
       </div>
-
+ 
       {!isLeftCollapsed && (
         <>
           {/* Symbol and Name */}

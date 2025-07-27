@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { 
   DollarSign, 
   BarChart, 
@@ -19,16 +19,15 @@ import {
   Shield,
   Zap
 } from 'lucide-react';
+import { CombinedData } from '@/types/types';
 
 interface StockAnalysisReportProps {
-  data: any;
+  data: CombinedData;
+  setIsShrunk: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const StockAnalysisReport: React.FC<StockAnalysisReportProps> = ({ data }) => {
-  const formatValue = (value: string | number) => {
-    if (typeof value === 'string') return value;
-    return value.toLocaleString('en-US', { maximumFractionDigits: 2 });
-  };
+const StockAnalysisReport: React.FC<StockAnalysisReportProps> = ({ data, setIsShrunk }) => {
+  const ref = React.useRef<HTMLDivElement>(null);
 
   const formatCurrency = (value: number) => {
     return `$${value.toLocaleString('en-US', { maximumFractionDigits: 2 })}`;
@@ -56,6 +55,26 @@ const StockAnalysisReport: React.FC<StockAnalysisReportProps> = ({ data }) => {
     return 'text-yellow-400';
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (ref.current) {
+        setIsShrunk(ref.current.scrollTop > 50);
+      }
+    };
+
+    const div = ref.current;
+    if(div) {
+      div.addEventListener('scroll', handleScroll);
+    }
+
+    return () => {
+      if(div) {
+        div.removeEventListener('scroll', handleScroll);
+      }
+    }
+    
+  }, [ref, setIsShrunk]);
+
   if (!data) {
     return (
       <div className="bg-[var(--bg-card-primary)] rounded-lg p-6 text-center">
@@ -64,8 +83,10 @@ const StockAnalysisReport: React.FC<StockAnalysisReportProps> = ({ data }) => {
     );
   }
 
+
+
   return (
-    <div className="space-y-6 overflow-y-auto">
+    <div className="space-y-6 overflow-y-auto" ref={ref}>
       {/* AI Insights Summary */}
       <div className="bg-[var(--bg-card-primary)] rounded-lg p-6">
         <h3 className="text-lg font-semibold mb-4 text-[var(--text-primary)] flex items-center">

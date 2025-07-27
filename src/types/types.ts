@@ -121,6 +121,22 @@ export interface Technicals {
   };
 }
 
+export interface AIInsights {
+  summary: string; // Brief overview of the stock's performance
+  recommendation: {
+    action: "Buy" | "Sell" | "Hold";
+    confidence: number; // 0 to 100
+    reasoning: string; // Why this recommendation
+  };
+  key_takeaways: string[]; // 3-5 bullet points for quick insights
+  visualization_data: {
+    price_trend: { x: string; y: number }[]; // Data for price trend chart
+    bullishness_meter: number; // 0 to 100 for sentiment meter
+    risk_score: number; // 0 to 100 for risk meter
+  };
+}
+
+
 export interface CombinedData {
   ticker: string;
   last_updated: string;
@@ -128,20 +144,7 @@ export interface CombinedData {
   fundamental?: Fundamental;
   analysis?: Analysis;
   technicals?: Technicals;
-  ai_insights?: {
-    summary: string;
-    recommendation: {
-      action: 'Buy' | 'Sell' | 'Hold';
-      confidence: number;
-      reasoning: string;
-    };
-    key_takeaways: string[];
-    visualization_data: {
-      price_trend: { x: string; y: number }[];
-      bullishness_meter: number;
-      risk_score: number;
-    };
-  } | null;
+  ai_insights?: AIInsights;
 }
 
 export interface TickerInfo {

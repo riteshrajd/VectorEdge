@@ -1,25 +1,9 @@
 import axios from "axios";
-import { CombinedData } from "@/types/types";
+import { AIInsights, CombinedData } from "@/types/types";
 
-// Define the fixed structure for AI insights
-interface AIInsights {
-  summary: string; // Brief overview of the stock's performance
-  recommendation: {
-    action: "Buy" | "Sell" | "Hold";
-    confidence: number; // 0 to 100
-    reasoning: string; // Why this recommendation
-  };
-  key_takeaways: string[]; // 3-5 bullet points for quick insights
-  visualization_data: {
-    price_trend: { x: string; y: number }[]; // Data for price trend chart
-    bullishness_meter: number; // 0 to 100 for sentiment meter
-    risk_score: number; // 0 to 100 for risk meter
-  };
-}
-
-export async function insightGenerator(
+async function insightGenerator(
   data: CombinedData
-): Promise<{ ai_insights: AIInsights } | null> {
+): Promise<{ ai_insights: AIInsights }> {
   try {
     const API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
     if (!API_KEY)
@@ -42,35 +26,35 @@ Given the following stock data for ${
 Return the JSON in \`\`\`json\`\`\` markers. Use the provided data to ensure accuracy and relevance.
 
 Data:
-- Current Price: ${data.overview.current_price}
-- P/E Ratio: ${data.overview.pe_ratio}
-- EPS: ${data.overview.eps}
-- Market Cap: ${data.overview.market_cap}
-- Beta: ${data.overview.beta}
-- 52-Week Range: ${data.overview["52_week_range"]}
+- Current Price: ${data.overview?.current_price}
+- P/E Ratio: ${data.overview?.pe_ratio}
+- EPS: ${data.overview?.eps}
+- Market Cap: ${data.overview?.market_cap}
+- Beta: ${data.overview?.beta}
+- 52-Week Range: ${data.overview ? data.overview["52_week_range"] : 'null'}
 - Revenue Growth (Quarterly): ${
-      data.fundamental.financial_highlights.income_statement
+      data.fundamental?.financial_highlights.income_statement
         .quarterly_revenue_growth
     }
 - Profit Margin: ${
-      data.fundamental.financial_highlights.profitability.profit_margin
+      data.fundamental?.financial_highlights.profitability.profit_margin
     }
 - Total Debt/Equity: ${
-      data.fundamental.financial_highlights.balance_sheet.total_debt_equity
+      data.fundamental?.financial_highlights.balance_sheet.total_debt_equity
     }
-- Moving Averages: ${data.technicals.summary.moving_averages.overall} (${
-      data.technicals.summary.moving_averages.buy
+- Moving Averages: ${data.technicals?.summary.moving_averages.overall} (${
+      data.technicals?.summary.moving_averages.buy
     }/15)
-- Oscillators: ${data.technicals.summary.oscillators.overall}
-- Analyst Price Target: ${data.analysis.analyst_ratings.price_target_avg}
+- Oscillators: ${data.technicals?.summary.oscillators.overall}
+- Analyst Price Target: ${data.analysis?.analyst_ratings.price_target_avg}
 - Analyst Buy Ratings: ${
-      data.analysis.analyst_ratings.ratings.filter(
+      data.analysis?.analyst_ratings.ratings.filter(
         (r) =>
-          r.rating.toLowerCase().includes("buy") ||
-          r.rating.toLowerCase().includes("outperform") ||
-          r.rating.toLowerCase().includes("overweight")
+          r.rating?.toLowerCase().includes("buy") ||
+          r.rating?.toLowerCase().includes("outperform") ||
+          r.rating?.toLowerCase().includes("overweight")
       ).length
-    }/${data.analysis.analyst_ratings.ratings.length}
+    }/${data.analysis?.analyst_ratings.ratings.length}
 - Last Updated: ${data.last_updated}
 
 Example JSON:
@@ -120,21 +104,40 @@ Example JSON:
     const jsonMatch = responseText.match(/```json\n([\s\S]*?)\n```/);
     if (!jsonMatch) {
       console.error("No JSON found in Gemini response:", responseText);
-      return null;
+      throw new Error("No JSON found in Gemini response");
     }
-    console.log(`Generated Insights:\n ${responseText}`);
+    console.log(`Generated Insights for ${data.ticker}:\n${responseText}`);
 
-    let ai_insights: AIInsights;
-    try {
-      ai_insights = JSON.parse(jsonMatch[1]);
-    } catch (e) {
-      console.error("JSON parse error:", responseText);
-      return null;
-    }
-
+    const ai_insights: AIInsights = JSON.parse(jsonMatch[1]);
     return { ai_insights };
   } catch (err) {
-    console.error("Error generating insights:", err);
-    return null;
+    const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+    console.error(`Error generating insights for ${data.ticker}: ${errorMessage}`);
+    throw new Error(`Insight generation failed: ${errorMessage}`);
   }
+}
+
+
+export async function getInsightData(
+  data: CombinedData,
+  maxRetries: number = 3,
+  delayMs: number = 1000
+): Promise<{ai_insights: AIInsights} | null> {
+  for(let attempt = 1; attempt<=maxRetries; attempt++) {
+    try {
+      console.log(`Attempt ${attempt} to fetch insights for ${data.ticker}`);
+      const result = await insightGenerator(data);
+      console.log(`Success in generating ai insight on attempt ${attempt} for ${data.ticker}`);
+      return result;
+    } catch (error) { 
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      console.error(`Attempt ${attempt} failed for ${data.ticker}: ${errorMessage}`);
+      if (attempt === maxRetries) {
+        console.error(`All ${maxRetries} attempts failed for ${data.ticker}`);
+        return null;
+      }
+      await new Promise(resolve => setTimeout(resolve, delayMs));
+    }
+  }
+  return null;
 }

@@ -4,7 +4,7 @@ import { scrapeYahooAnalysis } from './analysis/scrapeYahooAnalysis';
 import { scrapeTradingViewTechnicals } from './technical/scrapeTradingViewTechnicals';
 import { CombinedData } from '@/types/types';
 
-export async function aggregateData(ticker: string): Promise<any> {
+export async function aggregateData(ticker: string): Promise<CombinedData> {
   const urls = {
     overview: `https://finance.yahoo.com/quote/${ticker}/`,
     fundamental: `https://finance.yahoo.com/quote/${ticker}/key-statistics/`,
@@ -18,12 +18,7 @@ export async function aggregateData(ticker: string): Promise<any> {
     scrapeYahooAnalysis(urls.analysis),
     scrapeTradingViewTechnicals(urls.technicals),
   ]);
-
-  const insights = {
-    summary: "Preliminary analysis suggests potential growth based on available data.",
-    key_metric: "Check latest price against 1-year target estimate.",
-  }
-
+  
   console.log(`Aggregated data for ${ticker}: ${JSON.stringify(technicalsData)}`)
 
   return {
@@ -32,7 +27,6 @@ export async function aggregateData(ticker: string): Promise<any> {
     overview: overviewData.overview,
     fundamental: fundamentalData.fundamental,
     analysis: analysisData.analysis,
-    technicals: technicalsData.technicals,
-    insights,
+    technicals: technicalsData.technicals,    
   };
 }

@@ -4,7 +4,7 @@ import HistoryCard from './Instrument-history-list-components/HistoryCard';
 import { Star } from 'lucide-react';
 
 export default function InstrumentHistoryList() {
-  const { instrumentHistoryList, isLeftCollapsed, searchTerm } = useStore();
+  const { instrumentHistoryList, isLeftCollapsed, searchTerm, selectedInstrument } = useStore();
   const [activeTab, setActiveTab] = useState('history');
 
   const handleTabChange = (tab: string) => {
@@ -72,7 +72,7 @@ export default function InstrumentHistoryList() {
       <div className={`flex-1 h-full overflow-y-auto px-1 ${isLeftCollapsed ? 'pt-1' : ' '}`}>
         <ul>
           {filteredData().map((item, i) => (
-            <li key={i} className={`border-[var(--border)]`}>
+            <li key={i} className={`border-[var(--border)] ${selectedInstrument?.symbol===item.symbol ? 'bg-[var(--bg-secondary)] rounded-md' : ''}`}>
               <HistoryCard instrument={item} />
             </li>
           ))}

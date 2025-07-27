@@ -4,7 +4,7 @@ import { Activity, BarChart3, Building2, DollarSign, Fuel, Globe, Landmark, PieC
 import { useStore } from '@/store/store';
 
 export default function SearchResultCard({ instrument }: { instrument: InstrumentCoverInfo }) {
-  const { setInstrumentHistoryList, instrumentHistoryList, setSelectedInstrument, isLeftCollapsed } = useStore();
+  const { setInstrumentHistoryList, instrumentHistoryList, setSelectedInstrument, isLeftCollapsed, setSearchTerm } = useStore();
 
   const getIconForSymbol = useCallback((instrument: InstrumentCoverInfo) => {
     const icons = [Activity, BarChart3, Building2, DollarSign, Fuel, Globe, Landmark, PieChart, TrendingUp];
@@ -30,10 +30,20 @@ export default function SearchResultCard({ instrument }: { instrument: Instrumen
     setInstrumentHistoryList(updatedList);
   };
 
+  const handleInstrumentSelect = () => {
+    if(instrument){
+      setSelectedInstrument(instrument)
+      const updatedList = [instrument, ...instrumentHistoryList];
+      setInstrumentHistoryList(updatedList);
+      setSearchTerm('');
+      console.log(`added ${JSON.stringify(instrument)} in history`);
+    }
+  }
+
 
   return (
     <div
-      onClick={()=>setSelectedInstrument(instrument)}
+      onClick={handleInstrumentSelect}
       className={`flex items-center py-1 ${!isLeftCollapsed ? 'pl-1 pr-2' : ''} hover:bg-[var(--bg-hover)] cursor-pointer border-b border-[var(--border-secondary)] transition-colors group duration-200`}
     >
       {/* Icon */}

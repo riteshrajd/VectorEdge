@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { aggregateData } from './aggrigator';
-import { insightGenerator } from './generateInsight';
+import { getInsightData } from './generateInsight';
 
 // Define cache directory and time limit (in milliseconds)
 const CACHE_DIR = 'C:/Users/rites/Desktop/vscode/Web_Dev/projects/vectoredge-pro/src/lib/cache';
@@ -37,16 +37,16 @@ export async function getData(ticker: string, refresh: boolean): Promise<any> {
   
   // Fetch new data if no valid cache
   console.log(`Fetching new data for ${ticker}`);
-  const data = await aggregateData(ticker);                                        // to be in production
-  // const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));                        // to be removed in production
+  const data = await aggregateData(ticker);                                    
+  // const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));                       
   console.log(`data fetched successfully! \n ${data}`)
   
-  const insights = await insightGenerator(data);                                       //in prod
+  const insights = await getInsightData(data);                                  
 
 
   const enrichedData = {
     ...data,
-    ai_insights: insights ? insights.ai_insights : null,                             // in prod
+    ai_insights: insights ? insights.ai_insights : null,                   
   };
 
   try {

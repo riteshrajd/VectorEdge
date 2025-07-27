@@ -3,7 +3,7 @@ import { parseISO, format, formatDistanceToNow, differenceInMinutes } from "date
 import { useState, useEffect } from 'react';
 import { CombinedData, TickerInfo } from '@/types/types';
 import SuggestionList from './components/SuggestionList';
-import StockAnalysisReport from "./StockAnalysisReport2";
+import StockAnalysisReport from "../../components/main-content-tabs/StockAnalysisReport";
 import { useStore } from "@/store/store";
 
 export default function Home() {

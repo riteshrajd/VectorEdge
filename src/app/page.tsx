@@ -5,19 +5,11 @@ import Header from "./components/Header";
 import MainContent from "./components/MainContent";
 import SidebarLeft from "./components/SidebarLeft";
 import SidebarRight from "./components/SidebarRight";
-import { Instrument } from "../types";
+import { Instrument } from "../types/types";
 import Image from "next/image";
 import ThemeSelector from "./components/ThemeSelector";
 
 export default function Home(): JSX.Element {
-  const [selectedInstrument, setSelectedInstrument] =
-    useState<Instrument | null>(null);
-
-  const handleInstrumentSelect = (instrument: Instrument): void => {
-    setSelectedInstrument(instrument);
-    console.log("Selected instrument:", instrument);
-  };
-
   const setTheme = useCallback((theme: string) => {
     document.documentElement.className = theme;
     localStorage.setItem("theme", theme);

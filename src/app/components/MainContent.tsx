@@ -2,11 +2,12 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
 import { useStore } from "@/store/store";
-import StockAnalysisReport from "../test/StockAnalysisReport2";
+import StockAnalysisReport from "./main-content-tabs/StockAnalysisReport";
 import { useDataStore } from "@/store/dataStroe";
 import { CombinedData } from "@/types/types";
 import WelcomeScreen from "./main-content-tabs/WelcomeScreen";
 import { FETCH_TICK_DATA_API_ROUTE } from "@/constants/constants";
+import Header from "./main-content-tabs/StockDataHeader";
 
 const MainContent = () => {
   const store = useStore();
@@ -14,6 +15,7 @@ const MainContent = () => {
   const [data, setData] = useState<CombinedData|null>(null);
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('');
+  const [isShrunk, setIsShrunk] = useState(false);
 
   const fetchData = useCallback(async (ticker: string, refresh: boolean = false) => {
     if (ticker.trim()) {
@@ -55,8 +57,6 @@ const MainContent = () => {
     }
   }, [fetchData, store.selectedInstrument]);
 
-
-
   // If no instrument is selected, show welcome screen
   if (!store.selectedInstrument) {
     return (
@@ -79,11 +79,15 @@ const MainContent = () => {
       </div>
     )
   }
+
   return (
-    <div className="h-full w-full flex justify-center bg-[var(--bg-main)] overflow-hidden">
-      <StockAnalysisReport data={data}/>
+   <div className="h-full w-full bg-[var(--bg-main)]">
+      <Header data={data} isShrunk={isShrunk} />
+      <div className="h-full w-full flex justify-center bg-[var(--bg-main)] overflow-hidden">
+        <StockAnalysisReport data={data} setIsShrunk={setIsShrunk} />
+      </div>
     </div>
-  );
+  ); 
 };
 
 export default MainContent;
