@@ -192,7 +192,7 @@
   --text-accent: hsl(0, 0%, 80%);      /* Accent text */
 
   /* Borders */
-  --border: oklch(0.92 0.004 286.32);            /* Primary border color */
+  --border: hsl(0, 0%, 22%);            /* Primary border color */
   --border-secondary: hsl(0, 0%, 15%);  /* Secondary border color */
 
   /* Accents & Status */
