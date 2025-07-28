@@ -1,4 +1,7 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
 
 /* Define a custom gray palette based on #282828 */
 @theme {
@@ -181,26 +184,26 @@
   --bg-card-primary: hsl(0, 0%, 13%);  /* Cards */
   --bg-card-secondary: hsl(0, 0%, 17%);
   --bg-card-tertiary: hsl(0, 0%, 23%); 
-  
+
   /* Text */
   --text-primary: #ffffff;              /* Primary text color */
   --text-secondary: hsl(0, 0%, 60%);    /* Secondary text color */
   --text-muted: hsl(0, 0%, 50%);       /* Muted text color */
   --text-accent: hsl(0, 0%, 80%);      /* Accent text */
-  
+
   /* Borders */
-  --border: hsl(0, 0%, 20%);            /* Primary border color */
+  --border: oklch(0.92 0.004 286.32);            /* Primary border color */
   --border-secondary: hsl(0, 0%, 15%);  /* Secondary border color */
-  
+
   /* Accents & Status */
-  --accent: hsl(0, 0%, 50%);            /* Primary accent color */
+  --accent: oklch(0.967 0.001 286.375);            /* Primary accent color */
   --accent-main: hsl(0, 0%, 90%);       /* Primary accent color */
   --accent-hover: hsl(0, 0%, 45%);      /* Accent hover state */
   --positive: hsl(120, 70%, 54%);       /* Positive state (green) */
   --negative: hsl(0, 60%, 50%);         /* Negative state (red) */
   --neutral: hsl(60, 70%, 50%);         /* Neutral state (yellow) */
   --disabled: hsl(0, 0%, 30%);          /* Disabled state */
-  
+
   /* chat accent*/
   --accent-ai: hsl(205, 100%, 50%);     /* Primary accent color */
   --accent-secondary-ai: hsl(147, 61%, 47%);  /* Secondary accent */
@@ -214,11 +217,41 @@
   --user-chat-bubble: hsl(191, 60%, 35%);       /* User chat bubble */
   --ai-chat-bubble: hsl(0, 0%, 20%);         /* AI chat bubble */
   --star-fill: hsl(60, 70%, 50%);       /* Favorite star color */
-  
+
   /* Instrument colors */
   --instrument-1: hsl(240, 20%, 70%);
   --instrument-2: hsl(40, 20%, 60%);
   --instrument-3: hsl(160, 20%, 40%);
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.141 0.005 285.823);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.141 0.005 285.823);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.141 0.005 285.823);
+  --primary: oklch(0.21 0.006 285.885);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.967 0.001 286.375);
+  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --muted: oklch(0.967 0.001 286.375);
+  --muted-foreground: oklch(0.552 0.016 285.938);
+  --accent-foreground: oklch(0.21 0.006 285.885);
+  --destructive: oklch(0.577 0.245 27.325);
+  --input: oklch(0.92 0.004 286.32);
+  --ring: oklch(0.705 0.015 286.067);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.141 0.005 285.823);
+  --sidebar-primary: oklch(0.21 0.006 285.885);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.967 0.001 286.375);
+  --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
+  --sidebar-border: oklch(0.92 0.004 286.32);
+  --sidebar-ring: oklch(0.705 0.015 286.067);
 }
 
 :root.light-theme {
@@ -232,17 +265,17 @@
   --bg-card-primary: hsl(0, 0%, 92%);  /* Light cards */
   --bg-card-secondary: hsl(0, 0%, 87%);
   --bg-card-tertiary: hsl(0, 0%, 82%);
-  
+
   /* Text */
   --text-primary: hsl(0, 0%, 15%);     /* Darker primary text for better contrast */
   --text-secondary: hsl(0, 0%, 35%);   /* Darker secondary text */
   --text-muted: hsl(0, 0%, 55%);       /* Medium muted text */
   --text-accent: hsl(0, 0%, 25%);      /* Darker accent text */
-  
+
   /* Borders */
   --border: hsl(0, 0%, 75%);           /* Softer light border */
   --border-secondary: hsl(0, 0%, 85%); /* Lighter secondary border */
-  
+
   /* Accents & Status */
   --accent: hsl(205, 70%, 50%);        /* Blue accent for distinction */
   --accent-main: hsl(205, 70%, 40%);   /* Consistent blue main accent */
@@ -251,20 +284,20 @@
   --negative: hsl(0, 65%, 50%);        /* Red with slight adjustment */
   --neutral: hsl(60, 70%, 45%);        /* Softer yellow */
   --disabled: hsl(0, 0%, 65%);         /* Lighter disabled */
-  
+
   /* Chat Accents */
   --accent-ai: hsl(192, 90%, 46%);     /* Softer AI blue */
   --accent-secondary-ai: hsl(147, 62%, 44%); /* Softer green */
   --accent-send: hsl(179, 54%, 45%);   /* Lighter cyan */
   --accent-send-hover: hsl(179, 70%, 50%); /* Lighter cyan hover */
-  
+
   /* UI Elements */
   --user-bubble: hsl(205, 70%, 90%);   /* Light blue user bubble */
   --ai-bubble: hsl(0, 0%, 95%);        /* Very light AI bubble */
   --user-chat-bubble: hsl(192, 62%, 70%); /* Light cyan chat bubble */
   --ai-chat-bubble: hsl(0, 0%, 95%);   /* Very light AI chat bubble */
   --star-fill: hsl(60, 70%, 45%);      /* Softer yellow star */
-  
+
   /* Instrument colors */
   --instrument-1: hsl(240, 20%, 35%);
   --instrument-2: hsl(40, 20%, 45%);
@@ -282,17 +315,17 @@
   --bg-card-primary: hsl(29, 21%, 15%); /* Warm cards */
   --bg-card-secondary: hsl(30, 22%, 19%);
   --bg-card-tertiary: hsl(30, 20%, 25%);
-  
+
   /* Text */
   --text-primary: hsl(0, 0%, 95%);     /* Light gray text */
   --text-secondary: hsl(30, 20%, 70%); /* Warm gray */
   --text-muted: hsl(30, 20%, 50%);     /* Muted warm gray */
   --text-accent: hsl(30, 20%, 80%);    /* Light warm accent */
-  
+
   /* Borders */
   --border: hsl(30, 20%, 20%);         /* Warm border */
   --border-secondary: hsl(30, 20%, 15%); /* Darker warm border */
-  
+
   /* Accents & Status */
   --accent: hsl(30, 60%, 50%);         /* Warm orange */
   --accent-main: hsl(30, 60%, 70%);    /* Lighter orange */
@@ -301,20 +334,20 @@
   --negative: hsl(0, 70%, 50%);        /* Red */
   --neutral: hsl(60, 70%, 50%);        /* Yellow */
   --disabled: hsl(30, 20%, 30%);       /* Dark warm gray */
-  
+
   /* Chat Accents */
   --accent-ai: hsl(180, 50%, 50%);     /* Cool cyan */
   --accent-secondary-ai: hsl(120, 40%, 50%); /* Green */
   --accent-send: hsl(200, 60%, 50%);   /* Cool blue */
   --accent-send-hover: hsl(200, 60%, 55%); /* Brighter blue */
-  
+
   /* UI Elements */
   --user-bubble: hsl(200, 40%, 50%);   /* Cool blue user bubble */
   --ai-bubble: hsl(30, 20%, 25%);      /* Warm AI bubble */
   --user-chat-bubble: hsl(200, 40%, 50%); /* Cool blue chat */
   --ai-chat-bubble: hsl(30, 20%, 25%); /* Warm AI chat */
   --star-fill: hsl(60, 70%, 50%);      /* Yellow star */
-  
+
   /* Instrument colors */
   --instrument-1: hsl(180, 40%, 60%);
   --instrument-2: hsl(30, 40%, 50%);
@@ -332,17 +365,17 @@
   --bg-card-primary: hsl(0, 0%, 6%);   /* Dark cards */
   --bg-card-secondary: hsl(0, 0%, 8%);
   --bg-card-tertiary: hsl(0, 0%, 12%);
-  
+
   /* Text */
   --text-primary: hsl(0, 0%, 100%);    /* Pure white */
   --text-secondary: hsl(0, 0%, 75%);   /* Bright gray */
   --text-muted: hsl(0, 0%, 70%);       /* Medium gray */
   --text-accent: hsl(0, 0%, 95%);      /* Near-white accent */
-  
+
   /* Borders */
   --border: hsl(0, 0%, 30%);           /* Dark border */
   --border-secondary: hsl(0, 0%, 25%); /* Darker secondary border */
-  
+
   /* Accents & Status */
   --accent: hsl(0, 0%, 80%);           /* Neutral gray accent */
   --accent-main: hsl(0, 0%, 100%);      /* Darker accent */
@@ -351,20 +384,20 @@
   --negative: hsl(0, 80%, 70%);        /* Bright red */
   --neutral: hsl(60, 80%, 70%);        /* Bright yellow */
   --disabled: hsl(0, 0%, 40%);         /* Dark disabled */
-  
+
   /* Chat Accents */
   --accent-ai: hsl(205, 100%, 70%);    /* Bright AI blue */
   --accent-secondary-ai: hsl(147, 61%, 67%); /* Bright green */
   --accent-send: hsl(179, 47%, 49%);   /* Bright cyan */
   --accent-send-hover: hsl(179, 70%, 70%); /* Brighter cyan */
-  
+
   /* UI Elements */
   --user-bubble: hsl(0, 0%, 80%);      /* Light user bubble */
   --ai-bubble: hsl(0, 0%, 15%);        /* Dark AI bubble */
   --user-chat-bubble: hsl(192, 49%, 54%); /* Bright user chat */
   --ai-chat-bubble: hsl(0, 0%, 15%);   /* Dark AI chat */
   --star-fill: hsl(60, 80%, 70%);      /* Bright star */
-  
+
   /* Instrument colors */
   --instrument-1: hsl(240, 80%, 70%);
   --instrument-2: hsl(40, 80%, 60%);
@@ -382,17 +415,17 @@
   --bg-card-primary: hsl(240, 10%, 12%); /* Blue cards */
   --bg-card-secondary: hsl(240, 10%, 15%);
   --bg-card-tertiary: hsl(240, 10%, 20%);
-  
+
   /* Text */
   --text-primary: hsl(0, 0%, 95%);     /* Light gray text */
   --text-secondary: hsl(240, 10%, 70%); /* Blue-gray */
   --text-muted: hsl(240, 10%, 50%);    /* Muted blue-gray */
   --text-accent: hsl(240, 10%, 80%);   /* Light blue accent */
-  
+
   /* Borders */
   --border: hsl(240, 10%, 20%);        /* Blue border */
   --border-secondary: hsl(240, 10%, 15%); /* Darker blue border */
-  
+
   /* Accents & Status */
   --accent: hsl(180, 80%, 50%);        /* Neon cyan */
   --accent-main: hsl(180, 80%, 70%);   /* Lighter neon cyan */
@@ -401,20 +434,20 @@
   --negative: hsl(0, 80%, 50%);        /* Neon red */
   --neutral: hsl(60, 80%, 50%);        /* Neon yellow */
   --disabled: hsl(240, 10%, 30%);      /* Dark blue-gray */
-  
+
   /* Chat Accents */
   --accent-ai: hsl(205, 100%, 70%);    /* Bright AI blue */
   --accent-secondary-ai: hsl(147, 61%, 67%); /* Bright green */
   --accent-send: hsl(179, 47%, 49%);   /* Bright cyan */
   --accent-send-hover: hsl(179, 70%, 70%); /* Brighter cyan */
-  
+
   /* UI Elements */
   --user-bubble: hsl(180, 80%, 40%);   /* Neon cyan user bubble */
   --ai-bubble: hsl(240, 10%, 15%);     /* Dark blue AI bubble */
   --user-chat-bubble: hsl(180, 80%, 40%); /* Neon cyan chat */
   --ai-chat-bubble: hsl(240, 10%, 15%); /* Dark blue AI chat */
   --star-fill: hsl(60, 80%, 50%);      /* Neon yellow star */
-  
+
   /* Instrument colors */
   --instrument-1: hsl(180, 80%, 60%);
   --instrument-2: hsl(300, 80%, 50%);
@@ -432,17 +465,17 @@
   --bg-card-primary: hsl(240, 17%, 12%); /* Blue cards */
   --bg-card-secondary: hsl(240, 17%, 15%);
   --bg-card-tertiary: hsl(240, 17%, 20%);
-  
+
   /* Text */
   --text-primary: hsl(0, 0%, 90%);     /* Light gray text */
   --text-secondary: hsl(240, 17%, 70%); /* Blue-gray */
   --text-muted: hsl(240, 17%, 50%);    /* Muted blue-gray */
   --text-accent: hsl(240, 17%, 80%);   /* Light blue accent */
-  
+
   /* Borders */
   --border: hsl(240, 17%, 20%);        /* Blue border */
   --border-secondary: hsl(240, 17%, 15%); /* Darker blue border */
-  
+
   /* Accents & Status */
   --accent: hsl(270, 50%, 50%);        /* Deep purple */
   --accent-main: hsl(270, 50%, 70%);   /* Lighter purple */
@@ -451,22 +484,103 @@
   --negative: hsl(0, 70%, 50%);        /* Deep red */
   --neutral: hsl(60, 70%, 50%);        /* Yellow */
   --disabled: hsl(240, 17%, 20%);      /* Dark blue-gray */
-  
+
   /* Chat Accents */
   --accent-ai: hsl(205, 70%, 50%);     /* Bright blue */
   --accent-secondary-ai: hsl(147, 50%, 45%); /* Deep green */
   --accent-send: hsl(179, 70%, 35%);   /* Deep cyan */
   --accent-send-hover: hsl(179, 70%, 40%); /* Brighter cyan */
-  
+
   /* UI Elements */
   --user-bubble: hsl(191, 50%, 40%);   /* Cyan user bubble */
   --ai-bubble: hsl(240, 17%, 15%);     /* Dark blue AI bubble */
   --user-chat-bubble: hsl(191, 50%, 40%); /* Cyan user chat */
   --ai-chat-bubble: hsl(240, 17%, 15%); /* Dark blue AI chat */
   --star-fill: hsl(60, 70%, 50%);      /* Yellow star */
-  
+
   /* Instrument colors */
   --instrument-1: hsl(205, 40%, 60%);
   --instrument-2: hsl(270, 40%, 50%);
   --instrument-3: hsl(147, 40%, 40%);
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+.dark {
+  --background: oklch(0.141 0.005 285.823);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.21 0.006 285.885);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.21 0.006 285.885);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.92 0.004 286.32);
+  --primary-foreground: oklch(0.21 0.006 285.885);
+  --secondary: oklch(0.274 0.006 286.033);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.274 0.006 286.033);
+  --muted-foreground: oklch(0.705 0.015 286.067);
+  --accent: oklch(0.274 0.006 286.033);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.552 0.016 285.938);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.21 0.006 285.885);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.274 0.006 286.033);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.552 0.016 285.938);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }

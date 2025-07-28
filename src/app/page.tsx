@@ -1,13 +1,11 @@
 "use client";
 
-import { JSX, useCallback, useEffect, useState } from "react";
-import Header from "./components/Header";
+import { JSX, useCallback, useEffect } from "react";
 import MainContent from "./components/MainContent";
 import SidebarLeft from "./components/SidebarLeft";
 import SidebarRight from "./components/SidebarRight";
-import { Instrument } from "../types/types";
-import Image from "next/image";
-import ThemeSelector from "./components/ThemeSelector";
+// import Header from "../components/Header";
+// import ThemeSelector from "@/components/ThemeSelector";
 
 export default function Home(): JSX.Element {
   const setTheme = useCallback((theme: string) => {

@@ -2,12 +2,12 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
 import { useStore } from "@/store/store";
-import StockAnalysisReport from "./main-content-tabs/StockAnalysisReport";
+import StockAnalysisReport from "./main-content-components/StockAnalysisReport";
 import { useDataStore } from "@/store/dataStroe";
 import { CombinedData } from "@/types/types";
-import WelcomeScreen from "./main-content-tabs/WelcomeScreen";
+import WelcomeScreen from "./main-content-components/WelcomeScreen";
 import { FETCH_TICK_DATA_API_ROUTE } from "@/constants/constants";
-import Header from "./main-content-tabs/StockDataHeader";
+import Header from "./main-content-components/StockDataHeader";
 
 const MainContent = () => {
   const store = useStore();

@@ -7,7 +7,7 @@ import SearchResultCard from './instrument-search-list-component/SearchResultCar
 
 export default function InstrumentSearchList() {
   const { isLeftCollapsed, searchTerm } = useStore();
-  const [activeTab, setActiveTab] = useState('history');
+  const [activeTab, setActiveTab] = useState('global');
   const [searchResult, setSearchResult] = useState<TickerInfo[]>([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -67,9 +67,9 @@ export default function InstrumentSearchList() {
       {!isLeftCollapsed ? (
         <div className="flex border-b border-[var(--border)]">
           <button
-            onClick={() => handleTabChange('history')}
+            onClick={() => handleTabChange('global')}
             className={`flex-1 py-2 px-3 text-sm font-medium transition-colors border-b-2 ${
-              activeTab === 'history'
+              activeTab === 'global'
                 ? 'bg-[var(--bg-secondary)] text-[var(--text-primary)] border-[var(--accent-main)]'
                 : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-hover)] border-transparent'
             }`}
@@ -77,9 +77,9 @@ export default function InstrumentSearchList() {
             Global
           </button>
           <button
-            onClick={() => handleTabChange('favorite')}
+            onClick={() => handleTabChange('history')}
             className={`flex-1 py-2 px-3 text-sm font-medium transition-colors border-b-2 ${
-              activeTab === 'favorite'
+              activeTab === 'history'
                 ? 'bg-[var(--bg-secondary)] text-[var(--text-primary)] border-[var(--accent-main)]'
                 : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-hover)] border-transparent'
             }`}
@@ -90,11 +90,11 @@ export default function InstrumentSearchList() {
       ) : (
         <div className="flex justify-center border-b border-[var(--border)] min-h-10">
           <button
-            onClick={() => handleTabChange(`${activeTab==='favorite' ? 'history' : 'favorite'}`)}
+            onClick={() => handleTabChange(`${activeTab==='history' ? 'global' : 'history'}`)}
             className={`p-0.8 my-4 hover:bg-[var(--bg-hover)] rounded-lg transition-colors  `}
             aria-label="Toggle Collapse"
           >
-            <Star size={16} className={`${activeTab === 'favorite' ? 'text-[var(--star-fill)]' : 'text-[var(--text-primary)]' }`} />
+            <Star size={16} className={`${activeTab === 'history' ? 'text-[var(--star-fill)]' : 'text-[var(--text-primary)]' }`} />
           </button>
         </div>
       )}

@@ -12,6 +12,8 @@ import Image from 'next/image';
 import InstrumentHistoryList from './sidebar-left-components/InstrumentHistoryList';
 import { useStore } from '@/store/store';
 import InstrumentSearchList from './sidebar-left-components/InstrumentSearchList';
+import UserInfoCard from './sidebar-left-components/UserInfoCard';
+import ThemeSelector from './sidebar-left-components/ThemeSelector';
 
 // Icon mapping type
 const SidebarLeft = () => {
@@ -109,26 +111,13 @@ const SidebarLeft = () => {
       </div>
 
       <div className='flex-1 w-full overflow-hidden'>
-        { store.searchTerm.trim() ? <InstrumentSearchList /> : <InstrumentHistoryList /> }
+        { store.selectTheme ? <ThemeSelector /> :
+        ( store.searchTerm.trim() ? <InstrumentSearchList /> : <InstrumentHistoryList /> )
+        }
       </div>
 
       {/* Collapsed state bottom buttons */}
-      <div className={` flex p-1.5 border-t border-[var(--border)] pl-3`}>
-        <div className="flex flex-col space-y-1.5">
-          <button
-            className="p-1.5 hover:bg-[var(--bg-hover)] rounded-lg transition-colors flex justify-center"
-            aria-label="Settings"
-          >
-            <Settings size={16} />
-          </button>
-          <button
-            className="p-1.5 hover:bg-[var(--bg-hover)] rounded-lg transition-colors flex justify-center"
-            aria-label="Filter"
-          >
-            <Filter size={16} />
-          </button>
-        </div>
-      </div>
+      <UserInfoCard />
     </aside>
   );
 };

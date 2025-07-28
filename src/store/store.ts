@@ -7,11 +7,13 @@ interface Store {
   isLeftCollapsed: boolean;
   searchTerm:string,
   selectedInstrument?: InstrumentCoverInfo | null;
+  selectTheme: boolean;
+  setInstrumentHistoryList: (list: InstrumentCoverInfo[]) => void;
+  setSearching:() =>void
   setIsLeftCollapsed: () => void;
   setSearchTerm: (term:string)=>void;
-  setSearching:() =>void
-  setInstrumentHistoryList: (list: InstrumentCoverInfo[]) => void;
   setSelectedInstrument: (instrument: InstrumentCoverInfo)=>void;
+  setSelectTheme: (value: boolean) => void;
 }
 
 export const useStore = create<Store>((set) => {
@@ -25,6 +27,7 @@ export const useStore = create<Store>((set) => {
     isLeftCollapsed: false,
     searchTerm: '',
     selectedInstrument: null,
+    selectTheme: false,
 
     // --actions--
     setInstrumentHistoryList: (list: InstrumentCoverInfo[]) => {
@@ -41,6 +44,7 @@ export const useStore = create<Store>((set) => {
     },
     setSelectedInstrument:(instrument:InstrumentCoverInfo)=>{
       set({selectedInstrument: instrument})
-    }
+    },
+    setSelectTheme: (value) => set({ selectTheme: value }),
   };
 });

@@ -1,79 +1,63 @@
-// ThemeSelector.tsx
-import React, { useCallback, useEffect } from 'react';
-import { ChevronLeft } from 'lucide-react';
+'use client';
+
+import { useStore } from '@/store/store';
+import { useCallback } from 'react';
 import Image from 'next/image';
 
-const ThemeSelector: React.FC<{
-  onBack: () => void;
-  isOpen: boolean;
-  setTheme: (theme: string) => void;
-}> = ({ onBack, isOpen, setTheme }) => {
+const ThemeSelector = () => {
+  const { selectTheme, setSelectTheme, setSearchTerm } = useStore();
   const themes = [
-    'dark-theme',
-    'light-theme',
-    'high-contrast-theme',
-    'vibrant-theme',
-    'pastel-theme',
-    'midnight-theme',
-    'solarized-theme',
-    'monochrome-theme',
+    { name: 'Dark', className: '', previewColor: 'hsl(0, 0%, 15%)' },
+    { name: 'Light', className: 'light-theme', previewColor: 'hsl(0, 0%, 95%)' },
+    { name: 'High-Contrast', className: 'high-contrast-theme', previewColor: 'hsl(0, 0%, 0%)' },
+    { name: 'Solarized', className: 'solarized-theme', previewColor: 'hsl(30, 20%, 15%)' },
+    { name: 'Neon', className: 'neon-theme', previewColor: 'hsl(240, 10%, 10%)' },
+    { name: 'TokyoNight', className: 'tokyo-night-theme', previewColor: 'hsl(240, 17%, 10%)' },
   ];
 
-  // Load saved theme on mount
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') || '';
-    if (savedTheme) {
-      setTheme(savedTheme);
-    }
-  }, [setTheme]);
-
-  const handleThemeSelect = useCallback((theme: string) => {
-    setTheme(theme);
+  const setTheme = useCallback((theme: string) => {
+    document.documentElement.className = theme;
     localStorage.setItem('theme', theme);
-  }, [setTheme]);
+    setSearchTerm(''); // Clear search term if needed
+  }, [setSearchTerm]);
 
-  if (!isOpen) return null;
+  if (!selectTheme) return null;
 
   return (
-    <div className="relative w-full h-full flex flex-col items-center justify-start p-2 overflow-clip font-roboto font-extralight text-[var(--text-primary)]">
+    <div className="h-full w-full overflow-hidden flex flex-col text-white bg-[var(--bg-primary)]">
+      <div className="flex border-b border-[var(--border)]">
+        <button
+          onClick={() => setSelectTheme(false)}
+          className="flex-1 py-2 px-3 text-sm font-medium text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-hover)] border-b-2 border-transparent"
+        >
+          Close
+        </button>
+      </div>
+      <div className="flex-1 h-full overflow-y-auto px-1 pt-1">
+        <div className="flex flex-col space-y-2 p-2">
+          {themes.map((theme) => (
+            <div
+              key={theme.className}
+              onClick={() => setTheme(theme.className)}
+              className="flex items-center cursor-pointer hover:bg-[var(--bg-hover)] rounded-lg p-1 transition-colors"
+            >
+              <div
+                className="w-12 h-6 rounded-lg border border-[var(--border)]"
+                style={{ backgroundColor: theme.previewColor }}
+              />
+              <span className="ml-2 text-sm text-[var(--text-primary)]">{theme.name}</span>
+            </div>
+          ))}
+        </div>
+      </div>
       <Image
         alt="Background gradient"
         fill
         src="/assets/images/image.png"
-        className="absolute -z-10 object-cover brightness-120"
+        className="absolute -z-10 object-cover brightness-120 blur-[1px]"
         priority
         quality={100}
       />
-      <div className="relative z-10 w-full">
-        {/* Header with Back Arrow */}
-        <div className="flex items-center p-2 border-b border-[var(--border)]">
-          <button
-            onClick={onBack}
-            className="p-1.5 hover:bg-[var(--bg-hover)] rounded-lg transition-colors"
-            aria-label="Back to header"
-          >
-            <ChevronLeft size={16} />
-          </button>
-          <h3 className="ml-2 text-sm font-medium text-[var(--text-primary)]">Select Theme</h3>
-        </div>
-
-        {/* Theme List */}
-        <div className="flex flex-col p-2 space-y-1">
-          {themes.map((theme) => (
-            <button
-              key={theme}
-              onClick={() => handleThemeSelect(theme)}
-              className={`w-full text-left p-2 rounded-lg text-sm transition-colors ${
-                document.documentElement.className === theme
-                  ? 'bg-[var(--bg-secondary)] text-[var(--text-primary)] border border-[var(--accent)]'
-                  : 'text-[var(--text-secondary)] hover:bg-[var(--bg-hover)]'
-              }`}
-            >
-              {theme.replace('-theme', '').charAt(0).toUpperCase() + theme.slice(8, -6)}
-            </button>
-          ))}
-        </div>
-      </div>
     </div>
   );
 };
