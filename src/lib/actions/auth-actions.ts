@@ -21,9 +21,9 @@ export async function login(formData: FormData) {
     redirect('/error')
   }
 
-  if (user) {
+  if (user && !(await supabase.from('users').select('*').match({id:user.id}).single())) {
     const {error} = await supabase.from('users').insert({
-      userid: user.id,
+      id: user.id,
       email: user.email,
       instrument_history: '[]',
       theme: '',
@@ -47,7 +47,7 @@ export async function signup(formData: FormData) {
     password: formData.get('password') as string,
     options: {
       data: {
-        username: "john doe"
+        full_name: "jon de doe",
       }
     }
   })
@@ -59,4 +59,37 @@ export async function signup(formData: FormData) {
 
   revalidatePath('/', 'layout')
   redirect('/verify-email')
+}
+
+
+export async function logout() {
+  const supabase = await createClient()
+  const { error } = await supabase.auth.signOut()
+
+  if(error) {
+    console.log(`error occured while logging out: ${JSON.stringify(error)}`);
+    redirect('/error');
+  }
+  redirect('/login');
+}
+
+export async function signInWithGoogle() {
+  const supabase = await createClient()
+  const { error, data } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      queryParams: {
+        prompt: 'consent',
+        access_type: 'offline',
+      },
+      redirectTo: 'http://localhost:3000/auth/callback',
+    },
+  })
+
+  if (error) {
+    console.log(`error occurred while signing in with google: ${JSON.stringify(error)}`)
+    redirect('/error')
+  }
+
+  redirect(data.url)
 }

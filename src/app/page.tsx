@@ -1,41 +1,57 @@
 "use client";
 
-import { JSX, useCallback, useEffect } from "react";
+import { JSX, useEffect, useState } from "react";
 import MainContent from "./components/MainContent";
 import SidebarLeft from "./components/SidebarLeft";
 import SidebarRight from "./components/SidebarRight";
-// import Header from "../components/Header";
-// import ThemeSelector from "@/components/ThemeSelector";
+import { useUserStore } from "@/store/userStore";
+import { createClient } from "@/utils/supabase/client";
+import { fetchUser } from "@/utils/fetchUser";
 
 export default function Home(): JSX.Element {
-  const setTheme = useCallback((theme: string) => {
-    document.documentElement.className = theme;
-    localStorage.setItem("theme", theme);
-  }, []);
+  const [isMounted, setIsMounted] = useState(true);
 
-  // On initial load
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") || "";
-    if (savedTheme) {
-      setTheme(savedTheme);
+  // Function to handle fetching user data
+  const handleFetchUser = async () => {
+    const response = await fetchUser(); // Call Server Action
+    if (response.success) {
+      useUserStore.getState().setUser(response.data!); // Update store with user data
+      console.log('User fetched:', response.data);
+    } else {
+      useUserStore.getState().setUser(null); // Clear store on error
+      console.log('Error:', response.error);
     }
-  }, [setTheme]);
+  };
+
+  useEffect(() => {
+    // Initial fetch
+    handleFetchUser();
+
+    // Set up Supabase auth listener
+    const supabase = createClient();
+    const { data: authListener } = supabase.auth.onAuthStateChange((_, session) => {
+      if (isMounted) {
+        if (session?.user) {
+          handleFetchUser(); // Fetch user when logged in
+        } else {
+          useUserStore.getState().setUser(null); // Clear user when logged out
+          console.log('User logged out');
+        }
+      }
+    });
+
+    // Cleanup on unmount
+    return () => {
+      setIsMounted(false);
+      authListener.subscription.unsubscribe();
+    };
+  }, []);
 
   return (
     <div className="flex flex-col h-screen font-sans overflow-clip bg-[var(--bg-main)]">
-      {/* <div className="w-full z-10"><Header /></div> */}
-      {/* <div className="w-full z-10"><ThemeSelector /></div> */}
       <div className="flex flex-1 min-h-0 relative">
-        {/* <Image
-          alt="Background gradient"
-          fill
-          src="/assets/images/image_bg_grid.png"
-          className="absolute inset-0 object-cover -z-10 brightness-20" // Added inset-0 and -z-10
-          priority
-          quality={100}
-        /> */}
         <SidebarLeft />
-        <main className="flex-1 min-w-0 text-white">
+        <main className="flex-1 min-w-0">
           <MainContent />
         </main>
         <SidebarRight />

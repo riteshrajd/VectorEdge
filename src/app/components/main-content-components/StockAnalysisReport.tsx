@@ -22,7 +22,7 @@ import {
 import { CombinedData } from '@/types/types';
 
 interface StockAnalysisReportProps {
-  data: CombinedData;
+  data: CombinedData|null;
   setIsShrunk: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -84,6 +84,9 @@ const StockAnalysisReport: React.FC<StockAnalysisReportProps> = ({ data, setIsSh
   }
 
 
+  if(!data) {
+    return null;
+  }
 
   return (
     <div className="space-y-6 overflow-y-auto" ref={ref}>

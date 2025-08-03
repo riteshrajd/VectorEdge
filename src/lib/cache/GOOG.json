@@ -346,9 +346,21 @@
         "value": 17.85,
         "action": "Neutral"
       },
-      { "name": "Awesome Oscillator", "value": 3.41, "action": "Neutral" },
-      { "name": "Momentum (10)", "value": 6.88, "action": "Sell" },
-      { "name": "MACD Level (12, 26)", "value": 2.26, "action": "Buy" },
+      {
+        "name": "Awesome Oscillator",
+        "value": 3.41,
+        "action": "Neutral"
+      },
+      {
+        "name": "Momentum (10)",
+        "value": 6.88,
+        "action": "Sell"
+      },
+      {
+        "name": "MACD Level (12, 26)",
+        "value": 2.26,
+        "action": "Buy"
+      },
       {
         "name": "Stochastic RSI Fast (3, 3, 14, 14)",
         "value": 79.88,
@@ -359,7 +371,11 @@
         "value": "-6.74",
         "action": "Neutral"
       },
-      { "name": "Bull Bear Power", "value": 5.72, "action": "Neutral" },
+      {
+        "name": "Bull Bear Power",
+        "value": 5.72,
+        "action": "Neutral"
+      },
       {
         "name": "Ultimate Oscillator (7, 14, 28)",
         "value": 60.93,
@@ -392,7 +408,11 @@
         "value": 174.55,
         "action": "Buy"
       },
-      { "name": "Simple Moving Average (30)", "value": 174.9, "action": "Buy" },
+      {
+        "name": "Simple Moving Average (30)",
+        "value": 174.9,
+        "action": "Buy"
+      },
       {
         "name": "Exponential Moving Average (50)",
         "value": 172.57,
@@ -433,7 +453,11 @@
         "value": 175.05,
         "action": "Buy"
       },
-      { "name": "Hull Moving Average (9)", "value": 178.4, "action": "Buy" }
+      {
+        "name": "Hull Moving Average (9)",
+        "value": 178.4,
+        "action": "Buy"
+      }
     ],
     "pivots": {
       "Classic": {

@@ -1,20 +1,5 @@
 import { create } from "zustand";
-import { InstrumentCoverInfo } from "@/types/types";
-
-interface Store {
-  instrumentHistoryList: InstrumentCoverInfo[];
-  searching: boolean
-  isLeftCollapsed: boolean;
-  searchTerm:string,
-  selectedInstrument?: InstrumentCoverInfo | null;
-  selectTheme: boolean;
-  setInstrumentHistoryList: (list: InstrumentCoverInfo[]) => void;
-  setSearching:() =>void
-  setIsLeftCollapsed: () => void;
-  setSearchTerm: (term:string)=>void;
-  setSelectedInstrument: (instrument: InstrumentCoverInfo)=>void;
-  setSelectTheme: (value: boolean) => void;
-}
+import { Store } from "@/types/store-types";
 
 export const useStore = create<Store>((set) => {
   return {
@@ -30,19 +15,21 @@ export const useStore = create<Store>((set) => {
     selectTheme: false,
 
     // --actions--
-    setInstrumentHistoryList: (list: InstrumentCoverInfo[]) => {
+    setInstrumentHistoryList: (list) => {
       set({ instrumentHistoryList: list });
     },
+    addToInstrumentToList: (instrument) =>
+      set((state) => ({ instrumentHistoryList: [ instrument, ...state.instrumentHistoryList] })),
     setIsLeftCollapsed:()=>{
       set((state)=>({ isLeftCollapsed:!state.isLeftCollapsed }))
     },
     setSearching: ()=>{
       set((state)=>({searching: state.searchTerm.trim() !== ''}))
     },
-    setSearchTerm:(term:string)=>{
+    setSearchTerm:(term)=>{
       set({searchTerm: term})
     },
-    setSelectedInstrument:(instrument:InstrumentCoverInfo)=>{
+    setSelectedInstrument:(instrument)=>{
       set({selectedInstrument: instrument})
     },
     setSelectTheme: (value) => set({ selectTheme: value }),
