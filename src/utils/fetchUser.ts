@@ -35,3 +35,4 @@ export const fetchUser = async () => {
     return { success: false, error };
   }
 };
+

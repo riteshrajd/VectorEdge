@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { useStore } from '@/store/store';
-import StockAnalysisReport from './main-content-components/StockAnalysisReport';
+import StockAnalysisReport from './main-content-components/StockAnalysisReport2';
 import { useDataStore } from '@/store/dataStroe';
 import { CombinedData, InstrumentCoverInfo } from '@/types/types';
 import WelcomeScreen from './main-content-components/WelcomeScreen';
@@ -74,7 +74,6 @@ const MainContent = () => {
           }
           const fetchedData: CombinedData = await response.json();
           console.log(`Response received for ${selectedTicker}`);
-          // setData(fetchedData); --
           dataStore.addData(fetchedData);
           return fetchedData;
         } catch (error) {
@@ -88,10 +87,10 @@ const MainContent = () => {
   }, [dataStore]);
 
   useEffect(() => {
-    if(store.selectedInstrument) { 
-      console.log(`ITEM SELECTED LOG FROM in Maincontent: ${JSON.stringify(store.selectedInstrument)}`)
-      const data = dataStore.data.find(item => item.ticker === store.selectedInstrument?.symbol);
-      if(data){
+    if (store.selectedInstrument) {
+      console.log(`ITEM SELECTED LOG FROM in Maincontent: ${JSON.stringify(store.selectedInstrument)}`);
+      const data = dataStore.data.find((item) => item.ticker === store.selectedInstrument?.symbol);
+      if (data) {
         setData(data);
         setLoading(false);
         return;
@@ -126,11 +125,11 @@ const MainContent = () => {
     }
   };
 
-  if (!store.selectedInstrument) return <WelcomeScreen />
-  
-  if(error && !data) return (<div> {error} </div>)
+  if (!store.selectedInstrument) return <WelcomeScreen />;
 
-  if(askConfirmation) {
+  if (error && !data) return <div>{error}</div>;
+
+  if (askConfirmation) {
     return (
       <ConfirmationScreen
         instrumentName={store.selectedInstrument.name}
@@ -143,13 +142,13 @@ const MainContent = () => {
   if (loading) return <div>Loading data...</div>;
 
   return (
-   <div className="h-full w-full bg-[var(--bg-main)]">
+    <div className="h-full w-full bg-[var(--color-background)]">
       <Header data={data} isShrunk={isShrunk} />
-      <div className="h-full w-full flex justify-center bg-[var(--bg-main)] overflow-hidden">
+      <div className="h-full w-full flex justify-center bg-[var(--color-background)] overflow-hidden">
         <StockAnalysisReport data={data} setIsShrunk={setIsShrunk} />
       </div>
     </div>
-  ); 
+  );
 };
 
 export default MainContent;

@@ -20,9 +20,9 @@ const Header: React.FC<HeaderProps> = ({ data, isShrunk }) => {
 
   return (
     <header
-      className={`bg-[var(--bg-card-primary)] text-[var(--text-primary)] transition-all duration-200 ease-in-out ${
+      className={`bg-[var(--color-card)] text-[var(--color-chart-5)] transition-all duration-200 ease-in-out ${
         isShrunk ? 'h-14 py-1' : 'h-20 py-4'
-      } border-b border-[var(--border)] shadow-md`}
+      } border-b border-[var(--color-border)] shadow-md`}
     >
       <div
         className={`max-w-7xl mx-auto px-4 sm:px-4 lg:px-6 flex items-center justify-between transition-all duration-200`}
@@ -37,7 +37,7 @@ const Header: React.FC<HeaderProps> = ({ data, isShrunk }) => {
               {data?.ticker || 'N/A'}
             </h1>
             <p
-              className={`text-[var(--text-secondary)] ${
+              className={`text-[var(--color-muted-foreground)] ${
                 isShrunk ? 'text-[0.65rem]' : 'text-sm'
               } transition-all duration-200`}
             >
@@ -45,15 +45,10 @@ const Header: React.FC<HeaderProps> = ({ data, isShrunk }) => {
             </p>
           </div>
         </div>
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4 text-[var(--color-muted-foreground)]]">
           <div className="flex items-center">
-            <DollarSign
-              className={`text-[var(--accent-main)] ${
-                isShrunk ? 'w-3.5 h-3.5' : 'w-5 h-5'
-              } mr-1 transition-all duration-200`}
-            />
             <span
-              className={`font-semibold ${
+              className={`font-semibold${
                 isShrunk ? 'text-sm' : 'text-lg'
               } transition-all duration-200`}
             >
@@ -84,7 +79,7 @@ const Header: React.FC<HeaderProps> = ({ data, isShrunk }) => {
           </div>
           <div>
             <span
-              className={`text-[var(--text-secondary)] ${
+              className={`text-[var(--color-muted-foreground)] ${
                 isShrunk ? 'text-xs' : 'text-sm'
               } transition-all duration-200`}
             >
