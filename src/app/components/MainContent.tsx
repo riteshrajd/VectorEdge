@@ -142,9 +142,9 @@ const MainContent = () => {
   if (loading) return <div>Loading data...</div>;
 
   return (
-    <div className="h-full w-full bg-[var(--color-background)]">
+    <div className="h-full w-full bg-[var(--color-background)] flex flex-col">
       <Header data={data} isShrunk={isShrunk} />
-      <div className="h-full w-full flex justify-center bg-[var(--color-background)] overflow-hidden">
+      <div className="flex-1 w-full flex justify-center bg-[var(--color-background)] overflow-hidden">
         <StockAnalysisReport data={data} setIsShrunk={setIsShrunk} />
       </div>
     </div>

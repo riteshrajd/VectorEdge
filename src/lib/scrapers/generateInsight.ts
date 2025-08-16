@@ -1,3 +1,4 @@
+'use server'
 import axios from "axios";
 import { AIInsights, CombinedData } from "@/types/types";
 
@@ -5,10 +6,10 @@ async function insightGenerator(
   data: CombinedData
 ): Promise<{ ai_insights: AIInsights }> {
   try {
-    const API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+    const API_KEY = process.env.GEMINI_API_KEY;
     if (!API_KEY)
       throw new Error("Gemini API key not found in environment variables");
-    const API_URL = process.env.NEXT_PUBLIC_GEMINI_API_URL;
+    const API_URL = process.env.GEMINI_API_URL;
 
     // Construct a prompt summarizing key data points for AI processing
     const prompt = `
@@ -109,6 +110,7 @@ Example JSON:
     console.log(`Generated Insights for ${data.ticker}:\n${responseText}`);
 
     const ai_insights: AIInsights = JSON.parse(jsonMatch[1]);
+    console.log(`✅generated insights: ${JSON.stringify(ai_insights)}`);
     return { ai_insights };
   } catch (err) {
     const errorMessage = err instanceof Error ? err.message : 'Unknown error';

@@ -17,7 +17,7 @@ export const fetchUser = async () => {
       .single();
   
     if (profileError) {
-      return {seccess: false, error: 'failed to get user profile'};
+      return {success: false, error: 'failed to get user profile'};
     }
   
     const userData: UserData = {
@@ -35,4 +35,3 @@ export const fetchUser = async () => {
     return { success: false, error };
   }
 };
-

@@ -7,6 +7,8 @@ export interface Store {
   searchTerm:string,
   selectedInstrument?: InstrumentCoverInfo | null;
   selectTheme: boolean;
+  mobileView: 'search' | 'data' | 'chat';
+  isMobileSearchOpen: boolean;
   setInstrumentHistoryList: (list: InstrumentCoverInfo[]) => void;
   addToInstrumentToList: (instrument: InstrumentCoverInfo) => void;
   setSearching:() =>void
@@ -14,6 +16,8 @@ export interface Store {
   setSearchTerm: (term:string)=>void;
   setSelectedInstrument: (instrument: InstrumentCoverInfo)=>void;
   setSelectTheme: (value: boolean) => void;
+  setMobileView: (view: 'search' | 'data' | 'chat') => void;
+  toggleMobileSearch: () => void;
 }
 
 export interface DataStore {

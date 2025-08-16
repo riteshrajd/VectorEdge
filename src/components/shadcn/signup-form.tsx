@@ -10,16 +10,35 @@ export function SignupForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card className="overflow-hidden p-0">
-        <CardContent className="grid p-0 md:grid-cols-2">
+    <div
+      className={cn(
+        // Using h-screen ensures it fills the viewport height
+        "flex flex-col items-center justify-center h-full gap-6",
+        className
+      )}
+      {...props}
+    >
+      {/* Background Image */}
+      <div className="">
+        <img
+          src="/assets/images/login-page-images/abstract-light-speed-effect-black-background_107791-25835.jpg"
+          alt="Background"
+          className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.5]"
+        />
+      </div>
+
+      {/* 1. Added `text-white` to the Card for high contrast in both themes */}
+      <Card className="overflow-hidden p-0 z-20 bg-black/20 backdrop-blur-lg border border-white/10 w-full max-w-md text-white">
+        <CardContent className="grid p-0">
           <form className="p-6 md:p-8">
             <div className="flex flex-col gap-6">
               <div className="flex flex-col items-center text-center">
-                <h1 className="text-2xl font-bold">Welcome back</h1>
-                <p className="text-muted-foreground text-balance">
-                  Signup to your Acme Inc account
+                <h1 className="text-2xl font-bold">Create an account</h1>
+                {/* 2. Used a lighter text color for muted text */}
+                <p className="text-neutral-300 text-balance">
+                  Sign up for your VectorEdge account
                 </p>
               </div>
               <div className="grid gap-3">
@@ -30,25 +49,26 @@ export function SignupForm({
                   name="email"
                   placeholder="m@example.com"
                   required
+                  // 3. Styled inputs to match the glassmorphism theme
+                  className="bg-white/5 border-white/20 placeholder:text-neutral-400 focus:ring-offset-0"
                 />
               </div>
               <div className="grid gap-3">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                  <a
-                    href="#"
-                    className="ml-auto text-sm underline-offset-2 hover:underline"
-                  >
-                    Forgot your password?
-                  </a>
-                </div>
-                <Input id="password" name="password" type="password" required />
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  required
+                  className="bg-white/5 border-white/20 focus:ring-offset-0"
+                />
               </div>
               <Button type="submit" className="w-full" formAction={signup}>
-                Signup
+                Sign Up
               </Button>
-              <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
-                <span className="bg-card text-muted-foreground relative z-10 px-2">
+              {/* 4. Adjusted divider line and text for better blending */}
+              <div className="after:border-white/20 relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
+                <span className="bg-transparent text-neutral-300 relative z-10 px-2">
                   Or continue with
                 </span>
               </div>
@@ -56,26 +76,23 @@ export function SignupForm({
                 <SignWithGoogleButton type="Signup" />
               </div>
               <div className="text-center text-sm">
-                Don&apos;t have an account?{" "}
-                <a href="/login" className="underline underline-offset-4">
+                Already have an account?{" "}
+                <a
+                  href="/login"
+                  className="underline underline-offset-4 font-semibold hover:text-neutral-200"
+                >
                   Login
                 </a>
               </div>
             </div>
           </form>
-          <div className="bg-muted relative hidden md:block">
-            <img
-              src="/placeholder.svg"
-              alt="Image"
-              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
-            />
-          </div>
         </CardContent>
       </Card>
-      <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
+      {/* 5. Ensured footer text is visible and above the background */}
+      <div className="text-neutral-300 text-shadow-black p-2 dark:text-shadow-none *:[a]:hover:text-white text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4 z-20">
         By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
         and <a href="#">Privacy Policy</a>.
       </div>
     </div>
-  )
+  );
 }

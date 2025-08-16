@@ -7,10 +7,14 @@ import InstrumentHistoryList from './sidebar-left-components/InstrumentHistoryLi
 import { useStore } from '@/store/store';
 import InstrumentSearchList from './sidebar-left-components/InstrumentSearchList';
 import UserInfoCard from './sidebar-left-components/UserInfoCard';
+import PremiumCard from './sidebar-left-components/PremiumCard';
 import ThemeToggle from '@/components/ThemeToggle';
 
+import { useUserStore } from '@/store/userStore';
+
 const SidebarLeft = () => {
-  const sub: string = 'Lite';
+  const user = useUserStore().user;
+  const sub: string = user?.is_paid_member ? 'Plus' : 'Lite';
   const store = useStore();
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -39,7 +43,7 @@ const SidebarLeft = () => {
   return (
     <aside
       className={`${
-        store.isLeftCollapsed ? 'w-14' : 'w-62'
+        store.isLeftCollapsed ? 'w-12' : 'w-62'
       } bg-sidebar text-sidebar-foreground transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] border-r border-sidebar-border flex flex-col overflow-clip`}
     >
       {/* Header with toggle */}
@@ -59,16 +63,16 @@ const SidebarLeft = () => {
               VectorEdge
               <span
                 className={`${
-                  sub === 'Lite'
+                  (sub !== 'Pro' && sub!== 'Plus')
                     ? 'text-sidebar-accent-foreground rounded-xl font-quicksand text-sm font-light px-1'
                     : ''
                 } ${
                   sub === 'Plus'
-                    ? 'border border-sidebar-accent-foreground ml-1 text-sidebar-foreground rounded-xl font-roboto font-light px-1'
+                    ? 'border-sidebar-accent-foreground border-1 pb-0.5 ml-1.5 mr-0.5 text-sidebar-foreground rounded-xl font-roboto font-light px-1'
                     : ''
                 } ${
                   sub === 'Pro'
-                    ? 'border-2 border-sidebar-accent-foreground text-sidebar-foreground rounded-lg ml-1 pb-0.5 px-1'
+                    ? 'border-sidebar-accent-foreground text-sidebar-foreground rounded-lg pb-0.5 px-1'
                     : ''
                 }`}
               >
@@ -124,6 +128,7 @@ const SidebarLeft = () => {
         )}
       </div>
       
+      {!user?.is_paid_member && <PremiumCard />}
       <UserInfoCard />
     </aside>
   );

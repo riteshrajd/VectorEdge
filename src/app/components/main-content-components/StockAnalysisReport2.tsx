@@ -37,13 +37,19 @@ interface StockAnalysisReportProps {
 const StockAnalysisReport: React.FC<StockAnalysisReportProps> = ({ data, setIsShrunk }) => {
   const ref = React.useRef<HTMLDivElement>(null);
 
-  const formatCurrency = (value: number | string) => {
+  const formatCurrency = (value: number | string | null | undefined) => {
+    if (value === null || value === undefined) {
+      return 'N/A';
+    }
     const numValue = typeof value === 'string' ? parseFloat(value) : value;
     if (isNaN(numValue)) return 'N/A';
     return `$${numValue.toLocaleString('en-US', { maximumFractionDigits: 2 })}`;
   };
 
-  const formatBillions = (value: number) => {
+  const formatBillions = (value: number | null | undefined) => {
+    if (value === null || value === undefined || isNaN(value)) {
+      return 'N/A';
+    }
     return `$${(value / 1000000000000).toFixed(2)}T`;
   };
 
@@ -99,7 +105,7 @@ const StockAnalysisReport: React.FC<StockAnalysisReportProps> = ({ data, setIsSh
   }
 
   return (
-    <div className="space-y-6 overflow-y-auto max-h-screen p-1" ref={ref}>
+    <div className="space-y-6 overflow-y-auto p-1" ref={ref}>
       {/* Header Section */}
       <div className="bg-[--color-card] rounded-lg p-6 shadow-sm border border-[--color-border]">
         <div className="flex items-center justify-between mb-6">

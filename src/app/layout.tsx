@@ -13,9 +13,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
-        <title>VectorEdge</title>
         <script
           dangerouslySetInnerHTML={{
             __html: `

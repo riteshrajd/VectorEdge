@@ -31,7 +31,7 @@ export default function SearchResultCard({ instrument }: { instrument: Instrumen
       <div
         className={`${isLeftCollapsed ? 'mx-auto' : 'mr-2'} flex items-center justify-center ${color} rounded-full h-8 w-8`}
       >
-        <Icon size={16} className="text-primary-foreground" />
+        <Icon size={16} className="text-white" />
       </div>
 
       {!isLeftCollapsed && (

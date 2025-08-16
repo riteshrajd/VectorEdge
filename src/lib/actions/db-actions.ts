@@ -69,3 +69,36 @@ export async function toggleFavourite(userId: string, symbol: string) {
 
   return true;
 }
+
+export async function updateSubscriptionStatus(status: boolean, planType: string, userId: string) {
+  const supabase = await createClient();
+
+
+  const expiryDate = new Date();
+  if (planType === 'monthly') {
+    expiryDate.setMonth(expiryDate.getMonth() + 1);
+  } else if (planType === 'yearly') {
+    expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+  } else {
+    return { success: false, error: 'Invalid subscription plan provided.' };
+  }
+
+  const { data, error } = await supabase
+    .from('profiles')
+    .update({
+      is_paid_member: status,
+      subscription_plan: 'plus', // Set the plan tier, e.g., 'plus'
+      subscription_expiry: expiryDate.toISOString(),
+    })
+    .eq('id', userId)
+    .select()
+    .single();
+
+  if (error) {
+    console.error(`Error updating subscription for user ${userId}:`, error);
+    return { success: false, error: error.message };
+  }
+
+  console.log(`✅ Subscription status updated for user ${userId} to ${status}`);
+  return { success: true, data };
+}

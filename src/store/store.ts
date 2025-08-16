@@ -13,6 +13,8 @@ export const useStore = create<Store>((set) => {
     searchTerm: '',
     selectedInstrument: null,
     selectTheme: false,
+    mobileView: 'data',
+    isMobileSearchOpen: false,
 
     // --actions--
     setInstrumentHistoryList: (list) => {
@@ -33,5 +35,13 @@ export const useStore = create<Store>((set) => {
       set({selectedInstrument: instrument})
     },
     setSelectTheme: (value) => set({ selectTheme: value }),
+    setMobileView: (view) => set({ 
+      mobileView: view, 
+      isMobileSearchOpen: false // Also close search panel when switching views
+    }),
+
+    toggleMobileSearch: () => set((state) => ({ 
+      isMobileSearchOpen: !state.isMobileSearchOpen 
+    })),
   };
 });
