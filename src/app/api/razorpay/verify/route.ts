@@ -11,7 +11,6 @@ export async function POST(request: Request) {
       razorpay_payment_id,
       razorpay_signature,
       plan,
-      userId,
     } = await request.json();
 
 

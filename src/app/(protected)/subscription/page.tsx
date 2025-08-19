@@ -3,6 +3,19 @@
 import { JSX, useEffect, useState } from "react";
 import { useUserStore } from "@/store/userStore";
 import { useRouter } from "next/navigation";
+import { 
+  Check, 
+  Crown, 
+  Star, 
+  Shield, 
+  Zap, 
+  Mail, 
+  Headphones,
+  Sparkles,
+  ArrowLeft,
+  Loader2
+} from "lucide-react";
+import { useInitializeUser } from "@/app/hooks/useInitializeUser";
 
 declare global {
   interface Window {
@@ -11,11 +24,11 @@ declare global {
 }
 
 export default function Subscription(): JSX.Element {
+  useInitializeUser();
   const { user } = useUserStore();
   const router = useRouter();
-  const [loadingPlan, setLoadingPlan] = useState<"monthly" | "yearly" | null>(
-    null
-  );
+  const [loadingPlan, setLoadingPlan] = useState<"monthly" | "yearly" | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   // Load Razorpay script
   useEffect(() => {
@@ -25,7 +38,6 @@ export default function Subscription(): JSX.Element {
     document.body.appendChild(script);
 
     return () => {
-      // Clean up the script when the component unmounts
       if (document.body.contains(script)) {
         document.body.removeChild(script);
       }
@@ -33,8 +45,10 @@ export default function Subscription(): JSX.Element {
   }, []);
 
   const processPayment = async (plan: "monthly" | "yearly", amount: number) => {
-    if(useUserStore.getState().user?.is_paid_member) return;
-    if (loadingPlan) return; // Prevent multiple clicks
+    if (useUserStore.getState().user?.is_paid_member) return;
+    if (isProcessing) return; // Prevent multiple clicks
+
+    setIsProcessing(true);
     setLoadingPlan(plan);
 
     try {
@@ -44,7 +58,7 @@ export default function Subscription(): JSX.Element {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ amount, currency: "INR" }), // Razorpay expects amount in smallest currency unit
+        body: JSON.stringify({ amount, currency: "INR" }),
       });
 
       if (!response.ok) {
@@ -60,14 +74,11 @@ export default function Subscription(): JSX.Element {
         amount: order.amount,
         currency: order.currency,
         name: "VectorEdge",
-        description: `${
-          plan.charAt(0).toUpperCase() + plan.slice(1)
-        } Subscription`,
+        description: `${plan.charAt(0).toUpperCase() + plan.slice(1)} Subscription`,
         order_id: order.id,
         handler: async function (response: any) {
           console.log("Payment successful, now verifying...", response);
-          setLoadingPlan(plan); // Keep showing loading state during verification
-
+          
           try {
             const verificationResponse = await fetch('/api/razorpay/verify', {
               method: 'POST',
@@ -84,15 +95,17 @@ export default function Subscription(): JSX.Element {
             const result = await verificationResponse.json();
 
             if (result.success) {
-              alert('Payment Verified! Your subscription is now active. Redirecting...');
-              router.push('/'); // Redirect to the home page
+              // Show success state briefly before redirect
+              setTimeout(() => {
+                router.push('/');
+              }, 2000);
             } else {
               throw new Error(result.error || 'Payment verification failed.');
             }
           } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
             alert(`Payment verification failed: ${errorMessage}`);
-          } finally {
+            setIsProcessing(false);
             setLoadingPlan(null);
           }
         },
@@ -105,8 +118,15 @@ export default function Subscription(): JSX.Element {
           userId: user?.id,
         },
         theme: {
-          color: "#3b82f6", // A nice blue color for the modal
+          color: "#6366f1",
         },
+        modal: {
+          ondismiss: function() {
+            // Reset loading states if user cancels payment
+            setIsProcessing(false);
+            setLoadingPlan(null);
+          }
+        }
       };
 
       const rzp = new window.Razorpay(options);
@@ -115,63 +135,187 @@ export default function Subscription(): JSX.Element {
       rzp.on("payment.failed", function (response: any) {
         console.error("Payment failed:", response.error);
         alert(`Payment Failed: ${response.error.description}`);
+        setIsProcessing(false);
+        setLoadingPlan(null);
       });
     } catch (error) {
       console.error("Error processing payment:", error);
       alert("There was an error processing your payment. Please try again.");
-    } finally {
+      setIsProcessing(false);
       setLoadingPlan(null);
     }
   };
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-[var(--bg-main)] p-4">
-      <h1 className="text-4xl font-bold text-[var(--text-color)] mb-8">Choose Your Plan</h1>
 
-      <div className="flex flex-col md:flex-row gap-8">
-        {/* Monthly Subscription Card */}
-        <div
-          className="bg-slate-100 dark:bg-slate-800 rounded-lg shadow-lg p-8 w-80 text-center cursor-pointer transform transition-transform duration-300 hover:scale-105"
-          onClick={() => processPayment("monthly", 1)} // Amount in INR (e.g., ₹1)
-        >
-          <h2 className="text-2xl font-semibold text-[var(--text-color)] mb-4">Monthly Plan</h2>
-          <p className="text-5xl font-bold text-[var(--accent-color)] mb-4">₹1</p>
-          <p className="text-[var(--text-color-light)] mb-6">per month</p>
-          <ul className="text-[var(--text-color)] text-left mb-8 space-y-2">
-            <li>✓ Access to basic features</li>
-            <li>✓ Monthly updates</li>
-            <li>✓ Email support</li>
-          </ul>
-          <button
-            className="bg-[var(--accent-color)] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[var(--accent-color-dark)] transition-colors duration-300 w-full disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={loadingPlan === "monthly"}
-          >
-            {loadingPlan === "monthly" ? "Processing..." : "Select Monthly"}
-          </button>
+  if (isProcessing) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-accent/5 flex items-center justify-center">
+        <div className="text-center space-y-6">
+          <div className="w-16 h-16 mx-auto">
+            <Loader2 className="w-16 h-16 animate-spin text-primary" />
+          </div>
+          <div className="space-y-2">
+            <h2 className="text-2xl font-semibold text-foreground">
+              {loadingPlan === "monthly" ? "Processing Monthly Plan..." : "Processing Yearly Plan..."}
+            </h2>
+            <p className="text-muted-foreground">
+              Please wait while we set up your subscription
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-accent/5">
+      {/* Header */}
+      <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-sm border-b border-border">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={() => router.back()}
+                className="p-2 hover:bg-accent rounded-lg transition-colors"
+                aria-label="Go back"
+              >
+                <ArrowLeft size={20} />
+              </button>
+              <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+                Choose Your Plan
+              </h1>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Hero Section */}
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-6">
+            <Sparkles size={16} />
+            Unlock Premium Features
+          </div>
+          <h2 className="text-4xl sm:text-5xl font-bold mb-6 leading-tight">
+            Supercharge Your 
+            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"> Trading Experience</span>
+          </h2>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            Join thousands of traders who trust VectorEdge for advanced market insights and professional-grade tools.
+          </p>
         </div>
 
-        {/* Yearly Subscription Card */}
-        <div
-          className="bg-slate-100 dark:bg-slate-800 rounded-lg shadow-lg p-8 w-80 text-center cursor-pointer transform transition-transform duration-300 hover:scale-105 border-2 border-[var(--accent-color)] relative"
-          onClick={() => processPayment("yearly", 2)} // Amount in INR (e.g., ₹2)
-        >
-          <div className="absolute top-0 right-0 bg-[var(--accent-color)] text-white text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-lg">
-            Save 36%
+        {/* Pricing Cards */}
+        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          {/* Monthly Plan */}
+          <div className="relative bg-card border border-border rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 group">
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-2xl mb-4 group-hover:scale-110 transition-transform">
+                <Star className="w-8 h-8 text-primary" />
+              </div>
+              <h3 className="text-2xl font-bold mb-2">Monthly Plan</h3>
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <span className="text-4xl font-bold text-primary">₹1299</span>
+                <span className="text-muted-foreground">/month</span>
+              </div>
+              <p className="text-muted-foreground">Perfect for getting started</p>
+            </div>
+
+            <ul className="space-y-4 mb-8">
+              {[
+                { icon: Check, text: "Access to basic features" },
+                { icon: Zap, text: "Monthly market updates" },
+                { icon: Mail, text: "Email support" },
+                { icon: Shield, text: "Secure trading environment" }
+              ].map((feature, index) => (
+                <li key={index} className="flex items-center gap-3">
+                  <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <feature.icon size={12} className="text-primary" />
+                  </div>
+                  <span className="text-foreground">{feature.text}</span>
+                </li>
+              ))}
+            </ul>
+            <button
+              onClick={() => processPayment("yearly", 2)}
+              disabled={isProcessing || user?.is_paid_member}
+              className="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-primary-foreground py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 active:scale-95 shadow-lg"
+            > 
+              {user?.is_paid_member ? "Already Subscribed" : "Get Monthly Plan"}
+            </button>
           </div>
-          <h2 className="text-2xl font-semibold text-[var(--text-color)] mb-4">Yearly Plan</h2>
-          <p className="text-5xl font-bold text-[var(--accent-color)] mb-4">₹2</p>
-          <p className="text-[var(--text-color-light)] mb-6">per year</p>
-          <ul className="text-[var(--text-color)] text-left mb-8 space-y-2">
-            <li>✓ Access to all features</li>
-            <li>✓ Continuous updates</li>
-            <li>✓ Priority email support</li>
-            <li>✓ Access to beta features</li>
-          </ul>
-          <button
-            className="bg-[var(--accent-color)] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[var(--accent-color-dark)] transition-colors duration-300 w-full disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={loadingPlan === "yearly"}
-          >
-            {loadingPlan === "yearly" ? "Processing..." : "Select Yearly"}
-          </button>
+
+          {/* Yearly Plan - Popular */}
+          <div className="relative bg-gradient-to-br from-primary/5 to-secondary/5 border-2 border-primary rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 group">
+            {/* Popular Badge */}
+            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+              <div className="bg-gradient-to-r from-primary to-secondary text-primary-foreground px-6 py-2 rounded-full text-sm font-bold flex items-center gap-2">
+                <Crown size={16} />
+                Most Popular
+              </div>
+            </div>
+
+            <div className="text-center mb-8 mt-4">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-2xl mb-4 group-hover:scale-110 transition-transform">
+                <Crown className="w-8 h-8 text-primary" />
+              </div>
+              <h3 className="text-2xl font-bold mb-2">Yearly Plan</h3>
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <span className="text-4xl font-bold text-primary">₹9999</span>
+                <span className="text-muted-foreground">/year</span>
+              </div>
+              <div className="inline-flex items-center gap-2 bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400 px-3 py-1 rounded-full text-sm font-medium mb-2">
+                <Sparkles size={14} />
+                Save 36%
+              </div>
+              <p className="text-muted-foreground">Best value for serious traders</p>
+            </div>
+
+            <ul className="space-y-4 mb-8">
+              {[
+                { icon: Check, text: "Access to all premium features" },
+                { icon: Zap, text: "Real-time market insights" },
+                { icon: Headphones, text: "Priority support" },
+                { icon: Crown, text: "Beta feature access" },
+                { icon: Shield, text: "Advanced security features" },
+                { icon: Star, text: "Exclusive market reports" }
+              ].map((feature, index) => (
+                <li key={index} className="flex items-center gap-3">
+                  <div className="w-5 h-5 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                    <feature.icon size={12} className="text-primary" />
+                  </div>
+                  <span className="text-foreground font-medium">{feature.text}</span>
+                </li>
+              ))}
+            </ul>
+
+            <button
+              onClick={() => processPayment("yearly", 2)}
+              disabled={isProcessing || user?.is_paid_member}
+              className="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-primary-foreground py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 active:scale-95 shadow-lg"
+            >
+              {user?.is_paid_member ? "Already Subscribed" : "Get Yearly Plan"}
+            </button>
+          </div>
+        </div>
+
+        {/* Trust Section */}
+        <div className="text-center mt-16">
+          <div className="inline-flex items-center gap-4 text-muted-foreground text-sm">
+            <div className="flex items-center gap-2">
+              <Shield size={16} />
+              <span>Secure Payment</span>
+            </div>
+            <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
+            <div className="flex items-center gap-2">
+              <Check size={16} />
+              <span>Cancel Anytime</span>
+            </div>
+            <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
+            <div className="flex items-center gap-2">
+              <Headphones size={16} />
+              <span>24/7 Support</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

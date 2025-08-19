@@ -27,7 +27,8 @@ export const fetchUser = async () => {
       avatar_url: profile.avatar_url || null,
       instrument_history: profile.instrument_history || [],
       is_paid_member: profile.is_paid_member || false,
-      theme: profile.theme || undefined,
+      subscription_plan: profile.subscription_plan,
+      subscription_expiry: profile.subscription_expiry || null,
     };
   
     return {success: true, data: userData}

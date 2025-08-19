@@ -7,6 +7,7 @@ import { useUserStore } from '@/store/userStore';
 import { createClient } from '@/utils/supabase/client';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
+import Link from 'next/link';
 
 const UserInfoCard = () => {
   const { isLeftCollapsed } = useStore();
@@ -49,23 +50,25 @@ const UserInfoCard = () => {
           isLeftCollapsed ? 'justify-center w-full' : 'space-x-2 w-full'
         }`}
       >
-        <div
-          className={`flex items-center justify-center rounded-full min-h-8 min-w-8 h-8 w-8 transition-all duration-300 ${
-            isLeftCollapsed ? 'mx-auto' : 'mr-2'
-          } ${user?.avatar_url ? '' : colorClass} ${user?.is_paid_member ? 'ring-2 ring-offset-2 ring-offset-sidebar ring-yellow-600' : ''}`}
-        >
-          {user?.avatar_url ? (
-            <Image
-              src={user.avatar_url}
-              alt="User avatar"
-              width={32}
-              height={32}
-              className="h-8 w-8 rounded-full object-cover"
-            />
-          ) : (
-            <span className="text-sm font-medium select-none text-white dark:text-black">{firstLetter}</span>
-          )}
-        </div>
+        <Link href="/profile" title="View Profile">
+          <div
+            className={`flex items-center justify-center rounded-full min-h-8 min-w-8 h-8 w-8 transition-all duration-300 ${
+              isLeftCollapsed ? 'mx-auto' : 'mr-2'
+            } ${user?.avatar_url ? '' : colorClass} ${user?.is_paid_member ? 'ring-2 ring-offset-2 ring-offset-sidebar ring-yellow-600' : ''}`}
+          >
+            {user?.avatar_url ? (
+              <Image
+                src={user.avatar_url}
+                alt="User avatar"
+                width={32}
+                height={32}
+                className="h-8 w-8 rounded-full object-cover"
+              />
+            ) : (
+              <span className="text-sm font-medium select-none text-white dark:text-black">{firstLetter}</span>
+            )}
+          </div>
+        </Link>
         {!isLeftCollapsed && (
           <>
             <div className="flex items-center space-x-1.5 select-none flex-shrink min-w-0">              

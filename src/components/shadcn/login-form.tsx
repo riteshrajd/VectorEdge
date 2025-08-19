@@ -73,7 +73,7 @@ export function LoginForm({
                   className="bg-white/5 border-white/20 focus:ring-offset-0"
                 />
               </div>
-              <Button type="submit" className="w-full bg-neutral-200 text-neutral-800" formAction={login}>
+              <Button type="submit" className="w-full bg-neutral-200 text-neutral-800 hover:bg-neutral-300 hover:cursor-pointer" formAction={login}>
                 Login
               </Button>
               {/* 4. Adjusted divider styles */}

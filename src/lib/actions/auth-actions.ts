@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
 import { createClient } from '@/utils/supabase/server'
+import { BASE_URL } from '@/constants/constants'
 
 export async function login(formData: FormData) {
   const supabase = await createClient()
@@ -82,7 +83,7 @@ export async function signInWithGoogle() {
         prompt: 'consent',
         access_type: 'offline',
       },
-      redirectTo: 'http://localhost:3000/auth/callback',
+      redirectTo: `${BASE_URL}/auth/callback`,
     },
   })
 

@@ -5,7 +5,7 @@ import { signInWithGoogle } from "@/lib/actions/auth-actions";
 
 export default function SignWithGoogleButton({ type }: { type: "Login" | "Signup" }) {
   return (
-    <Button variant="outline" type="button" className="w-full" onClick={() => signInWithGoogle()}>
+    <Button variant="outline" type="button" className="w-full hover:cursor-pointer" onClick={() => signInWithGoogle()}>
       {/* 1. Wrapper for alignment and color */}
       <div className="flex items-center justify-center gap-2 text-neutral-800 dark:text-neutral-200">
         

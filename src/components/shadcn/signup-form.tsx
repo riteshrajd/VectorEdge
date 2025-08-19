@@ -21,14 +21,14 @@ export function SignupForm({
       {...props}
     >
       {/* Background Image */}
-      <div className="z-5 bg-gradient-to-b from-red-600 to-black">
+      <div className="z-5">
         <img
           src="/assets/images/login-page-images/abstract-light-speed-effect-black-background_107791-25835.jpg"
           alt="Background"
           className="fixed inset-0 h-[100vh] w-full object-cover brightness-[0.8] dark:brightness-[0.4]"
         />
       </div>
-      <div className={`fixed h-[100vh] w-[100vw] z-6 bg-gradient-to-b from-blue-600/20 to-black/40 dark:to-black/10`}></div>
+      <div className={`fixed inset-0 h-[100vh] w-[100vw] z-6 bg-gradient-to-b from-blue-600/20 to-black/40 dark:to-black/10`}></div>
 
       {/* 1. Added `text-white` to the Card for high contrast in both themes */}
       <Card className="overflow-hidden p-0 z-20 bg-white/4 dark:bg-white/2 backdrop-blur-xl border border-white/10 w-full max-w-md text-white">
@@ -78,7 +78,7 @@ export function SignupForm({
                   className="bg-white/5 border-white/20 focus:ring-offset-0"
                 />
               </div>
-              <Button type="submit" className="w-full bg-neutral-200 text-neutral-800" formAction={signup}>
+              <Button type="submit" className="w-full bg-neutral-200 text-neutral-800 hover:bg-neutral-300 hover:cursor-pointer" formAction={signup}>
                 Sign Up
               </Button>
               {/* 4. Adjusted divider line and text for better blending */}

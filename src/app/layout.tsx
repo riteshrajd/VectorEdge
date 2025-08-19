@@ -1,6 +1,7 @@
 // app/layout.tsx
 import type { Metadata } from "next";
 import "./globals.css";
+import { useInitializeUser } from "./hooks/useInitializeUser";
 
 export const metadata: Metadata = {
   title: "VectorEdge",

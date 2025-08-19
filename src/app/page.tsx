@@ -6,11 +6,9 @@ import SidebarLeft from "./components/SidebarLeft";
 import AIChat from "./components/AIChat";
 import MobileNav from "./components/MobileNav";
 import { useStore } from "@/store/store";
-import { useUserStore } from "@/store/userStore";
-import { createClient } from "@/utils/supabase/client";
-import { fetchUser } from "@/services/fetchUser";
 import { ChevronRight } from "lucide-react";
 import { useBreakpoint } from "./hooks/useBreakpoint";
+import { useInitializeUser } from "./hooks/useInitializeUser";
 
 
 // --- Step 2: The Desktop Layout Component ---
@@ -75,38 +73,12 @@ const MobileLayout = () => {
 // --- Step 4: The Main Home Component ---
 export default function Home(): JSX.Element {
   const isMobile = useBreakpoint();
+  useInitializeUser();
   useEffect(() => {
       useStore.getState().setIsMobile(isMobile);
     }, [isMobile]); // This effect runs only when `isMobile` changes
 
-  // This user fetching logic remains here as it's needed for both layouts
-  useEffect(() => {
-    const handleFetchUser = async () => {
-      const response = await fetchUser();
-      if (response.success) {
-        useUserStore.getState().setUser(response.data!);
-      } else {
-        useUserStore.getState().setUser(null);
-        console.log("Error:", response.error);
-      }
-    };
+  useInitializeUser();
 
-    handleFetchUser();
-
-    const supabase = createClient();
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      (_, session) => {
-        if (session?.user) {
-          handleFetchUser();
-        } else {
-          useUserStore.getState().setUser(null);
-        }
-      }
-    );
-
-    return () => authListener.subscription.unsubscribe();
-  }, []);
-
-  // Conditionally render the correct layout based on the screen size
   return isMobile ? <MobileLayout /> : <DesktopLayout />;
 }

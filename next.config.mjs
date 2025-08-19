@@ -9,6 +9,16 @@ const nextConfig = {
       },
     ],
   },
+  
+  // --- ADD THIS ---
+  devIndicators: {
+    allowedDevOrigins: [
+      // This will allow any origin during development.
+      // You can be more specific if you want to.
+      '**', 
+    ],
+  },
+  // --- END ADD ---
 };
 
 export default nextConfig;

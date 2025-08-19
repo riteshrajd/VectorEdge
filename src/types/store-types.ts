@@ -34,7 +34,8 @@ export interface UserData {
   avatar_url: string | null;
   instrument_history: InstrumentCoverInfo[];
   is_paid_member: boolean;
-  theme?: string;
+  subscription_plan: string;
+  subscription_expiry: string | null;
 }
 
 export interface UserStore {

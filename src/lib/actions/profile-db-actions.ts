@@ -87,7 +87,7 @@ export async function updateSubscriptionStatus(status: boolean, planType: string
     .from('profiles')
     .update({
       is_paid_member: status,
-      subscription_plan: 'plus', // Set the plan tier, e.g., 'plus'
+      subscription_plan: 'Plus', // Set the plan tier, e.g., 'plus'
       subscription_expiry: expiryDate.toISOString(),
     })
     .eq('id', userId)
