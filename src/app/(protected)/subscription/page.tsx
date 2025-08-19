@@ -33,6 +33,7 @@ export default function Subscription(): JSX.Element {
   }, []);
 
   const processPayment = async (plan: "monthly" | "yearly", amount: number) => {
+    if(useUserStore.getState().user?.is_paid_member) return;
     if (loadingPlan) return; // Prevent multiple clicks
     setLoadingPlan(plan);
 

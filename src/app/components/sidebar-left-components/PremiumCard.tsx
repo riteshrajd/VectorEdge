@@ -1,25 +1,51 @@
-
 'use client';
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-
 import { useStore } from '@/store/store';
 import { Button } from '@/components/shadcn/ui/button';
+import { Crown } from 'lucide-react';
+import { useViewportHeight } from '@/app/hooks/useViewportHeight';
 
 const PremiumCard = () => {
   const router = useRouter();
-  const store = useStore();
+  const { isLeftCollapsed } = useStore();
+  const isShortScreen = useViewportHeight(700); // Get the boolean from the hook
 
   const handleGetPremium = () => {
     router.push('/subscription');
   };
 
-  if(store.isLeftCollapsed) return null;
+  // Logic for the collapsed desktop sidebar
+  if (isLeftCollapsed) {
+    return (
+      <div className="p-3 border-t border-sidebar-border">
+        <Button
+          onClick={handleGetPremium}
+          size="sm"
+          className="w-full bg-primary text-primary-foreground"
+          title="Get Premium"
+        >
+          <Crown size={16} />
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className="p-3 border-t border-sidebar-border">
-      {!store.isLeftCollapsed && (
+      {/* --- Conditional Rendering Logic --- */}
+      {isShortScreen ? (
+        // Renders ONLY the button on short screens
+        <Button
+          onClick={handleGetPremium}
+          className="w-full bg-primary text-primary-foreground"
+          size="sm"
+        >
+          Get Premium
+        </Button>
+      ) : (
+        // Renders the full card on taller screens
         <div
           onClick={handleGetPremium}
           className="group relative cursor-pointer overflow-hidden rounded-lg bg-sidebar-accent p-3 text-center shadow-sm transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg"

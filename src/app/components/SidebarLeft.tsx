@@ -83,8 +83,10 @@ const SidebarLeft = () => {
         )}
         <button
           onClick={store.setIsLeftCollapsed}
-          className="p-1.5 hover:bg-sidebar-accent rounded-lg transition-colors"
+          disabled={store.isMobile}
+          className={`p-1.5 hover:bg-sidebar-accent rounded-lg transition-colors ${store.isMobile ? 'hidden' : '' }`}
           aria-label={store.isLeftCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          title={`${store.isLeftCollapsed ? 'Expand' : 'Collapse'}`}
         >
           {store.isLeftCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
         </button>
@@ -97,6 +99,7 @@ const SidebarLeft = () => {
             className="w-full p-1 hover:bg-sidebar-accent rounded-lg transition-colors flex justify-center"
             aria-label="Search"
             onClick={handleSearchClick}
+            title='Search'
           >
             <Search size={16} />
           </button>

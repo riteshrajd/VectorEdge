@@ -1,6 +1,6 @@
 import { createClient } from '@/utils/supabase/server';
 import { NextResponse } from 'next/server';
-import { addInstrumentToHistory } from '@/lib/actions/db-actions';
+import { addInstrumentToHistory } from '@/lib/actions/profile-db-actions';
 
 export async function POST(request: Request) {
   console.log(`update instrument history route called`)

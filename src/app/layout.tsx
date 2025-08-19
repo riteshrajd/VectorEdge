@@ -18,18 +18,25 @@ export default function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              // Check for saved theme in localStorage or system preference
-              const theme = localStorage.getItem('theme');
-              if (theme) {
-                document.documentElement.classList.add(theme);
-              } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                document.documentElement.classList.add('dark');
-              }
+              // This script now uses a function to avoid immediate execution issues.
+              (function() {
+                try {
+                  const theme = localStorage.getItem('theme');
+                  if (theme) {
+                    document.documentElement.classList.add(theme);
+                  } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.classList.add('dark');
+                  }
+                } catch (e) {
+                  console.error('Error setting theme from script:', e);
+                }
+              })();
             `,
           }}
         />
       </head>
-      <body className="">
+      {/* THE FIX: Add suppressHydrationWarning here as well */}
+      <body className="" suppressHydrationWarning>
         {children}
       </body>
     </html>

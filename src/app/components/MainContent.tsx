@@ -89,6 +89,7 @@ const MainContent = () => {
   useEffect(() => {
     if (store.selectedInstrument) {
       console.log(`ITEM SELECTED LOG FROM in Maincontent: ${JSON.stringify(store.selectedInstrument)}`);
+      store.setMobileView('data');
       const data = dataStore.data.find((item) => item.ticker === store.selectedInstrument?.symbol);
       if (data) {
         setData(data);

@@ -1,7 +1,6 @@
 'use client';
 
 import { Crown, LogOut } from 'lucide-react';
-import Link from 'next/link';
 import { useStore } from '@/store/store';
 import ThemeToggle from '@/components/ThemeToggle';
 import { useUserStore } from '@/store/userStore';
@@ -44,7 +43,7 @@ const UserInfoCard = () => {
   };
 
   return (
-    <div className="flex border-t border-sidebar-border px-3 py-1.5">
+    <div className="flex border-t-2 mt-2 border-sidebar-border px-3 py-1.5">
       <div
         className={`flex items-center ${
           isLeftCollapsed ? 'justify-center w-full' : 'space-x-2 w-full'
@@ -81,12 +80,12 @@ const UserInfoCard = () => {
               )}
             </div>
             <div className="flex-1" /> 
-            <div className='p-1 hover:bg-sidebar-accent rounded-lg transition-colors'>
+            <div className='p-1 hover:bg-sidebar-accent rounded-lg transition-colors' title='Light/Dark Mode'>
               <ThemeToggle />
             </div>
             <button
               onClick={handleSignOut}
-              className="p-1.5 hover:bg-sidebar-accent rounded-lg transition-colors"
+              className="p-1.5 hover:bg-sidebar-accent rounded-lg transition-colors hover:cursor-pointer"
               title="Sign Out"
             >
               <LogOut size={16} className="text-sidebar-accent-foreground" />

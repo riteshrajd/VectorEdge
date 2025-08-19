@@ -5,26 +5,37 @@ import { cn } from "@/lib/shadcn/utils";
 import { Search, LayoutDashboard, MessageCircle } from "lucide-react";
 
 const MobileNav = () => {
-  // Destructure the new state and actions
-  const { mobileView, setMobileView, isMobileSearchOpen, toggleMobileSearch } = useStore();
+  const { mobileView, setMobileView } = useStore();
 
   const navItems = [
-    // This item's logic is now different
-    { name: "Search", view: "search", icon: Search, action: toggleMobileSearch, isActive: isMobileSearchOpen },
-    { name: "Data", view: "data", icon: LayoutDashboard, action: () => setMobileView('data'), isActive: mobileView === 'data' && !isMobileSearchOpen },
-    { name: "Chat", view: "chat", icon: MessageCircle, action: () => setMobileView('chat'), isActive: mobileView === 'chat' && !isMobileSearchOpen },
+    { name: "Search", view: "search", icon: Search },
+    { name: "Data", view: "data", icon: LayoutDashboard },
+    { name: "Chat", view: "chat", icon: MessageCircle },
   ];
 
+  // This handler now contains the correct logic
+  const handleItemClick = (view: 'search' | 'data' | 'chat') => {
+    // If the user taps the currently active icon (and it's not 'data'),
+    // it will toggle back to the default 'data' view.
+    if (useStore.getState().mobileView === view && view !== 'data') {
+      setMobileView('data');
+    } else {
+      // Otherwise, it just switches to the selected view.
+      setMobileView(view);
+    }
+  };
+
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-[var(--bg-secondary)] border-t border-[var(--border)] flex justify-around items-center z-50">
+    <nav className="fixed bottom-0 left-0 right-0 bg-background border-t border-[var(--border)] flex justify-around items-center z-50">
       {navItems.map((item) => (
         <button
           key={item.view}
-          onClick={item.action}
+          // The onClick now calls the correct handler with the correct type.
+          onClick={() => handleItemClick(item.view as 'search' | 'data' | 'chat')}
           className={cn(
             "flex flex-col items-center gap-1 p-2 rounded-md transition-colors w-20",
-            item.isActive
-              ? "text-[var(--primary)]"
+            mobileView === item.view
+              ? "text-[var(--primary)]" // Using a simple color change for the active state is cleaner.
               : "text-[var(--text-muted-foreground)] hover:bg-[var(--bg-hover)]"
           )}
         >

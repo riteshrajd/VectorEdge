@@ -1,4 +1,4 @@
-import { toggleFavourite } from "@/lib/actions/db-actions";
+import { toggleFavourite } from "@/lib/actions/profile-db-actions";
 import { createClient } from "@/utils/supabase/server";
 import { NextResponse } from "next/server";
 

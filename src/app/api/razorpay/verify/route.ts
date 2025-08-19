@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
-import { updateSubscriptionStatus } from '@/lib/actions/db-actions';
+import { updateSubscriptionStatus } from '@/lib/actions/profile-db-actions';
 import { createClient } from '@/utils/supabase/server';
 
 export async function POST(request: Request) {

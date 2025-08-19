@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import { useDataStore } from '@/store/dataStroe';
 import { CombinedData } from '@/types/types';
-import { generateAIResponse } from '@/services/aiChat';
+import { generateAIResponse } from '@/services/getAIChatResponse';
 import { useUserStore } from '@/store/userStore';
 
 // Types

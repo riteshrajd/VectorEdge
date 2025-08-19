@@ -59,6 +59,7 @@ export default function InstrumentHistoryList() {
             onClick={() => setActiveTab(activeTab => (`${activeTab === 'favorite' ? 'history' : 'favorite'}`))}
             className="p-0.8 my-4 hover:bg-sidebar-accent rounded-lg transition-colors"
             aria-label="Toggle Collapse"
+            title='Favorites'
           >
             <Star size={16} className={`${activeTab === 'favorite' ? 'text-sidebar-primary' : 'text-sidebar-foreground'}`} />
           </button>

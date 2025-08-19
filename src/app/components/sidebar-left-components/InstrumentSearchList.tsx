@@ -18,7 +18,7 @@ export default function InstrumentSearchList() {
       } else {
         setSearchResult([]);
       }
-    }, 500);
+    }, 1000);
 
     return () => clearTimeout(debouncedSearchTimer);
   }, [searchTerm]);

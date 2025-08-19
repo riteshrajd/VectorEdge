@@ -84,6 +84,7 @@ export default function HistoryCard({ instrument }: { instrument: InstrumentCove
             onClick={handleFavoriteClick}
             className="opacity-0 group-hover:opacity-100 transition-opacity"
             aria-label={instrument.isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+            title={instrument.isFavorite ? 'Remove from favorites' : 'Add to favorites'}
           >
             <Star
               size={10}
