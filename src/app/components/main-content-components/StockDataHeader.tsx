@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { DollarSign, TrendingUp, TrendingDown } from 'lucide-react';
+import { TrendingUp, TrendingDown } from 'lucide-react';
 import { CombinedData } from '@/types/types';
 
 interface HeaderProps {

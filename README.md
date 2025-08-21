@@ -1,6 +1,6 @@
 
 <div align="center">
-  <img src="public/assets/images/logo.png" alt="Vectoredge Pro Logo" width="200"/>
+  <img src="public/assets/images/logo1.png" alt="Vectoredge Pro Logo" width="200"/>
   <h1 align="center">Vectoredge Pro</h1>
   <p align="center">
     A powerful, AI-driven stock analysis platform.
@@ -56,6 +56,8 @@ To get a local copy up and running, follow these simple steps.
     Create a `.env.local` file in the root of your project and add the following environment variables:
 
     ```env
+    NEXT_PUBLIC_BASE_SERVER_URL=http://localhost:3000
+
     # Supabase
     NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
     NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key

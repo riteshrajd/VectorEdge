@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { useStore } from '@/store/store';
-import StockAnalysisReport from './main-content-components/StockAnalysisReport2';
+import StockAnalysisReport from './main-content-components/StockAnalysisReport';
 import { useDataStore } from '@/store/dataStroe';
 import { CombinedData, InstrumentCoverInfo } from '@/types/types';
 import WelcomeScreen from './main-content-components/WelcomeScreen';
