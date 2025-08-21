@@ -16,10 +16,11 @@ import {
   Loader2
 } from "lucide-react";
 import { useInitializeUser } from "@/app/hooks/useInitializeUser";
+import { RazorpayInstance, RazorpayOptions, RazorpayPaymentFailureResponse, RazorpayPaymentSuccessResponse } from "@/types/types";
 
 declare global {
   interface Window {
-    Razorpay: any;
+    Razorpay: new (options: RazorpayOptions) => RazorpayInstance;
   }
 }
 
@@ -69,14 +70,15 @@ export default function Subscription(): JSX.Element {
       const order = await response.json();
 
       // 2. Open Razorpay Checkout modal
-      const options = {
+      const options: RazorpayOptions = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: order.amount,
         currency: order.currency,
         name: "VectorEdge",
         description: `${plan.charAt(0).toUpperCase() + plan.slice(1)} Subscription`,
         order_id: order.id,
-        handler: async function (response: any) {
+        // FIX 1: Typed the response for the success handler
+        handler: async function (response: RazorpayPaymentSuccessResponse) {
           console.log("Payment successful, now verifying...", response);
           
           try {
@@ -132,7 +134,8 @@ export default function Subscription(): JSX.Element {
       const rzp = new window.Razorpay(options);
       rzp.open();
 
-      rzp.on("payment.failed", function (response: any) {
+      // FIX 2: Typed the response for the failure handler
+      rzp.on("payment.failed", function (response: RazorpayPaymentFailureResponse) {
         console.error("Payment failed:", response.error);
         alert(`Payment Failed: ${response.error.description}`);
         setIsProcessing(false);
@@ -236,7 +239,8 @@ export default function Subscription(): JSX.Element {
               ))}
             </ul>
             <button
-              onClick={() => processPayment("yearly", 2)}
+              // LOGIC FIX 1: Pass correct plan and amount in paise (1299 * 100)
+              onClick={() => processPayment("monthly", 129900)}
               disabled={isProcessing || user?.is_paid_member}
               className="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-primary-foreground py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 active:scale-95 shadow-lg"
             > 
@@ -289,7 +293,8 @@ export default function Subscription(): JSX.Element {
             </ul>
 
             <button
-              onClick={() => processPayment("yearly", 2)}
+              // LOGIC FIX 2: Pass correct plan and amount in paise (9999 * 100)
+              onClick={() => processPayment("yearly", 999900)}
               disabled={isProcessing || user?.is_paid_member}
               className="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-primary-foreground py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 active:scale-95 shadow-lg"
             >

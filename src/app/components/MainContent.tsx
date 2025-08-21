@@ -20,6 +20,7 @@ const MainContent = () => {
   const [isShrunk, setIsShrunk] = useState(false);
   const [askConfirmation, setAskConfirmation] = useState(false);
   const { user, setUser } = useUserStore();
+  const { selectedInstrument, setMobileView } = useStore();
 
   const updateInstrumentHistory = async (instrument: InstrumentCoverInfo) => {
     try {
@@ -87,10 +88,10 @@ const MainContent = () => {
   }, [dataStore]);
 
   useEffect(() => {
-    if (store.selectedInstrument) {
-      console.log(`ITEM SELECTED LOG FROM in Maincontent: ${JSON.stringify(store.selectedInstrument)}`);
-      store.setMobileView('data');
-      const data = dataStore.data.find((item) => item.ticker === store.selectedInstrument?.symbol);
+    if (selectedInstrument) {
+      console.log(`ITEM SELECTED LOG FROM in Maincontent: ${JSON.stringify(selectedInstrument)}`);
+      setMobileView('data');
+      const data = dataStore.data.find((item) => item.ticker === selectedInstrument?.symbol);
       if (data) {
         setData(data);
         setLoading(false);
@@ -98,7 +99,7 @@ const MainContent = () => {
       }
       setAskConfirmation(true);
     }
-  }, [dataStore.data, store.selectedInstrument]);
+  }, [dataStore.data, selectedInstrument, setMobileView]);
 
   const handleInstrumentDataFetch = async () => {
     setAskConfirmation(false);

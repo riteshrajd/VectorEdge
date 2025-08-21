@@ -5,6 +5,7 @@ import { Input } from "@/components/shadcn/ui/input"
 import { Label } from "@/components/shadcn/ui/label"
 import { login } from "@/lib/actions/auth-actions"
 import SignWithGoogleButton from "./SignWithGoogleButton"
+import Image from "next/image"
 
 export function LoginForm({
   className,
@@ -21,11 +22,14 @@ export function LoginForm({
       {...props}
     >
       <div className="z-5">
-        <img
-          src="/assets/images/login-page-images/abstract-light-speed-effect-black-background_107791-25835.jpg"
-          alt="Background"
-          className="fixed inset-0 h-[100vh] w-full object-cover brightness-[0.8] dark:brightness-[0.4]"
-        />
+      <Image
+        src="/assets/images/login-page-images/abstract-light-speed-effect-black-background_107791-25835.jpg"
+        alt="Background"
+        fill
+        style={{ objectFit: 'cover' }}
+        className="fixed inset-0 brightness-[0.8] dark:brightness-[0.4] z-[-1]"
+        priority
+      />
       </div>
       <div className="fixed h-[100vh] w-[100vw] z-6 bg-gradient-to-b from-blue-600/20 to-black/10"></div>
 

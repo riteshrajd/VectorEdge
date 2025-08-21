@@ -6,11 +6,9 @@ import {
   ArrowLeft, 
   Crown, 
   User, 
-  ShieldCheck, 
   Mail, 
   Calendar,
   CreditCard,
-  Settings,
   History,
   Star,
   Badge
@@ -269,16 +267,6 @@ const ProfilePage = () => {
                         {instrument.symbol && (
                           <div className="text-xs text-muted-foreground">
                             <span className="font-medium">Symbol:</span> {instrument.symbol}
-                          </div>
-                        )}
-                        {instrument.exchange && (
-                          <div className="text-xs text-muted-foreground">
-                            <span className="font-medium">Exchange:</span> {instrument.exchange}
-                          </div>
-                        )}
-                        {instrument.score && (
-                          <div className="text-xs text-muted-foreground">
-                            <span className="font-medium">Score:</span> {instrument.score}
                           </div>
                         )}
                       </div>

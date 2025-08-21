@@ -2,15 +2,9 @@
 
 import React, { useEffect } from 'react';
 import { 
-  DollarSign, 
-  BarChart, 
-  Percent, 
+  DollarSign,
   TrendingUp, 
-  TrendingDown,
-  Layers,
-  PieChart,
-  Factory,
-  BookOpen,
+  TrendingDown, 
   Calendar,
   Award,
   Target,
@@ -18,15 +12,12 @@ import {
   Brain,
   Shield,
   Zap,
-  ChartLine,
-  Building,
-  Clock,
-  Info,
-  Globe,
-  Eye,
   Users,
-  Calculator
+  ChartLine,
+  Calculator,
+  Building,
 } from 'lucide-react';
+
 import { CombinedData } from '@/types/types';
 
 interface StockAnalysisReportProps {
@@ -53,7 +44,7 @@ const StockAnalysisReport: React.FC<StockAnalysisReportProps> = ({ data, setIsSh
     return `$${(value / 1000000000000).toFixed(2)}T`;
   };
 
-  const getRatingColor = (rating: string) => {
+  const getRatingColor = (rating: string | null) => {
     if (!rating) return 'text-[--color-muted-foreground]';
     const normalizedRating = rating.toLowerCase();
     if (normalizedRating.includes('strong buy') || normalizedRating.includes('outperform')) return 'text-[--color-chart-1]';
@@ -64,16 +55,16 @@ const StockAnalysisReport: React.FC<StockAnalysisReportProps> = ({ data, setIsSh
     return 'text-[--color-muted-foreground]';
   };
 
-  const getActionColor = (action: string) => {
+  const getActionColor = (action: string | null | undefined) => {
     if (!action) return 'text-[--color-muted-foreground]';
     if (action === 'Buy') return 'text-[--color-chart-1]';
     if (action === 'Sell') return 'text-[--color-chart-5]';
     return 'text-[--color-chart-3]';
   };
 
-  const getChangeColor = (change: number) => {
-    if (change > 0) return 'text-[--color-chart-1]';
-    if (change < 0) return 'text-[--color-chart-5]';
+  const getChangeColor = (change: number | null | undefined) => {
+    if (change && change > 0) return 'text-[--color-chart-1]';
+    if (change && change < 0) return 'text-[--color-chart-5]';
     return 'text-[--color-muted-foreground]';
   };
 
@@ -118,7 +109,7 @@ const StockAnalysisReport: React.FC<StockAnalysisReportProps> = ({ data, setIsSh
             <div className={`flex items-center ${getChangeColor(data.overview?.change)}`}>
               <span className="text-lg font-semibold">{formatCurrency(data.overview?.change)}</span>
               <span className="ml-2">({data.overview?.percent_change})</span>
-              {data.overview?.change > 0 ? <TrendingUp className="w-4 h-4 ml-1 text-green-500" /> : <TrendingDown className="w-4 h-4 ml-1 text-red-700" />}
+              {data.overview?.change && data.overview?.change > 0 ? <TrendingUp className="w-4 h-4 ml-1 text-green-500" /> : <TrendingDown className="w-4 h-4 ml-1 text-red-700" />}
             </div>
           </div>
         </div>
@@ -560,7 +551,7 @@ const StockAnalysisReport: React.FC<StockAnalysisReportProps> = ({ data, setIsSh
               <div className="text-sm text-[--color-muted-foreground] mb-1">Average Price Target</div>
               <div className="text-2xl font-bold text-[--color-primary]">{formatCurrency(data.analysis?.analyst_ratings?.price_target_avg)}</div>
               <div className="text-sm text-[--color-muted-foreground] mt-1">
-                Potential Upside: {((data.analysis?.analyst_ratings?.price_target_avg / data.overview?.current_price - 1) * 100)?.toFixed(2)}%
+                Potential Upside: { data.analysis?.analyst_ratings?.price_target_avg && data.overview?.current_price ? (((data.analysis?.analyst_ratings?.price_target_avg / data.overview?.current_price - 1) * 100)?.toFixed(2)) : 'N/A'}%
               </div>
             </div>
           </div>
@@ -570,7 +561,7 @@ const StockAnalysisReport: React.FC<StockAnalysisReportProps> = ({ data, setIsSh
               <div className="text-sm text-[--color-muted-foreground] mb-1">Highest Target</div>
               <div className="text-2xl font-bold text-[--color-chart-1]">{formatCurrency(data.analysis?.analyst_ratings?.price_target_high)}</div>
               <div className="text-sm text-[--color-muted-foreground] mt-1">
-                Max Upside: {((data.analysis?.analyst_ratings?.price_target_high / data.overview?.current_price - 1) * 100)?.toFixed(2)}%
+                Max Upside: { data.analysis?.analyst_ratings?.price_target_high && data.overview?.current_price ? ((data.analysis?.analyst_ratings?.price_target_high / data.overview?.current_price - 1) * 100)?.toFixed(2): 'N/A'}%
               </div>
             </div>
           </div>
@@ -580,7 +571,7 @@ const StockAnalysisReport: React.FC<StockAnalysisReportProps> = ({ data, setIsSh
               <div className="text-sm text-[--color-muted-foreground] mb-1">Lowest Target</div>
               <div className="text-2xl font-bold text-[--color-chart-5]">{formatCurrency(data.analysis?.analyst_ratings?.price_target_low)}</div>
               <div className="text-sm text-[--color-muted-foreground] mt-1">
-                Min Change: {((data.analysis?.analyst_ratings?.price_target_low / data.overview?.current_price - 1) * 100)?.toFixed(2)}%
+                Min Change: { data.analysis?.analyst_ratings?.price_target_low && data.overview?.current_price ? ((data.analysis?.analyst_ratings?.price_target_low / data.overview?.current_price - 1) * 100)?.toFixed(2) : 'N/A'}%
               </div>
             </div>
           </div>
@@ -712,10 +703,10 @@ const StockAnalysisReport: React.FC<StockAnalysisReportProps> = ({ data, setIsSh
                   <td className="p-3 font-medium">{quarter}</td>
                   <td className="text-right p-3">{formatCurrency(history.eps_estimate)}</td>
                   <td className="text-right p-3 font-semibold">{formatCurrency(history.eps_actual)}</td>
-                  <td className={`text-right p-3 font-medium ${getChangeColor(history.difference)}`}>
+                  <td className={`text-right p-3 font-medium ${getChangeColor(Number(history.difference))}`}>
                     {formatCurrency(history.difference)}
                   </td>
-                  <td className={`text-right p-3 font-semibold ${getChangeColor(history.difference)}`}>
+                  <td className={`text-right p-3 font-semibold ${getChangeColor(Number(history.difference))}`}>
                     {history.surprise_percent}
                   </td>
                 </tr>

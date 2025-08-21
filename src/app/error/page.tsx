@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 
-export default function ErrorPage({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
+export default function ErrorPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-neutral-900">
       <div className="text-center space-y-4 rounded-lg bg-neutral-800 p-8 shadow-md">

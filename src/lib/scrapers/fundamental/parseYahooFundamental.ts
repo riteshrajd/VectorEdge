@@ -1,6 +1,7 @@
+import { Fundamental } from '@/types/types';
 import axios from 'axios';
 
-export async function parseYahooFundamental(rawText: string): Promise<any> {
+export async function parseYahooFundamental(rawText: string): Promise<Fundamental | null> {
     try {
         const API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY; // Use Next.js env variable
         if (!API_KEY) throw new Error('Gemini API key not found in environment variables');
@@ -78,15 +79,15 @@ ${rawText.slice(0, 4000)}
         let jsonOutput;
         try {
             jsonOutput = JSON.parse(jsonMatch[1]);
-        } catch (e) {
-            console.error('Failed to parse Gemini output as JSON:', responseText);
+        } catch (error) {
+            if(error instanceof Error)console.error('Failed to parse Gemini output as JSON:', error.message);
             return null;
         }
 
         return jsonOutput;
 
     } catch (error) {
-        console.error('Error during parsing:', error.message);
+        if(error instanceof Error)console.error('Error during parsing:', error.message);
         return null;
     }
 }

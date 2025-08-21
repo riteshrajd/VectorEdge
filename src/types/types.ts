@@ -163,3 +163,57 @@ export interface InstrumentCoverInfo {
   recomendation?: string;
   icon?: string;
 }
+
+// razor pay
+// Describes the successful payment response object from Razorpay
+export interface RazorpayPaymentSuccessResponse {
+  razorpay_order_id: string;
+  razorpay_payment_id: string;
+  razorpay_signature: string;
+}
+
+// Describes the failed payment response object from Razorpay
+export interface RazorpayPaymentFailureResponse {
+  error: {
+    code: string;
+    description: string;
+    source: string;
+    step: string;
+    reason: string;
+    metadata: {
+      order_id: string;
+      payment_id: string;
+    };
+  };
+}
+
+// Describes the options object passed to the Razorpay constructor
+export interface RazorpayOptions {
+  key: string | undefined;
+  amount: number;
+  currency: string;
+  name: string;
+  description: string;
+  order_id: string;
+  handler: (response: RazorpayPaymentSuccessResponse) => void;
+  prefill?: {
+    name?: string;
+    email?: string;
+    contact?: string;
+  };
+  notes?: {
+    [key: string]: string | undefined;
+  };
+  theme?: {
+    color: string;
+  };
+  modal?: {
+    ondismiss: () => void;
+  };
+}
+
+// Describes the instance returned by `new window.Razorpay()`
+export interface RazorpayInstance {
+  open(): void;
+  on(event: 'payment.failed', callback: (response: RazorpayPaymentFailureResponse) => void): void;
+}

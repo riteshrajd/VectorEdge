@@ -1,7 +1,8 @@
-import puppeteer from 'puppeteer';
+import puppeteer, { Page } from 'puppeteer';
 import { parseYahooOverview } from './parseYahooOverview';
+import { Overview } from '@/types/types';
 
-export async function scrapeYahooOverview(url: string): Promise<any> {
+export async function scrapeYahooOverview(url: string): Promise<Overview | null> {
     const browser = await puppeteer.launch({
         headless: true,
         args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu']
@@ -21,13 +22,13 @@ export async function scrapeYahooOverview(url: string): Promise<any> {
         const pageText = await extractTextWithRetry(page);
         console.log('Extracted text from the overview page');
 
-        const cleanedText = pageText.replace(/\n+/g, '\n').trim();
+        const cleanedText = pageText ? pageText.replace(/\n+/g, '\n').trim() : '';
         const jsonData = await parseTextWithRetry(cleanedText);
         console.log(`JSON overview data extracted`)
-        return jsonData;
+        return jsonData ? jsonData : null;
 
-    } catch (error: any) {
-        console.error('Error during scraping:', error.message);
+    } catch (error: unknown) {
+        if(error instanceof Error)console.error('Error during scraping:', error.message);
         throw error;
 
     } finally {
@@ -37,30 +38,30 @@ export async function scrapeYahooOverview(url: string): Promise<any> {
 }
 
 
-async function navigateWithRetry(page: any, url: string, retries = 5) {
+async function navigateWithRetry(page: Page, url: string, retries = 5) {
   for (let i = 0; i < retries; i++) {
     try {
       await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
       return;
-    } catch (error: any) {
+    } catch (error: unknown) {
       if (i === retries - 1) throw error;
-      console.log(`Retry ${i + 1} for ${url} due to: ${error.message}`);
+      if(error instanceof Error)console.log(`Retry ${i + 1} for ${url} due to: ${error.message}`);
       await new Promise((resolve) => setTimeout(resolve, 5000)); // 5s delay before retry
     }
   }
 }
 
 // Helper function to retry text extraction
-async function extractTextWithRetry(page: any, retries = 5) {
+async function extractTextWithRetry(page: Page, retries = 5) {
   for (let i = 0; i < retries; i++) {
     try {
       const text = await page.evaluate(() => document.body.innerText);
       if (text && text.length > 0) return text; // Ensure non-empty text
       throw new Error('Empty or invalid page content');
-    } catch (error: any) {
+    } catch (error: unknown) {
       if (i === retries - 2) await page.reload({ waitUntil: 'networkidle2', timeout: 60000 }); // Reload before last retry
       if (i === retries - 1) throw error;
-      console.log(`Retry ${i + 1} for text extraction due to: ${error.message}`);
+      if(error instanceof Error)console.log(`Retry ${i + 1} for text extraction due to: ${error.message}`);
       await new Promise((resolve) => setTimeout(resolve, 3000)); // 3s delay before retry
     }
   }
@@ -71,9 +72,9 @@ async function parseTextWithRetry(cleanedText: string, retries = 5) {
     try {
       const jsonData = await parseYahooOverview(cleanedText);
       return jsonData
-    } catch (error: any) {
+    } catch (error: unknown) {
       if (i === retries - 1) throw error;
-      console.log(`Retry ${i + 1} for text parsing due to: ${error.message}`);
+      if(error instanceof Error)console.log(`Retry ${i + 1} for text parsing due to: ${error.message}`);
       await new Promise((resolve) => setTimeout(resolve, 3000)); // 3s delay before retry
     }
   }

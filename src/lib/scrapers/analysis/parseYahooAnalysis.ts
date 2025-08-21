@@ -1,6 +1,7 @@
+import { Analysis } from '@/types/types';
 import axios from 'axios';
 
-export async function parseYahooAnalysis(rawText: string): Promise<any> {
+export async function parseYahooAnalysis(rawText: string): Promise<Analysis | null> {
     try {
         const API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY; // Replace with your Gemini API key
         const API_URL = process.env.NEXT_PUBLIC_GEMINI_API_URL;
@@ -72,7 +73,7 @@ ${rawText.slice(0, 4000)}
         try {
             jsonOutput = JSON.parse(jsonMatch[1]);
         } catch (error) {
-            console.error('Failed to parse Gemini output as JSON:', responseText);
+            console.error('Failed to parse Gemini output as JSON:', error);
             return null;
         }
 

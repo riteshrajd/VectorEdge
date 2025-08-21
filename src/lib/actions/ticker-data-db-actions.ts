@@ -41,7 +41,7 @@ export async function searchTickersInDB(
  * @param ticker who's data needs to be fetched
  * @returns the fetched json data from db
  */
-export async function fetchCachedTickerData(ticker: string): Promise<{ data: CombinedData | null, error: any }> {
+export async function fetchCachedTickerData(ticker: string): Promise<{ data: CombinedData | null, error: unknown }> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from('ticker_data') // Your table name
@@ -64,7 +64,7 @@ export async function fetchCachedTickerData(ticker: string): Promise<{ data: Com
  * @param newData the new data
  * @returns error if any during updation
  */
-export async function updateCachedTickerData(ticker: string, newData: CombinedData): Promise<{ error: any }> {
+export async function updateCachedTickerData(ticker: string, newData: CombinedData): Promise<{ error: unknown }> {
   const supabase = await createClient();
   const { error } = await supabase
     .from('ticker_data')
