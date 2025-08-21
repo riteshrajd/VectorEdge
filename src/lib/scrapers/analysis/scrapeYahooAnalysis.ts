@@ -2,7 +2,7 @@ import puppeteer, { Page } from "puppeteer";
 import { parseYahooAnalysis } from "./parseYahooAnalysis";
 import { Analysis } from "@/types/types";
 
-export async function scrapeYahooAnalysis(url: string): Promise<Analysis | null> {
+export async function scrapeYahooAnalysis(url: string): Promise<{analysis: Analysis} | null> {
   const browser = await puppeteer.launch({
     headless: true,
     args: [

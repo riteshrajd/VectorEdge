@@ -136,7 +136,11 @@ const MainContent = () => {
       <ConfirmationScreen
         instrumentName={store.selectedInstrument.name}
         onConfirm={handleInstrumentDataFetch}
-        onCancel={() => setAskConfirmation(false)}
+        onCancel={() => {
+          store.setSelectedInstrument(null);
+          store.setSearchTerm('');
+          setAskConfirmation(false)
+        }}
       />
     );
   }

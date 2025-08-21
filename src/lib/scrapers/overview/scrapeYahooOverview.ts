@@ -2,7 +2,7 @@ import puppeteer, { Page } from 'puppeteer';
 import { parseYahooOverview } from './parseYahooOverview';
 import { Overview } from '@/types/types';
 
-export async function scrapeYahooOverview(url: string): Promise<Overview | null> {
+export async function scrapeYahooOverview(url: string): Promise<{overview:Overview} | null> {
     const browser = await puppeteer.launch({
         headless: true,
         args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu']

@@ -1,7 +1,7 @@
 import { Fundamental } from '@/types/types';
 import axios from 'axios';
 
-export async function parseYahooFundamental(rawText: string): Promise<Fundamental | null> {
+export async function parseYahooFundamental(rawText: string): Promise<{fundamental: Fundamental} | null> {
     try {
         const API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY; // Use Next.js env variable
         if (!API_KEY) throw new Error('Gemini API key not found in environment variables');

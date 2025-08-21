@@ -14,7 +14,7 @@ export interface Store {
   setSearching:() =>void
   setIsLeftCollapsed: () => void;
   setSearchTerm: (term:string)=>void;
-  setSelectedInstrument: (instrument: InstrumentCoverInfo)=>void;
+  setSelectedInstrument: (instrument: InstrumentCoverInfo | null)=>void;
   setSelectTheme: (value: boolean) => void;
   setMobileView: (view: 'search' | 'data' | 'chat') => void;
   setIsMobile: (value: boolean) => void;

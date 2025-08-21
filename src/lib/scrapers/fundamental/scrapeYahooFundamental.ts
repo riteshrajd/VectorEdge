@@ -2,7 +2,7 @@ import puppeteer, { Page } from 'puppeteer';
 import { parseYahooFundamental } from './parseYahooFundamental';
 import { Fundamental } from '@/types/types';
 
-export async function scrapeYahooFundamental(url: string): Promise<Fundamental | null> {
+export async function scrapeYahooFundamental(url: string): Promise<{fundamental: Fundamental} | null> {
     const browser = await puppeteer.launch({
         headless: true,
         args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu']

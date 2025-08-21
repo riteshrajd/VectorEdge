@@ -1,7 +1,7 @@
 import { Analysis } from '@/types/types';
 import axios from 'axios';
 
-export async function parseYahooAnalysis(rawText: string): Promise<Analysis | null> {
+export async function parseYahooAnalysis(rawText: string): Promise<{analysis: Analysis} | null> {
     try {
         const API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY; // Replace with your Gemini API key
         const API_URL = process.env.NEXT_PUBLIC_GEMINI_API_URL;

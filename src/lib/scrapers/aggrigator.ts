@@ -24,9 +24,9 @@ export async function aggregateData(ticker: string): Promise<CombinedData> {
   return {
     ticker,
     last_updated: new Date().toISOString(),
-    overview: overviewData.overview,
-    fundamental: fundamentalData.fundamental,
-    analysis: analysisData.analysis,
-    technicals: technicalsData.technicals,    
+    overview: overviewData?.overview ?? null,
+    fundamental: fundamentalData?.fundamental ?? null,
+    analysis: analysisData?.analysis ?? null,
+    technicals: technicalsData?.technicals ?? null,    
   };
 }

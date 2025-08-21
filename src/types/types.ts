@@ -140,11 +140,11 @@ export interface AIInsights {
 export interface CombinedData {
   ticker: string;
   last_updated: string;
-  overview?: Overview;
-  fundamental?: Fundamental;
-  analysis?: Analysis;
-  technicals?: Technicals;
-  ai_insights?: AIInsights;
+  overview: Overview | null;
+  fundamental: Fundamental | null;
+  analysis: Analysis | null;
+  technicals: Technicals | null;
+  ai_insights?: AIInsights | null;
 }
 
 export interface TickerInfo {

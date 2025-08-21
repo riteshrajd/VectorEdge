@@ -2,7 +2,7 @@ import puppeteer, { Page } from 'puppeteer';
 import { parseTradingViewTechnicals } from './parseTradingViewTechnicals';
 import { Technicals } from '@/types/types';
 
-export async function scrapeTradingViewTechnicals(url: string = 'https://www.tradingview.com/symbols/MSFT/technicals/'): Promise<Technicals | null> {
+export async function scrapeTradingViewTechnicals(url: string = 'https://www.tradingview.com/symbols/MSFT/technicals/'): Promise<{technicals: Technicals} | null> {
   const browser = await puppeteer.launch({
     headless: true,
     args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu'],
