@@ -12,12 +12,10 @@ export async function aggregateData(ticker: string): Promise<CombinedData> {
     technicals: `https://www.tradingview.com/symbols/${ticker}/technicals/`,
   };
 
-  const [overviewData, fundamentalData, analysisData, technicalsData] = await Promise.all([
-    scrapeYahooOverview(urls.overview),
-    scrapeYahooFundamental(urls.fundamental),
-    scrapeYahooAnalysis(urls.analysis),
-    scrapeTradingViewTechnicals(urls.technicals),
-  ]);
+  const overviewData = await scrapeYahooOverview(urls.overview);
+  const fundamentalData = await scrapeYahooFundamental(urls.fundamental);
+  const analysisData = await scrapeYahooAnalysis(urls.analysis);
+  const technicalsData =  await scrapeTradingViewTechnicals(urls.technicals);
   
   console.log(`Aggregated data for ${ticker}: ${JSON.stringify(technicalsData)}`)
 

@@ -10,7 +10,7 @@ import { fetchCachedTickerData, updateCachedTickerData } from '@/lib/actions/tic
 
 export async function getData(ticker: string, refresh: boolean): Promise<CombinedData> {
   console.log(`refreshing? ${refresh}`)
-
+  
   if (!refresh) {
     const { data: cachedData } = await fetchCachedTickerData(ticker);
     

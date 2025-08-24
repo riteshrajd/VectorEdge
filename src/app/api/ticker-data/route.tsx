@@ -8,8 +8,8 @@ export async function GET(request: Request) {
   const ticker = url.searchParams.get('ticker')?.toUpperCase() || '';
   const refresh = url.searchParams.has('refresh') || false;
 
-  if(!ticker) return NextResponse.json({ error: 'Ticker is required' }, { status: 400 });
   if(!checkUserAuth()) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  if(!ticker) return NextResponse.json({ error: 'Ticker is required' }, { status: 400 })
 
   try {
     const data = await getData(ticker, refresh);
