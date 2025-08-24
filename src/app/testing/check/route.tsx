@@ -6,7 +6,6 @@ import { NextResponse } from 'next/server';
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const ticker = url.searchParams.get('ticker')?.toUpperCase() || '';
-  const refresh = url.searchParams.has('refresh') || false;
   
   try {
     const data = await getData(ticker, false);
