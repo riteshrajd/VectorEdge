@@ -105,6 +105,6 @@ The web scraping functionality in this project is for demonstration purposes onl
 
 ## 👨‍💻 Contact
 
-Ritesh Kumar - [Your Portfolio](https://your-portfolio-url.com) - ritesh.kr.20.02.2004@gmail.com
+Ritesh Raj Dwivedi - riteshrajdwivedi@gmail.com
 
 Project Link: [https://github.com/your_username/vectoredge-pro](https://github.com/your_username/vectoredge-pro)
