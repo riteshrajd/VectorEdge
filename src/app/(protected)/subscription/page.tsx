@@ -240,7 +240,7 @@ export default function Subscription(): JSX.Element {
             </ul>
             <button
               // LOGIC FIX 1: Pass correct plan and amount in paise (1299 * 100)
-              onClick={() => processPayment("monthly", 129900)}
+              onClick={() => processPayment("monthly", 1299)}
               disabled={isProcessing || user?.is_paid_member}
               className="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-primary-foreground py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 active:scale-95 shadow-lg"
             > 
@@ -294,7 +294,7 @@ export default function Subscription(): JSX.Element {
 
             <button
               // LOGIC FIX 2: Pass correct plan and amount in paise (9999 * 100)
-              onClick={() => processPayment("yearly", 999900)}
+              onClick={() => processPayment("yearly", 9999)}
               disabled={isProcessing || user?.is_paid_member}
               className="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-primary-foreground py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 active:scale-95 shadow-lg"
             >

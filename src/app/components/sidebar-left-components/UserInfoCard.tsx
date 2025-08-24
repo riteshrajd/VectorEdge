@@ -103,7 +103,7 @@ const UserInfoCard = () => {
 
       {/* Sign Out Confirmation Modal */}
       {showSignOutConfirm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+        <div className="fixed h-screen w-[100dvw] inset-0 z-50 flex items-center justify-center bg-black/60 bg-opacity-50 backdrop-blur-sm">
           <div className="bg-card border border-border rounded-lg shadow-xl p-6 w-full max-w-sm mx-4">
             <h2 className="text-lg font-semibold text-foreground">Confirm Sign Out</h2>
             <p className="text-sm text-muted-foreground mt-2">

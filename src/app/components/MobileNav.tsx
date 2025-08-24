@@ -26,7 +26,7 @@ const MobileNav = () => {
   };
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-background border-t border-[var(--border)] flex justify-around items-center z-50">
+    <nav className="fixed bottom-0 left-0 right-0 bg-background border-t border-[var(--border)] flex justify-around items-center z-40">
       {navItems.map((item) => (
         <button
           key={item.view}
