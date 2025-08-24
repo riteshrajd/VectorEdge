@@ -5,9 +5,10 @@ import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
-  const ticker = url.searchParams.get('ticker')?.toUpperCase() || 'AAPL';
+  const ticker = url.searchParams.get('ticker')?.toUpperCase() || '';
   const refresh = url.searchParams.has('refresh') || false;
 
+  if(!ticker) return NextResponse.json({ error: 'Ticker is required' }, { status: 400 });
   if(!checkUserAuth()) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   try {

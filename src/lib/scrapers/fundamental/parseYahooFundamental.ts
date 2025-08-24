@@ -3,9 +3,9 @@ import axios from 'axios';
 
 export async function parseYahooFundamental(rawText: string): Promise<{fundamental: Fundamental} | null> {
     try {
-        const API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY; // Use Next.js env variable
+        const API_KEY = process.env.GEMINI_API_KEY; // Use Next.js env variable
         if (!API_KEY) throw new Error('Gemini API key not found in environment variables');
-        const API_URL = process.env.NEXT_PUBLIC_GEMINI_API_URL;
+        const API_URL = process.env.GEMINI_API_URL;
 
         const prompt = `
 Parse the following raw text from Yahoo Finance's key statistics page into a JSON object with a fixed structure under the root key "fundamental". Include these mandatory sections: "valuation_measures", "financial_highlights", "trading_information".

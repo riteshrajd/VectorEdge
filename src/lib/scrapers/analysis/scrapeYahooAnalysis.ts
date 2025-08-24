@@ -1,22 +1,52 @@
-import puppeteer, { Page } from "puppeteer";
+import type { Page as PuppeteerPage } from 'puppeteer';
+import type { Page as PuppeteerCorePage } from 'puppeteer-core';
+import type { Browser as PuppeteerBrowser } from 'puppeteer';
+import type { Browser as PuppeteerCoreBrowser } from 'puppeteer-core';
 import { parseYahooAnalysis } from "./parseYahooAnalysis";
 import { Analysis } from "@/types/types";
 
-export async function scrapeYahooAnalysis(url: string): Promise<{analysis: Analysis} | null> {
-  const browser = await puppeteer.launch({
-    headless: true,
-    args: [
-      "--no-sandbox",
-      "--disable-setuid-sandbox",
-      "--disable-dev-shm-usage",
-      "--disable-accelerated-2d-canvas",
-      "--no-first-run",
-      "--no-zygote",
-      "--disable-gpu",
-    ],
-  });
+// Create union types
+type Page = PuppeteerPage | PuppeteerCorePage;
+
+export async function scrapeYahooAnalysis(urlOrSymbol: string): Promise<{analysis: Analysis} | null> {
+  // Convert symbol to full URL if needed
+  const url = urlOrSymbol.startsWith('http') 
+      ? urlOrSymbol 
+      : `https://finance.yahoo.com/quote/${urlOrSymbol.toUpperCase()}/analysis`;
+  
+  let browser: PuppeteerBrowser | PuppeteerCoreBrowser | null = null;
 
   try {
+    const isVercel = !!process.env.VERCEL_ENV;
+    let puppeteer;
+
+    const launchOptions = {
+      headless: true,
+      args: [] as string[],
+      executablePath: '',
+    };
+
+    if (isVercel) {
+      puppeteer = await import('puppeteer-core');
+      const chromium = (await import('@sparticuz/chromium')).default;
+      
+      launchOptions.args = chromium.args;
+      launchOptions.executablePath = await chromium.executablePath();
+    } else {
+      puppeteer = await import('puppeteer');
+      launchOptions.args = [
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-dev-shm-usage",
+        "--disable-accelerated-2d-canvas",
+        "--no-first-run",
+        "--no-zygote",
+        "--disable-gpu",
+      ];
+    }
+
+    browser = await puppeteer.launch(launchOptions);
+
     const page = await browser.newPage();
     await page.setUserAgent(
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
@@ -69,11 +99,15 @@ export async function scrapeYahooAnalysis(url: string): Promise<{analysis: Analy
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error("Error during scraping:", error.message);
+    } else {
+      console.error('An unknown error occurred:', error);
     }
-    throw error;
+    return null;
   } finally {
-    await browser.close();
-    console.log("Browser closed");
+    if (browser) {
+      await browser.close();
+      console.log("Browser closed");
+    }
   }
 }
 
@@ -97,10 +131,10 @@ async function navigateWithRetry(page: Page, url: string, retries = 5) {
 async function extractTextWithRetry(page: Page, retries = 5): Promise<string> {
   for (let i = 0; i < retries; i++) {
     try {
-      const text = await page.evaluate(() => document.body.innerText);
+      const text = await (page as PuppeteerPage).evaluate(() => document.body.innerText);
       if (text && text.length > 0) return text; // Ensure non-empty text
       throw new Error("Empty or invalid page content");
-    } catch (error) {
+    } catch (error: unknown) {
       if (i === retries - 2)
         await page.reload({ waitUntil: "networkidle2", timeout: 60000 }); // Reload before last retry
       if (i === retries - 1) throw error;
@@ -119,7 +153,7 @@ async function parseTextWithRetry(cleanedText: string, retries = 5) {
     try {
       const jsonData = await parseYahooAnalysis(cleanedText);
       return jsonData
-    } catch (error) {
+    } catch (error: unknown) {
       if (i === retries - 1) throw error;
       if (error instanceof Error) console.log(`Retry ${i + 1} for text parsing due to: ${error.message}`);
       await new Promise((resolve) => setTimeout(resolve, 3000)); // 3s delay before retry

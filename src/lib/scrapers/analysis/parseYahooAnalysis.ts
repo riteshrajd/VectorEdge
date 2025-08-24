@@ -3,8 +3,8 @@ import axios from 'axios';
 
 export async function parseYahooAnalysis(rawText: string): Promise<{analysis: Analysis} | null> {
     try {
-        const API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY; // Replace with your Gemini API key
-        const API_URL = process.env.NEXT_PUBLIC_GEMINI_API_URL;
+        const API_KEY = process.env.GEMINI_API_KEY; // Replace with your Gemini API key
+        const API_URL = process.env.GEMINI_API_URL;
 
         const prompt = `
 Parse the following raw text from Yahoo Finance's analysis page into a JSON object with a fixed structure under the root key "analysis". Include these mandatory sections: "earnings_estimates", "revenue_estimates", "earnings_history", "analyst_ratings".

@@ -1,39 +1,83 @@
-import puppeteer, { Page } from 'puppeteer';
+import type { Page as PuppeteerPage } from 'puppeteer';
+import type { Page as PuppeteerCorePage } from 'puppeteer-core';
+// 1. Import the Browser type from each package using an alias
+import type { Browser as PuppeteerBrowser } from 'puppeteer';
+import type { Browser as PuppeteerCoreBrowser } from 'puppeteer-core';
+import type { Overview } from '@/types/types'; // Assuming you have this type defined
 import { parseYahooOverview } from './parseYahooOverview';
-import { Overview } from '@/types/types';
 
-export async function scrapeYahooOverview(url: string): Promise<{overview:Overview} | null> {
-    const browser = await puppeteer.launch({
-        headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu']
-    });
+// Create union type for Page
+type Page = PuppeteerPage | PuppeteerCorePage;
+
+export async function scrapeYahooOverview(urlOrSymbol: string): Promise<{ overview: Overview } | null> {
+    // Convert symbol to full URL if needed
+    const url = urlOrSymbol.startsWith('http') 
+        ? urlOrSymbol 
+        : `https://finance.yahoo.com/quote/${urlOrSymbol.toUpperCase()}`;
+    
+    // 2. Use a union type to correctly handle both Browser types
+    let browser: PuppeteerBrowser | PuppeteerCoreBrowser | null = null;
 
     try {
+        const isVercel = !!process.env.VERCEL_ENV;
+        let puppeteer;
+
+        // 3. Use 'let' instead of 'const' because this object is modified
+        const launchOptions = {
+            headless: true,
+            args: [] as string[],
+            executablePath: '',
+        };
+
+        if (isVercel) {
+            puppeteer = await import('puppeteer-core');
+            const chromium = (await import('@sparticuz/chromium')).default;
+            
+            launchOptions.args = chromium.args;
+            launchOptions.executablePath = await chromium.executablePath();
+
+        } else {
+            puppeteer = await import('puppeteer');
+            launchOptions.args = ['--no-sandbox', '--disable-setuid-sandbox'];
+        }
+
+        browser = await puppeteer.launch(launchOptions);
+
+        // 4. Removed redundant 'if (browser)' check. If launch fails, it will throw.
         const page = await browser.newPage();
         await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
         await page.setViewport({ width: 1280, height: 800 });
         
-        // navigation
         console.log(`Navigating to ${url}`);
         await navigateWithRetry(page, url);
-        console.log('overview Page loaded successfully');
+        console.log('Overview page loaded successfully');
         
-        // text extraction
         const pageText = await extractTextWithRetry(page);
+        if (!pageText) {
+            console.log("Could not extract any text from the page.");
+            return null;
+        }
         console.log('Extracted text from the overview page');
 
-        const cleanedText = pageText ? pageText.replace(/\n+/g, '\n').trim() : '';
+        const cleanedText = pageText.replace(/\n+/g, '\n').trim();
         const jsonData = await parseTextWithRetry(cleanedText);
-        console.log(`JSON overview data extracted`)
+        
+        console.log(`JSON overview data extracted`);
         return jsonData ? jsonData : null;
 
     } catch (error: unknown) {
-        if(error instanceof Error)console.error('Error during scraping:', error.message);
-        throw error;
-
+        if (error instanceof Error) {
+            console.error('Error during scraping:', error.message);
+        } else {
+            console.error('An unknown error occurred:', error);
+        }
+        return null;
+        
     } finally {
-        await browser.close();
-        console.log('Browser closed');
+        if (browser) {
+            await browser.close();
+            console.log('Browser closed');
+        }
     }
 }
 
@@ -55,7 +99,7 @@ async function navigateWithRetry(page: Page, url: string, retries = 5) {
 async function extractTextWithRetry(page: Page, retries = 5) {
   for (let i = 0; i < retries; i++) {
     try {
-      const text = await page.evaluate(() => document.body.innerText);
+      const text = await (page as PuppeteerPage).evaluate(() => document.body.innerText);
       if (text && text.length > 0) return text; // Ensure non-empty text
       throw new Error('Empty or invalid page content');
     } catch (error: unknown) {

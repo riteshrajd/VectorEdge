@@ -3,9 +3,9 @@ import axios from 'axios';
 
 export async function parseYahooOverview(rawText: string): Promise<{overview: Overview} | null> {
     try {
-        const API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY; // Use Next.js env variable
+        const API_KEY = process.env.GEMINI_API_KEY; // Use Next.js env variable
         if (!API_KEY) throw new Error('Gemini API key not found in environment variables');
-        const API_URL = process.env.NEXT_PUBLIC_GEMINI_API_URL;
+        const API_URL = process.env.GEMINI_API_URL;
 
         const prompt = `
 Parse the following raw text from Yahoo Finance's overview page into a JSON object with a fixed structure under the root key "overview". Include these mandatory fields: "current_price", "change", "percent_change", "previous_close", "open", "bid", "ask", "day_range", "52_week_range", "volume", "avg_volume", "market_cap", "beta", "pe_ratio", "eps", "earnings_date", "forward_dividend_yield", "ex_dividend_date", "1y_target_est", each as string, float, or null.

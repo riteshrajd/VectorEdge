@@ -75,8 +75,13 @@ export default function Home(): JSX.Element {
   const isMobile = useBreakpoint();
   useInitializeUser();
   useEffect(() => {
-      useStore.getState().setIsMobile(isMobile);
-    }, [isMobile]); // This effect runs only when `isMobile` changes
+    useStore.getState().setIsMobile(isMobile);
+  }, [isMobile]); // This effect runs only when `isMobile` changes
+
+  useEffect(() => {
+    if(isMobile && useStore.getState().isLeftCollapsed) useStore.getState().setIsLeftCollapsed();
+  }, [isMobile]);
+
 
   useInitializeUser();
 
