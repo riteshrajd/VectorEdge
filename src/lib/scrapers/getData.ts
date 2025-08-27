@@ -29,7 +29,6 @@ export async function getData(ticker: string, refresh: boolean): Promise<Combine
   // Fetch new data if no valid cache
   console.log(`Fetching new data for ${ticker}`);
   const data = await aggregateData(ticker);
-  // const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));                         
   const insights = await getInsightData(data);                                   
 
 

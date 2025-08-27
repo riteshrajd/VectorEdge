@@ -2,6 +2,8 @@
 
 import { CombinedData, TickerInfo } from "@/types/types";
 import { createClient } from "@/utils/supabase/server";
+import { createClient as createAdminClient } from '@supabase/supabase-js';
+
 
 /**
  * Searches for tickers directly in the Supabase database.
@@ -65,14 +67,22 @@ export async function fetchCachedTickerData(ticker: string): Promise<{ data: Com
  * @returns error if any during updation
  */
 export async function updateCachedTickerData(ticker: string, newData: CombinedData): Promise<{ error: unknown }> {
-  const supabase = await createClient();
+  console.log(`🌿💻updateCachedTickerData called for ${ticker}`);
+  const supabase = createAdminClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY! 
+  );
+
   const { error } = await supabase
     .from('ticker_data')
     .update({
       analysis_data: newData,
-      last_updated: new Date().toISOString(), // Set the new timestamp
+      last_updated: new Date().toISOString(),
     })
     .eq('symbol', ticker);
 
+  if (error) {
+    console.error(`Error updating DB cache for ${ticker}:`, error);
+  }
   return { error };
 }
