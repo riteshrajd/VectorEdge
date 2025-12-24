@@ -1,6 +1,7 @@
 // app/layout.tsx
 import type { Metadata } from "next";
 import "./globals.css";
+import { Toaster } from 'sonner'; 
 
 export const metadata: Metadata = {
   title: "VectorEdge",
@@ -38,6 +39,7 @@ export default function RootLayout({
       {/* THE FIX: Add suppressHydrationWarning here as well */}
       <body className="" suppressHydrationWarning>
         {children}
+        <Toaster position="bottom-right" richColors expand={true} visibleToasts={6} />
       </body>
     </html>
   );

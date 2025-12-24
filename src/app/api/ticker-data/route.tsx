@@ -1,21 +1,53 @@
-import { getData } from '@/lib/scrapers/getData';
-import { checkUserAuth } from '@/utils/authMiddleware';
 import { NextResponse } from 'next/server';
-// import { CombinedData } from '@/lib/types';
+import { Queue } from 'bullmq';
+import { redisConnection } from '@/lib/redis';
+
+// Ensure this matches the queue name in your worker.ts
+const QUEUE_NAME = 'ticker-queue';
+
+// Create the queue instance sharing the same Redis connection logic
+const tickerQueue = new Queue(QUEUE_NAME, { connection: redisConnection });
 
 export async function GET(request: Request) {
-  const url = new URL(request.url);
-  const ticker = url.searchParams.get('ticker')?.toUpperCase() || '';
-  const refresh = url.searchParams.has('refresh') || false;
+  const { searchParams } = new URL(request.url);
+  const ticker = searchParams.get('ticker');
 
-  if(!checkUserAuth()) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  if(!ticker) return NextResponse.json({ error: 'Ticker is required' }, { status: 400 })
+  console.log(`🔵 API: /ticker-data called for: ${ticker}`);
 
   try {
-    const data = await getData(ticker, refresh);
-    return NextResponse.json(data);
-  } catch (error: unknown) {
-    if (error instanceof Error) console.error(`error during fetching data for ${ticker}:`, error.message);
-    return NextResponse.json({ error: 'Failed to aggregate data' }, { status: 500 });
+    if (!ticker) {
+      return NextResponse.json({ message: 'Ticker is required' }, { status: 400 });
+    }
+
+    const normalizedTicker = ticker.toUpperCase();
+
+    // 1. Check Cache First (Standard Efficiency Check)
+    const cacheKey = `ticker:${normalizedTicker}`;
+    const cachedData = await redisConnection.get(cacheKey);
+
+    if (cachedData) {
+      console.log(`✅ API: Cache HIT for ${normalizedTicker}. Serving from Redis.`);
+      return NextResponse.json({
+        status: 'success',
+        source: 'cache',
+        data: JSON.parse(cachedData),
+      }, { status: 200 });
+    }
+
+    // 2. Cache Miss? Add to Queue.
+    console.log(`🟡 API: Cache MISS for ${normalizedTicker}. Adding job to queue.`);
+    
+    await tickerQueue.add('analyze-stock', { ticker: normalizedTicker });
+
+    // 3. Return "Processing" immediately so frontend knows to listen to Socket
+    return NextResponse.json({
+      status: 'processing',
+      message: 'Analysis has been started. You will be notified when it is complete.',
+      ticker: normalizedTicker
+    }, { status: 202 });
+
+  } catch (error) {
+    console.error('🔴 API: Error', error);
+    return NextResponse.json({ message: 'Something went wrong' }, { status: 500 });
   }
 }
