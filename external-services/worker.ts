@@ -4,6 +4,7 @@ import { Worker } from 'bullmq';
 import { Emitter } from '@socket.io/redis-emitter';
 // FIX 1: Correct path (assuming worker.ts is in root)
 import { redisConnection } from '../src/lib/redis.ts'; 
+import { getData } from '../src/lib/scrapers/getData.ts'
 
 // We can reuse the connection for the Emitter
 const io = new Emitter(redisConnection);
@@ -46,18 +47,11 @@ const worker = new Worker(QUEUE_NAME, async (job) => {
 
     try {
         // --- 3. The Work ---
-        console.log(`⏳ Simulating 5-second analysis for ${ticker}...`);
-        
-        // 
-        
+        console.log(`⏳ Worker Fetching Data for ${ticker}...`);
+      
         await new Promise((resolve) => setTimeout(resolve, 15000));
 
-        const result = {
-            ticker: ticker,
-            price: parseFloat((Math.random() * 1000).toFixed(2)), 
-            analysis: "Gemini AI says: Bullish based on recent market trends.",
-            timestamp: new Date().toISOString(),
-        };
+        const result = await getData(ticker, true);
 
         console.log(`✅ Analysis complete for ${ticker}. Emitting...`);
         
