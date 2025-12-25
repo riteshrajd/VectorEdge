@@ -1,5 +1,5 @@
 import { fetchDummyData } from './fetchDummyData.ts';
-// import { aggregateData } from './aggrigator';
+import { aggregateData } from './aggrigator';
 // import { getInsightData } from './generateInsight';
 import type { CombinedData } from '../../types/types.ts';
 
@@ -10,14 +10,15 @@ export async function getData(ticker: string): Promise<CombinedData> {
 
   try {
     data = await aggregateData(ticker);
-  } catch (err) {
-    console.warn('⚠️ Scraping failed, using free Yahoo data');
+  } catch (error) {
+    if(error instanceof Error) console.log(`error occured during scrapping data: ${error.message} \nfalling back to preloaded data`)
+    console.warn('⚠️ Scraping failed, using free Yahoo data');   
     data = await fetchDummyData(ticker);
     return data;
   }
 
-  let insights = null;
-  // try {
+  // let insights = null;
+  // try {u
   //   const insightResult = await getInsightData(data);
   //   insights = insightResult?.ai_insights ?? null;
   // } catch (e) {
@@ -26,6 +27,6 @@ export async function getData(ticker: string): Promise<CombinedData> {
 
   return {
     ...data,
-    ai_insights: insights,
+    ai_insights: null,
   };
 }

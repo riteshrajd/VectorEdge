@@ -1,9 +1,8 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { 
   TrendingUp, 
-  TrendingDown, 
   Target, 
   Brain, 
   Shield, 
@@ -11,7 +10,6 @@ import {
   Activity,
   Users,
   Scale,
-  Info
 } from 'lucide-react';
 import { 
   AreaChart, 
@@ -33,23 +31,22 @@ const StockAnalysisReport: React.FC<StockAnalysisReportProps> = ({ data, setIsSh
   const ref = useRef<HTMLDivElement>(null);
 
   // --- Helpers ---
-  const formatCurrency = (val: any) => {
+  const formatCurrency = (val: number | null) => {
     if (val === null || val === undefined) return 'N/A';
     const num = typeof val === 'string' ? parseFloat(val) : val;
     return isNaN(num) ? 'N/A' : `$${num.toLocaleString('en-US', { maximumFractionDigits: 2 })}`;
   };
 
-  const formatCompact = (val: any) => {
+  const formatCompact = (val: number | null) => {
     if (!val) return 'N/A';
     if (typeof val === 'string' && /[KMBT]$/i.test(val)) return val;
     const num = typeof val === 'string' ? parseFloat(val) : val;
     return Intl.NumberFormat('en-US', { notation: "compact", maximumFractionDigits: 2 }).format(num);
   };
 
-  const getColorClass = (val: any, type: 'text' | 'bg' | 'border' = 'text') => {
+  const getColorClass = (val: number | null, type: 'text' | 'bg' | 'border' = 'text') => {
     let isPos = false;
-    if (typeof val === 'string') isPos = !val.startsWith('-');
-    else if (typeof val === 'number') isPos = val > 0;
+    if (typeof val === 'number') isPos = val > 0;
 
     if (type === 'bg') return isPos ? 'bg-emerald-500/10' : 'bg-rose-500/10';
     if (type === 'border') return isPos ? 'border-emerald-500/20' : 'border-rose-500/20';
@@ -173,7 +170,7 @@ const StockAnalysisReport: React.FC<StockAnalysisReportProps> = ({ data, setIsSh
                         <Tooltip 
                             contentStyle={{ backgroundColor: 'var(--color-card)', borderColor: 'var(--color-border)', borderRadius: '8px' }}
                             itemStyle={{ color: 'var(--color-foreground)' }}
-                            formatter={(value: number) => [`$${value}`, 'Price']}
+                            formatter={(val: number | undefined) => [`$${val}`, 'Price']}
                         />
                         <Area 
                             type="monotone" 
@@ -211,7 +208,7 @@ const StockAnalysisReport: React.FC<StockAnalysisReportProps> = ({ data, setIsSh
             ].map((item, i) => (
                 <div key={i} className="p-3 bg-muted/20 border border-border/40 rounded-lg hover:bg-muted/40 transition-colors">
                     <div className="text-[11px] text-muted-foreground uppercase tracking-wide mb-1">{item.label}</div>
-                    <div className={`font-semibold text-sm ${item.color ? getColorClass(item.val) : 'text-foreground'}`}>
+                    <div className={`font-semibold text-sm ${item.color ? getColorClass(Number(item.val)) : 'text-foreground'}`}>
                         {item.val ? `${item.val}${item.suffix || ''}` : '--'}
                     </div>
                 </div>
@@ -235,19 +232,19 @@ const StockAnalysisReport: React.FC<StockAnalysisReportProps> = ({ data, setIsSh
                   
                   {/* Low Marker */}
                   <div className="absolute top-0 left-0 -translate-x-0 flex flex-col items-start">
-                      <span className="text-xs font-bold text-rose-500">{formatCurrency(analysis?.analyst_ratings?.price_target_low)}</span>
+                      <span className="text-xs font-bold text-rose-500">{formatCurrency(analysis!.analyst_ratings?.price_target_low)}</span>
                       <span className="text-[10px] text-muted-foreground">Low</span>
                   </div>
 
                   {/* High Marker */}
                   <div className="absolute top-0 right-0 translate-x-0 flex flex-col items-end">
-                      <span className="text-xs font-bold text-emerald-500">{formatCurrency(analysis?.analyst_ratings?.price_target_high)}</span>
+                      <span className="text-xs font-bold text-emerald-500">{formatCurrency(analysis!.analyst_ratings?.price_target_high)}</span>
                       <span className="text-[10px] text-muted-foreground">High</span>
                   </div>
 
                   {/* Average Marker (Centered roughly) */}
                   <div className="absolute top-0 left-1/2 -translate-x-1/2 flex flex-col items-center">
-                      <span className="text-sm font-extrabold text-foreground">{formatCurrency(analysis?.analyst_ratings?.price_target_avg)}</span>
+                      <span className="text-sm font-extrabold text-foreground">{formatCurrency(analysis!.analyst_ratings?.price_target_avg)}</span>
                       <span className="text-[10px] text-muted-foreground">Average</span>
                       <div className="w-0.5 h-3 bg-foreground mt-1"></div>
                   </div>
@@ -279,16 +276,16 @@ const StockAnalysisReport: React.FC<StockAnalysisReportProps> = ({ data, setIsSh
                           </tr>
                       </thead>
                       <tbody className="divide-y divide-border/30">
-                          {['Current Qtr', 'Next Qtr', 'Current Year', 'Next Year'].map((key) => {
-                              const eps = analysis?.earnings_estimates?.[key];
-                              const rev = analysis?.revenue_estimates?.[key];
+                          {(['Current Qtr', 'Next Qtr', 'Current Year', 'Next Year'] as const).map((key) => {
+                              const eps = analysis!.earnings_estimates?.[key];
+                              const rev = analysis!.revenue_estimates?.[key];
                               if (!eps && !rev) return null;
                               return (
                                   <tr key={key}>
                                       <td className="py-3 font-medium text-foreground/90">{key}</td>
                                       <td className="py-3 text-right">{eps?.avg_estimate || '-'}</td>
-                                      <td className="py-3 text-right">{rev?.avg_estimate ? formatCompact(rev.avg_estimate) : '-'}</td>
-                                      <td className={`py-3 text-right ${getColorClass(rev?.sales_growth)}`}>
+                                      <td className="py-3 text-right">{rev?.avg_estimate ? formatCompact(Number(rev.avg_estimate)) : '-'}</td>
+                                      <td className={`py-3 text-right ${getColorClass(Number(rev?.sales_growth))}`}>
                                           {rev?.sales_growth || '-'}
                                       </td>
                                   </tr>
@@ -316,9 +313,9 @@ const StockAnalysisReport: React.FC<StockAnalysisReportProps> = ({ data, setIsSh
                       </span>
                   </div>
                   <div className="flex gap-1 h-2 rounded-full overflow-hidden">
-                      <div style={{ flex: technicals?.summary?.moving_averages?.buy }} className="bg-emerald-500" />
-                      <div style={{ flex: technicals?.summary?.moving_averages?.neutral }} className="bg-gray-400" />
-                      <div style={{ flex: technicals?.summary?.moving_averages?.sell }} className="bg-rose-500" />
+                      <div style={{ flex: technicals!.summary?.moving_averages?.buy?.toString() }} className="bg-emerald-500" />
+                      <div style={{ flex: technicals!.summary?.moving_averages?.neutral?.toString() }} className="bg-gray-400" />
+                      <div style={{ flex: technicals!.summary?.moving_averages?.sell?.toString() }} className="bg-rose-500" />
                   </div>
                   <div className="flex justify-between text-[10px] text-muted-foreground mt-2">
                       <span>Buy: {technicals?.summary?.moving_averages?.buy}</span>
@@ -335,9 +332,9 @@ const StockAnalysisReport: React.FC<StockAnalysisReportProps> = ({ data, setIsSh
                       </span>
                   </div>
                   <div className="flex gap-1 h-2 rounded-full overflow-hidden">
-                      <div style={{ flex: technicals?.summary?.oscillators?.buy }} className="bg-emerald-500" />
-                      <div style={{ flex: technicals?.summary?.oscillators?.neutral }} className="bg-gray-400" />
-                      <div style={{ flex: technicals?.summary?.oscillators?.sell }} className="bg-rose-500" />
+                      <div style={{ flex: technicals?.summary?.oscillators?.buy?.toString() }} className="bg-emerald-500" />
+                      <div style={{ flex: technicals?.summary?.oscillators?.neutral?.toString() }} className="bg-gray-400" />
+                      <div style={{ flex: technicals?.summary?.oscillators?.sell?.toString() }} className="bg-rose-500" />
                   </div>
                    <div className="flex justify-between text-[10px] text-muted-foreground mt-2">
                       <span>Buy: {technicals?.summary?.oscillators?.buy}</span>

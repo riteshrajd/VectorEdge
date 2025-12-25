@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Card, CardContent } from "@/components/shadcn/ui/card";
-import { Button } from "@/components/shadcn/ui/button"; // Optional: if you want to use the component directly
 
 export default function VerifyEmailPage() {
   return (

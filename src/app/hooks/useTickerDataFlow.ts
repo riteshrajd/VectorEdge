@@ -56,11 +56,7 @@ export const useTickerDataFlow = (selectedInstrument: InstrumentCoverInfo | null
              // Switch the main view to this ticker
              setSelectedInstrument({ 
                 symbol: socketData.ticker,
-                name: socketData.companyName || socketData.ticker, // Fallback if name missing
-                type: 'stock', 
-                exchange: 'NS',
-                currency: 'USD',
-                country: 'US'
+                name: socketData.ticker, // Fallback if name missing
              });
           }
         }
@@ -115,9 +111,9 @@ export const useTickerDataFlow = (selectedInstrument: InstrumentCoverInfo | null
         setSocketTicker(symbol); 
       }
 
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('❌ Fetch error:', err);
-      setError(err.message || 'Failed to fetch data');
+      setError(err instanceof Error ? err.message : 'Failed to fetch data');
       setStatus('error');
     }
   }, [selectedInstrument, addData, updateHistory]);
