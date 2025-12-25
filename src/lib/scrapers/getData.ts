@@ -1,49 +1,31 @@
-import { aggregateData } from './aggrigator';
-import { getInsightData } from './generateInsight';
-import { CombinedData } from '@/types/types';
+import { fetchDummyData } from './fetchDummyData.ts';
+// import { aggregateData } from './aggrigator';
+// import { getInsightData } from './generateInsight';
+import type { CombinedData } from '../../types/types.ts';
 
-// Define cache directory and time limit (in milliseconds)
-const CACHE_DURATION = 24 * 60 * 60 * 1000 * 7; // 7 days in milliseconds
+export async function getData(ticker: string): Promise<CombinedData> {
+  console.log(`⚡ worker: Fetching FRESH data for ${ticker}...`);
 
-import { fetchCachedTickerData, updateCachedTickerData } from '@/lib/actions/ticker-data-db-actions';
+  let data: CombinedData;
 
-
-export async function getData(ticker: string, refresh: boolean): Promise<CombinedData> {
-  console.log(`refreshing? ${refresh}`)
-  
-  if (!refresh) {
-    const { data: cachedData } = await fetchCachedTickerData(ticker);
-    
-    if (cachedData) {
-      const lastUpdated = new Date(cachedData.last_updated).getTime();
-      const now = Date.now();
-
-      // Check if cache is still valid
-      if (now - lastUpdated < CACHE_DURATION) {
-        console.log(`Using cached data for ${ticker} from DB`);
-        return cachedData;
-      }
-    }
+  try {
+    data = await aggregateData(ticker);
+  } catch (err) {
+    console.warn('⚠️ Scraping failed, using free Yahoo data');
+    data = await fetchDummyData(ticker);
+    return data;
   }
-  
-  // Fetch new data if no valid cache
-  console.log(`Fetching new data for ${ticker}`);
-  const data = await aggregateData(ticker);
-  const insights = await getInsightData(data);                                   
 
+  let insights = null;
+  // try {
+  //   const insightResult = await getInsightData(data);
+  //   insights = insightResult?.ai_insights ?? null;
+  // } catch (e) {
+  //   console.error('AI Insight generation failed:', e);
+  // }
 
-  const enrichedData = {
+  return {
     ...data,
-    ai_insights: insights ? insights.ai_insights : null,                   
+    ai_insights: insights,
   };
-
-  // --- 3. Replace fs.writeFileSync with a database call ---
-  const { error } = await updateCachedTickerData(ticker, enrichedData as CombinedData);
-  if (error) {
-    console.error(`Error writing to DB cache for ${ticker}:`, error);
-  } else {
-    console.log(`Data scraped and saved to DB cache for ${ticker}`);
-  }
-
-  return enrichedData as CombinedData;
 }

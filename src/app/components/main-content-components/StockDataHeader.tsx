@@ -13,12 +13,15 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ data, isShrunk, onRefresh, isLoading }) => {
   
+  // 1. Extract the string safely once
+  const percentChangeStr = data?.overview?.percent_change || '';
+
+  // 2. Logic Fix: Check if it is negative. 
+  // If it does NOT start with '-', we assume it's positive (covers "5.2%", "+5.2%", "0.0%")
+  const isPositiveChange = !percentChangeStr.startsWith('-');
+
   const formatCurrency = (value: number) => {
     return `$${value.toLocaleString('en-US', { maximumFractionDigits: 2 })}`;
-  };
-
-  const getPercentChangeColor = (percentChange: string) => {
-    return percentChange.startsWith('+') ? 'text-[#50ff7a]' : 'text-red-500';
   };
 
   const formatDate = (dateString?: string) => {
@@ -32,7 +35,7 @@ const Header: React.FC<HeaderProps> = ({ data, isShrunk, onRefresh, isLoading })
         isShrunk ? 'h-14 py-1' : 'h-20 py-4'
       } border-b border-[var(--color-border)] shadow-md`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-4 lg:px-6 flex items-center justify-between h-full transition-all duration-200">
+      <div className="max-w-[90%] mx-auto px-4 sm:px-4 lg:px-6 flex items-center justify-between h-full transition-all duration-200">
         
         {/* LEFT SECTION: Ticker & Name */}
         <div className="flex items-center space-x-3">
@@ -41,7 +44,7 @@ const Header: React.FC<HeaderProps> = ({ data, isShrunk, onRefresh, isLoading })
               {data?.ticker || 'N/A'}
             </h1>
             <p className={`text-[var(--color-muted-foreground)] ${isShrunk ? 'text-[0.65rem]' : 'text-sm'} transition-all duration-200`}>
-              {'Apple Inc.'} {/* Fallback/Placeholder */}
+              {`${data?.ticker} Inc.`} {/* Fallback/Placeholder */}
             </p>
           </div>
         </div>
@@ -56,10 +59,13 @@ const Header: React.FC<HeaderProps> = ({ data, isShrunk, onRefresh, isLoading })
             </span>
             
             <div className="flex items-center ml-2">
-              <span className={`text-xs ${getPercentChangeColor(data?.overview?.percent_change || '')}`}>
-                {data?.overview?.percent_change || 'N/A'}
+              {/* Color Logic: Uses isPositiveChange boolean */}
+              <span className={`text-xs ${isPositiveChange ? 'text-[#50ff7a]' : 'text-red-500'}`}>
+                {percentChangeStr || 'N/A'}
               </span>
-              {data?.overview?.percent_change?.startsWith('+') ? (
+
+              {/* Icon Logic: Uses isPositiveChange boolean */}
+              {isPositiveChange ? (
                 <TrendingUp className={`ml-1 ${isShrunk ? 'w-3.5 h-3.5' : 'w-4 h-4'} text-[#50ff7a]`} />
               ) : (
                 <TrendingDown className={`ml-1 ${isShrunk ? 'w-3.5 h-3.5' : 'w-4 h-4'} text-red-500`} />

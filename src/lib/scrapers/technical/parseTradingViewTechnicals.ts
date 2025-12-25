@@ -2,6 +2,7 @@ import { Technicals } from '@/types/types';
 import axios from 'axios';
 
 export async function parseTradingViewTechnicals(rawText: string): Promise<{technicals: Technicals} | null> {
+    if(!rawText) return null;
     try {
         const API_KEY = process.env.GEMINI_API_KEY; // Use Next.js env variable
         if (!API_KEY) throw new Error('Gemini API key not found in environment variables');
@@ -94,6 +95,6 @@ ${rawText.slice(0, 4000)}
 
     } catch (error: unknown) {
         console.error('Error during parsing:', error instanceof Error ? error.message : '');
-        return null;
+        throw error;
     }
 }

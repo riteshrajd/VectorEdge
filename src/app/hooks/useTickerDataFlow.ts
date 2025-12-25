@@ -49,7 +49,7 @@ export const useTickerDataFlow = (selectedInstrument: InstrumentCoverInfo | null
 
       // 2. Prepare the Toast
       toast.success(`Analysis ready for ${socketData.ticker}!`, {
-        description: `Price: $${socketData.price || 'N/A'}`,
+        description: `Price: $${socketData?.overview?.current_price || 'N/A'}`,
         action: {
           label: 'View Data',
           onClick: () => {

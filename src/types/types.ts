@@ -144,7 +144,7 @@ export interface CombinedData {
   fundamental: Fundamental | null;
   analysis: Analysis | null;
   technicals: Technicals | null;
-  ai_insights?: AIInsights | null;
+  ai_insights: AIInsights | null;
 }
 
 export interface TickerInfo {
@@ -165,14 +165,14 @@ export interface InstrumentCoverInfo {
 }
 
 // razor pay
-// Describes the successful payment response object from Razorpay
+// the successful payment response object from Razorpay
 export interface RazorpayPaymentSuccessResponse {
   razorpay_order_id: string;
   razorpay_payment_id: string;
   razorpay_signature: string;
 }
 
-// Describes the failed payment response object from Razorpay
+// the failed payment response object from Razorpay
 export interface RazorpayPaymentFailureResponse {
   error: {
     code: string;
@@ -187,7 +187,7 @@ export interface RazorpayPaymentFailureResponse {
   };
 }
 
-// Describes the options object passed to the Razorpay constructor
+// the options object passed to the Razorpay constructor
 export interface RazorpayOptions {
   key: string | undefined;
   amount: number;
