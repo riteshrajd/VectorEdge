@@ -10,7 +10,7 @@ export async function GET(request: Request) {
   console.log(`🧪 TEST ROUTE: Starting scrape for ${ticker}...`);
 
   try {
-    const data = await getData(ticker, true);
+    const data = await getData(ticker);
 
     return NextResponse.json({
       status: 'success',
@@ -18,11 +18,11 @@ export async function GET(request: Request) {
       data: data
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(`❌ TEST ROUTE Error:`, error);
     return NextResponse.json({ 
       status: 'error', 
-      message: error.message || 'Scraping failed' 
+      message: error instanceof Error ? error.message : 'Scraping failed' 
     }, { status: 500 });
   } 
 }

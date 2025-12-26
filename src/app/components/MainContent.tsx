@@ -14,7 +14,7 @@ const MainContent = () => {
   const [isShrunk, setIsShrunk] = useState(false);
 
   // Use the Hook
-  const { status, data, error, confirmAndFetch, refreshData, resetFlow } = useTickerDataFlow(store.selectedInstrument);
+  const { status, data, error, confirmAndFetch, refreshData, resetFlow } = useTickerDataFlow(store.selectedInstrument || null);
 
   // --- RENDER LOGIC ---
 
@@ -83,7 +83,7 @@ const MainContent = () => {
         data={data} 
         isShrunk={isShrunk} 
         onRefresh={refreshData} 
-        isLoading={status === 'loading' || status === 'analyzing' || status === 'checking_cache'} 
+        isLoading={false} 
       />
       <div className="flex-1 w-full flex justify-center bg-[var(--color-background)] overflow-hidden">
         {data && <StockAnalysisReport data={data} setIsShrunk={setIsShrunk} />}

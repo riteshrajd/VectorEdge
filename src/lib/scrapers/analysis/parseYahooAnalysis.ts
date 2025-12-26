@@ -79,9 +79,8 @@ ${rawText.slice(0, 4000)}
         }
 
         return jsonOutput;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-        console.error('Error during parsing:', error.message);
+    } catch (error: unknown) {
+        console.error('Error during parsing:', (error instanceof Error ? error.message : ''));
         throw error;
     }
 }

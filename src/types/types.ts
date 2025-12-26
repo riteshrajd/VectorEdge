@@ -144,7 +144,7 @@ export interface CombinedData {
   fundamental: Fundamental | null;
   analysis: Analysis | null;
   technicals: Technicals | null;
-  ai_insights: AIInsights | null;
+  ai_insights?: AIInsights | null;
 }
 
 export interface TickerInfo {
