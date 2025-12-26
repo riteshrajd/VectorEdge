@@ -10,9 +10,6 @@ RUN npm install
 
 COPY . .
 
-# Build the Next.js app (optional for the worker, but good for caching)
-RUN npm run build
-
 EXPOSE 3001
 
 # 2. Add '--esm' here so ts-node can read .ts files
