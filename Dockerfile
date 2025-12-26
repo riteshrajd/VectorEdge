@@ -13,4 +13,4 @@ COPY . .
 EXPOSE 3001
 
 # 2. Add '--esm' here so ts-node can read .ts files
-CMD ["npx", "ts-node", "--esm", "external-services/socket-server.ts"]
+CMD ["npx", "tsx", "external-services/socket-server.ts"]
