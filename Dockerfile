@@ -1,20 +1,19 @@
-# Use a lightweight Node image
-FROM node:18-alpine
+# 1. Update to Node 20 to fix engine warnings
+FROM node:20-alpine
 
-# Set working directory
 WORKDIR /app
 
-# Copy package files
 COPY package*.json ./
 
-# Install dependencies (including devDependencies for ts-node)
+# Install dependencies
 RUN npm install
 
-# Copy source code
 COPY . .
 
-# Expose the port for the Socket Server
+# Build the Next.js app (optional for the worker, but good for caching)
+RUN npm run build
+
 EXPOSE 3001
 
-# Default command (we will override this in Render dashboard)
-CMD ["npx", "ts-node", "external-services/socket-server.ts"]
+# 2. Add '--esm' here so ts-node can read .ts files
+CMD ["npx", "ts-node", "--esm", "external-services/socket-server.ts"]
