@@ -3,6 +3,7 @@ import { Worker, Job } from 'bullmq';
 import { Emitter } from '@socket.io/redis-emitter';
 import { redisConnection } from '../src/lib/redis.ts'; 
 import { getData } from '../src/lib/scrapers/getData.ts';
+import http from 'http';
 
 // Initialize Socket Emitter
 const io = new Emitter(redisConnection);
@@ -100,4 +101,17 @@ worker.on('completed', (job) => {
 
 worker.on('failed', (job, err) => {
     console.error(`❌ Job ${job?.id} failed: ${err.message}`);
+});
+
+
+// --- RENDER KEEP-ALIVE ---
+// This dummy server prevents Render from killing the worker for being "unresponsive"
+const PORT = process.env.PORT || 8080;
+const healthServer = http.createServer((req, res) => {
+  res.writeHead(200);
+  res.end('Worker is active and processing jobs.');
+});
+
+healthServer.listen(PORT, () => {
+  console.log(`Worker health check listener running on port ${PORT}`);
 });
