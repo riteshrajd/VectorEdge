@@ -112,10 +112,10 @@ export async function scrapeYahooAnalysis(urlOrSymbol: string): Promise<{analysi
 }
 
 // Helper function to retry navigation
-async function navigateWithRetry(page: Page, url: string, retries = 5) {
+async function navigateWithRetry(page: Page, url: string, retries = 1) {
   for (let i = 0; i < retries; i++) {
     try {
-      await page.goto(url, { waitUntil: "networkidle2", timeout: 60000 });
+      await page.goto(url, { waitUntil: "networkidle2", timeout: 10000 });
       return;
     } catch (error: unknown) {
       if (i === retries - 1) throw error;
@@ -128,7 +128,7 @@ async function navigateWithRetry(page: Page, url: string, retries = 5) {
 }
 
 // Helper function to retry text extraction
-async function extractTextWithRetry(page: Page, retries = 5): Promise<string> {
+async function extractTextWithRetry(page: Page, retries = 1): Promise<string> {
   for (let i = 0; i < retries; i++) {
     try {
       const text = await (page as PuppeteerPage).evaluate(() => document.body.innerText);
@@ -136,7 +136,7 @@ async function extractTextWithRetry(page: Page, retries = 5): Promise<string> {
       throw new Error("Empty or invalid page content");
     } catch (error: unknown) {
       if (i === retries - 2)
-        await page.reload({ waitUntil: "networkidle2", timeout: 60000 }); // Reload before last retry
+        await page.reload({ waitUntil: "networkidle2", timeout: 10000 }); // Reload before last retry
       if (i === retries - 1) throw error;
       if (error instanceof Error) console.log(
         `Retry ${i + 1} for text extraction due to: ${error.message}`
@@ -148,7 +148,7 @@ async function extractTextWithRetry(page: Page, retries = 5): Promise<string> {
   throw new Error("Text extraction failed after all retries.");
 }
 
-async function parseTextWithRetry(cleanedText: string, retries = 5) {
+async function parseTextWithRetry(cleanedText: string, retries = 1) {
   for (let i = 0; i < retries; i++) {
     try {
       const jsonData = await parseYahooAnalysis(cleanedText);

@@ -47,18 +47,15 @@ export default function Subscription(): JSX.Element {
 
   const processPayment = async (plan: "monthly" | "yearly", amount: number) => {
     if (useUserStore.getState().user?.is_paid_member) return;
-    if (isProcessing) return; // Prevent multiple clicks
+    if (isProcessing) return; 
 
     setIsProcessing(true);
     setLoadingPlan(plan);
 
     try {
-      // 1. Create an order from our backend
       const response = await fetch("/api/razorpay", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount, currency: "INR" }),
       });
 
@@ -69,7 +66,6 @@ export default function Subscription(): JSX.Element {
 
       const order = await response.json();
 
-      // 2. Open Razorpay Checkout modal
       const options: RazorpayOptions = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: order.amount,
@@ -77,10 +73,7 @@ export default function Subscription(): JSX.Element {
         name: "VectorEdge",
         description: `${plan.charAt(0).toUpperCase() + plan.slice(1)} Subscription`,
         order_id: order.id,
-        // FIX 1: Typed the response for the success handler
         handler: async function (response: RazorpayPaymentSuccessResponse) {
-          console.log("Payment successful, now verifying...", response);
-          
           try {
             const verificationResponse = await fetch('/api/razorpay/verify', {
               method: 'POST',
@@ -97,7 +90,6 @@ export default function Subscription(): JSX.Element {
             const result = await verificationResponse.json();
 
             if (result.success) {
-              // Show success state briefly before redirect
               setTimeout(() => {
                 router.push('/');
               }, 2000);
@@ -124,7 +116,6 @@ export default function Subscription(): JSX.Element {
         },
         modal: {
           ondismiss: function() {
-            // Reset loading states if user cancels payment
             setIsProcessing(false);
             setLoadingPlan(null);
           }
@@ -134,7 +125,6 @@ export default function Subscription(): JSX.Element {
       const rzp = new window.Razorpay(options);
       rzp.open();
 
-      // FIX 2: Typed the response for the failure handler
       rzp.on("payment.failed", function (response: RazorpayPaymentFailureResponse) {
         console.error("Payment failed:", response.error);
         alert(`Payment Failed: ${response.error.description}`);
@@ -151,17 +141,18 @@ export default function Subscription(): JSX.Element {
 
   if (isProcessing) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-background via-background to-accent/5 flex items-center justify-center">
-        <div className="text-center space-y-6">
-          <div className="w-16 h-16 mx-auto">
-            <Loader2 className="w-16 h-16 animate-spin text-primary" />
+      <div className="min-h-screen bg-gray-50 dark:bg-neutral-950 flex items-center justify-center transition-colors duration-300">
+        <div className="bg-white/70 dark:bg-white/5 backdrop-blur-xl border border-gray-200 dark:border-white/10 p-12 rounded-2xl shadow-2xl text-center space-y-6">
+          <div className="w-16 h-16 mx-auto relative">
+            <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl animate-pulse"></div>
+            <Loader2 className="w-16 h-16 animate-spin text-primary relative z-10" />
           </div>
           <div className="space-y-2">
-            <h2 className="text-2xl font-semibold text-foreground">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
               {loadingPlan === "monthly" ? "Processing Monthly Plan..." : "Processing Yearly Plan..."}
             </h2>
-            <p className="text-muted-foreground">
-              Please wait while we set up your subscription
+            <p className="text-gray-500 dark:text-neutral-400">
+              Please wait while we secure your subscription
             </p>
           </div>
         </div>
@@ -170,154 +161,179 @@ export default function Subscription(): JSX.Element {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-accent/5">
+    <div className="min-h-screen bg-gray-50 dark:bg-neutral-950 text-gray-900 dark:text-neutral-100 transition-colors duration-300 relative overflow-hidden">
+      
+      {/* Background Ambience */}
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-blue-500/5 dark:bg-blue-500/10 rounded-full blur-[100px]"></div>
+        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-500/5 dark:bg-purple-500/10 rounded-full blur-[100px]"></div>
+      </div>
+
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-sm border-b border-border">
+      <div className="sticky top-0 z-50 w-full border-b border-gray-200 dark:border-white/5 bg-white/70 dark:bg-black/50 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-black/20 transition-colors duration-300">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={() => router.back()}
-                className="p-2 hover:bg-accent rounded-lg transition-colors"
-                aria-label="Go back"
-              >
-                <ArrowLeft size={20} />
-              </button>
-              <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-                Choose Your Plan
-              </h1>
-            </div>
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={() => router.back()}
+              className="p-2 hover:bg-gray-200 dark:hover:bg-white/10 rounded-lg transition-colors text-gray-600 dark:text-neutral-300 hover:text-black dark:hover:text-white"
+              aria-label="Go back"
+            >
+              <ArrowLeft size={20} />
+            </button>
+            <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-white/60 bg-clip-text text-transparent">
+              Choose Your Plan
+            </h1>
           </div>
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
         {/* Hero Section */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-6">
-            <Sparkles size={16} />
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 text-primary px-3 py-1 rounded-full text-xs font-medium mb-4 backdrop-blur-md">
+            <Sparkles size={12} />
             Unlock Premium Features
           </div>
-          <h2 className="text-4xl sm:text-5xl font-bold mb-6 leading-tight">
-            Supercharge Your 
-            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"> Trading Experience</span>
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4 leading-tight text-gray-900 dark:text-white">
+            Supercharge Your <br className="hidden sm:block" />
+            <span className="bg-gradient-to-r from-blue-600 to-teal-600 dark:from-blue-400 dark:to-teal-400 bg-clip-text text-transparent">Trading Experience</span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Join thousands of traders who trust VectorEdge for advanced market insights and professional-grade tools.
+          <p className="text-base text-gray-600 dark:text-neutral-400 max-w-2xl mx-auto">
+            Join thousands of traders trusting VectorEdge for advanced insights.
           </p>
         </div>
 
-        {/* Pricing Cards */}
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        {/* Pricing Cards Container */}
+        {/* Removed 'items-start' to allow grid to stretch items to equal height */}
+        <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          
           {/* Monthly Plan */}
-          <div className="relative bg-card border border-border rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 group">
-            <div className="text-center mb-8">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-2xl mb-4 group-hover:scale-110 transition-transform">
-                <Star className="w-8 h-8 text-primary" />
-              </div>
-              <h3 className="text-2xl font-bold mb-2">Monthly Plan</h3>
-              <div className="flex items-center justify-center gap-2 mb-4">
-                <span className="text-4xl font-bold text-primary">₹1299</span>
-                <span className="text-muted-foreground">/month</span>
-              </div>
-              <p className="text-muted-foreground">Perfect for getting started</p>
+          <div className="relative bg-white dark:bg-white/5 backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-2xl p-6 shadow-lg hover:shadow-xl dark:shadow-2xl transition-all duration-300 group flex flex-col h-full">
+            <div className="flex items-start justify-between mb-6">
+                <div>
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1">Monthly Plan</h3>
+                    <p className="text-sm text-gray-500 dark:text-neutral-400">Perfect for getting started</p>
+                </div>
+                <div className="w-10 h-10 bg-gray-100 dark:bg-white/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Star className="w-5 h-5 text-gray-700 dark:text-white" />
+                </div>
             </div>
 
-            <ul className="space-y-4 mb-8">
-              {[
-                { icon: Check, text: "Access to basic features" },
-                { icon: Zap, text: "Monthly market updates" },
-                { icon: Mail, text: "Email support" },
-                { icon: Shield, text: "Secure trading environment" }
-              ].map((feature, index) => (
-                <li key={index} className="flex items-center gap-3">
-                  <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <feature.icon size={12} className="text-primary" />
-                  </div>
-                  <span className="text-foreground">{feature.text}</span>
-                </li>
-              ))}
-            </ul>
+            <div className="mb-6">
+              <span className="text-3xl font-bold text-gray-900 dark:text-white">₹1299</span>
+              <span className="text-gray-500 dark:text-neutral-400 text-sm"> /month</span>
+            </div>
+
+            <div className="flex-grow">
+                <ul className="grid grid-cols-1 gap-y-3 mb-6 text-sm">
+                {[
+                    { icon: Check, text: "Access to basic features" },
+                    { icon: Zap, text: "Monthly market updates" },
+                    { icon: Mail, text: "Email support" },
+                    { icon: Shield, text: "Secure trading environment" }
+                ].map((feature, index) => (
+                    <li key={index} className="flex items-center gap-3">
+                    <div className="w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+                        <feature.icon size={10} className="text-blue-600 dark:text-blue-400" />
+                    </div>
+                    <span className="text-gray-700 dark:text-neutral-300">{feature.text}</span>
+                    </li>
+                ))}
+                </ul>
+            </div>
+
             <button
-              // LOGIC FIX 1: Pass correct plan and amount in paise (1299 * 100)
               onClick={() => processPayment("monthly", 1299)}
               disabled={isProcessing || user?.is_paid_member}
-              className="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-primary-foreground py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 active:scale-95 shadow-lg"
+              className="w-full mt-auto bg-gray-100 hover:bg-gray-200 dark:bg-white/10 dark:hover:bg-white/20 text-gray-900 dark:text-white py-3 px-4 rounded-xl font-semibold text-sm transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed border border-gray-200 dark:border-white/10"
             > 
               {user?.is_paid_member ? "Already Subscribed" : "Get Monthly Plan"}
             </button>
           </div>
 
-          {/* Yearly Plan - Popular */}
-          <div className="relative bg-gradient-to-br from-primary/5 to-secondary/5 border-2 border-primary rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 group">
+          {/* Yearly Plan - Removed translate-y so it aligns perfectly */}
+          <div className="relative 
+            bg-white dark:bg-white/5 backdrop-blur-xl
+            bg-gradient-to-b from-indigo-50/40 to-white 
+            dark:bg-gradient-to-b dark:from-indigo-950/30 dark:to-neutral-900/40 
+            backdrop-blur-xl border-2 border-primary/50 dark:border-primary/50 
+            rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 
+            group flex flex-col h-full"
+          >
             {/* Popular Badge */}
-            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-              <div className="bg-gradient-to-r from-primary to-secondary text-primary-foreground px-6 py-2 rounded-full text-sm font-bold flex items-center gap-2">
-                <Crown size={16} />
+            <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+              <div className="bg-white dark:bg-neutral-900 bg-gradient-to-r from-blue-500 to-teal-500 text-white px-4 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-lg shadow-blue-500/20">
+                <Crown size={12} />
                 Most Popular
               </div>
             </div>
 
-            <div className="text-center mb-8 mt-4">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-2xl mb-4 group-hover:scale-110 transition-transform">
-                <Crown className="w-8 h-8 text-primary" />
-              </div>
-              <h3 className="text-2xl font-bold mb-2">Yearly Plan</h3>
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <span className="text-4xl font-bold text-primary">₹9999</span>
-                <span className="text-muted-foreground">/year</span>
-              </div>
-              <div className="inline-flex items-center gap-2 bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400 px-3 py-1 rounded-full text-sm font-medium mb-2">
-                <Sparkles size={14} />
-                Save 36%
-              </div>
-              <p className="text-muted-foreground">Best value for serious traders</p>
+            <div className="flex items-start justify-between mb-6 mt-2">
+                <div>
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1">Yearly Plan</h3>
+                    <div className="flex items-center gap-2">
+                        <p className="text-sm text-gray-500 dark:text-neutral-400">Best value for pros</p>
+                        <span className="inline-flex items-center gap-1 bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400 px-2 py-0.5 rounded-full text-[10px] font-bold">
+                            SAVE 36%
+                        </span>
+                    </div>
+                </div>
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-teal-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
+                    <Crown className="w-5 h-5 text-white" />
+                </div>
             </div>
 
-            <ul className="space-y-4 mb-8">
-              {[
-                { icon: Check, text: "Access to all premium features" },
-                { icon: Zap, text: "Real-time market insights" },
-                { icon: Headphones, text: "Priority support" },
-                { icon: Crown, text: "Beta feature access" },
-                { icon: Shield, text: "Advanced security features" },
-                { icon: Star, text: "Exclusive market reports" }
-              ].map((feature, index) => (
-                <li key={index} className="flex items-center gap-3">
-                  <div className="w-5 h-5 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
-                    <feature.icon size={12} className="text-primary" />
-                  </div>
-                  <span className="text-foreground font-medium">{feature.text}</span>
-                </li>
-              ))}
-            </ul>
+            <div className="mb-6">
+              <span className="text-3xl font-bold text-gray-900 dark:text-white">₹9999</span>
+              <span className="text-gray-500 dark:text-neutral-400 text-sm"> /year</span>
+            </div>
+
+            <div className="flex-grow">
+                {/* 2-Column Grid */}
+                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3 mb-6 text-sm">
+                {[
+                    { icon: Check, text: "All premium features" },
+                    { icon: Zap, text: "Real-time insights" },
+                    { icon: Headphones, text: "Priority support" },
+                    { icon: Crown, text: "Beta access" },
+                    { icon: Shield, text: "Advanced security" },
+                    { icon: Star, text: "Exclusive reports" }
+                ].map((feature, index) => (
+                    <li key={index} className="flex items-center gap-2">
+                    <div className="w-5 h-5 rounded-full bg-gradient-to-br from-blue-500/20 to-teal-500/20 flex items-center justify-center flex-shrink-0">
+                        <feature.icon size={10} className="text-blue-600 dark:text-blue-400" />
+                    </div>
+                    <span className="text-gray-700 dark:text-neutral-200 text-xs sm:text-sm">{feature.text}</span>
+                    </li>
+                ))}
+                </ul>
+            </div>
 
             <button
-              // LOGIC FIX 2: Pass correct plan and amount in paise (9999 * 100)
               onClick={() => processPayment("yearly", 9999)}
               disabled={isProcessing || user?.is_paid_member}
-              className="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-primary-foreground py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 active:scale-95 shadow-lg"
+              className="w-full mt-auto bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700 text-white py-3 px-4 rounded-xl font-semibold text-sm transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-blue-500/25 active:scale-[0.98]"
             >
               {user?.is_paid_member ? "Already Subscribed" : "Get Yearly Plan"}
             </button>
           </div>
         </div>
 
-        {/* Trust Section */}
-        <div className="text-center mt-16">
-          <div className="inline-flex items-center gap-4 text-muted-foreground text-sm">
+        {/* Trust Footer */}
+        <div className="text-center mt-12 border-t border-gray-200 dark:border-white/5 pt-6 max-w-2xl mx-auto">
+          <div className="flex flex-wrap justify-center gap-4 sm:gap-8 text-gray-500 dark:text-neutral-500 text-xs sm:text-sm">
             <div className="flex items-center gap-2">
-              <Shield size={16} />
+              <Shield size={14} className="text-green-500" />
               <span>Secure Payment</span>
             </div>
-            <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
+            <div className="hidden sm:block w-1 h-1 bg-gray-300 dark:bg-white/20 rounded-full"></div>
             <div className="flex items-center gap-2">
-              <Check size={16} />
+              <Check size={14} className="text-blue-500" />
               <span>Cancel Anytime</span>
             </div>
-            <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
+            <div className="hidden sm:block w-1 h-1 bg-gray-300 dark:bg-white/20 rounded-full"></div>
             <div className="flex items-center gap-2">
-              <Headphones size={16} />
+              <Headphones size={14} className="text-purple-500" />
               <span>24/7 Support</span>
             </div>
           </div>

@@ -2,6 +2,7 @@ import { Analysis } from '@/types/types';
 import axios from 'axios';
 
 export async function parseYahooAnalysis(rawText: string): Promise<{analysis: Analysis} | null> {
+    if(!rawText) return null;
     try {
         const API_KEY = process.env.GEMINI_API_KEY; // Replace with your Gemini API key
         const API_URL = process.env.GEMINI_API_URL;
@@ -78,9 +79,8 @@ ${rawText.slice(0, 4000)}
         }
 
         return jsonOutput;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-        console.error('Error during parsing:', error.message);
-        return null;
+    } catch (error: unknown) {
+        console.error('Error during parsing:', (error instanceof Error ? error.message : ''));
+        throw error;
     }
 }

@@ -46,7 +46,7 @@ export default function SearchResultCard({ instrument }: { instrument: Instrumen
 
           {/* recomendation */}
           <div className="text-right ml-1 w-16 flex flex-col">
-            <p className='text-xs text-muted-foreground'>Result</p>
+            <p className='text-xs text-muted-foreground'>View</p>
             {instrument.recomendation && (
               <span
                 className={`text-xs font-medium font-mono opacity-90 ${

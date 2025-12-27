@@ -28,11 +28,11 @@ export function SignupForm({
         alt="Background"
         fill
         style={{ objectFit: 'cover' }}
-        className="fixed inset-0 brightness-[0.8] dark:brightness-[0.4] z-[-1]"
+        className="fixed inset-0 brightness-[1] dark:brightness-[0.6] z-[-1]"
         priority
       />
       </div>
-      <div className={`fixed inset-0 h-[100vh] w-[100vw] z-6 bg-gradient-to-b from-blue-600/20 to-black/40 dark:to-black/10`}></div>
+      <div className={`fixed inset-0 h-[100vh] w-[100vw] z-6 bg-gradient-to-b from-blue-600/20 to-black/10 dark:to-black/10`}></div>
 
       {/* 1. Added `text-white` to the Card for high contrast in both themes */}
       <Card className="overflow-hidden p-0 z-20 bg-white/4 dark:bg-white/2 backdrop-blur-xl border border-white/10 w-full max-w-md text-white">
@@ -85,11 +85,13 @@ export function SignupForm({
               <Button type="submit" className="w-full bg-neutral-200 text-neutral-800 hover:bg-neutral-300 hover:cursor-pointer" formAction={signup}>
                 Sign Up
               </Button>
-              {/* 4. Adjusted divider line and text for better blending */}
-              <div className="after:border-white/20 relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
-                <span className="bg-transparent text-neutral-300 relative z-10 px-2">
+              {/* 4. divider */}
+              <div className="flex w-full items-center">
+                <div className="flex-1 border-t border-white/20"></div>                
+                <span className="px-3 text-sm text-neutral-300">
                   Or continue with
                 </span>
+              <div className="flex-1 border-t border-white/20"></div>
               </div>
               <div className="">
                 <SignWithGoogleButton type="Signup" />

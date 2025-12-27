@@ -2,6 +2,7 @@ import { Overview } from '@/types/types';
 import axios from 'axios';
 
 export async function parseYahooOverview(rawText: string): Promise<{overview: Overview} | null> {
+    if(!rawText) return null;
     try {
         const API_KEY = process.env.GEMINI_API_KEY; // Use Next.js env variable
         if (!API_KEY) throw new Error('Gemini API key not found in environment variables');
@@ -63,11 +64,9 @@ ${rawText.slice(0, 4000)}
             if(e instanceof Error)console.error('Failed to parse Gemini output as JSON:', e.message);
             return null;
         }
-
         return jsonOutput;
-
     } catch (error) {
         if(error instanceof Error)console.error('Error during parsing:', error.message);
-        return null;
+        throw error;
     }
 }

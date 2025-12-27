@@ -1,157 +1,92 @@
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useStore } from '@/store/store';
+import { useTickerDataFlow } from '@/app/hooks/useTickerDataFlow';
 import StockAnalysisReport from './main-content-components/StockAnalysisReport';
-import { useDataStore } from '@/store/dataStroe';
-import { CombinedData, InstrumentCoverInfo } from '@/types/types';
 import WelcomeScreen from './main-content-components/WelcomeScreen';
-import { ADD_TO_SEARCH_HISTORY_API_ROUTE, FETCH_TICK_DATA_API_ROUTE } from '@/constants/constants';
-import Header from './main-content-components/StockDataHeader';
-import { useUserStore } from '@/store/userStore';
 import ConfirmationScreen from './main-content-components/ConfirmationScreen';
+import Header from './main-content-components/StockDataHeader';
+import { Loader2 } from 'lucide-react'; // Optional: Use a nice icon if you have lucide
 
 const MainContent = () => {
   const store = useStore();
-  const dataStore = useDataStore();
-  const [data, setData] = useState<CombinedData | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
   const [isShrunk, setIsShrunk] = useState(false);
-  const [askConfirmation, setAskConfirmation] = useState(false);
-  const { user, setUser } = useUserStore();
-  const { selectedInstrument, setMobileView } = useStore();
 
-  const updateInstrumentHistory = async (instrument: InstrumentCoverInfo) => {
-    try {
-      if (!user) {
-        console.error('No user found for updating instrument history');
-        return;
-      }
-      if (!instrument?.symbol || !instrument?.name) {
-        console.error('Invalid instrument data:', instrument);
-        return;
-      }
-      console.log(`Sending instrument to backend: ${JSON.stringify(instrument)}`);
-      const response = await fetch(ADD_TO_SEARCH_HISTORY_API_ROUTE, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ instrument }),
-      });
-      if (response.ok) {
-        const { instrument_history } = await response.json();
-        console.log(`Added ${instrument.name} to search history: ${JSON.stringify(instrument_history)}`);
-        setUser({ ...user, instrument_history });
-      } else {
-        console.error(`Failed to add ${instrument.name} to history: ${response.status} ${response.statusText}`);
-      }
-    } catch (error) {
-      console.error(`Error adding ${instrument.name} to search history:`, error);
-    }
-  };
+  // Use the Hook
+  const { status, data, error, confirmAndFetch, refreshData, resetFlow } = useTickerDataFlow(store.selectedInstrument || null);
 
-  const fetchData = useCallback(async (ticker: string, refresh: boolean = false) => {
-    if (ticker.trim()) {
-      setData(null);
-      setError('');
-      const current_data = dataStore.data;
-      const selectedTicker = ticker.toUpperCase();
-      const result = current_data.find((item) => item.ticker === selectedTicker);
-      console.log(`Setting loading = true and fetching data`);
-      setLoading(true);
-      if (result && !refresh) {
-        setData(result);
-        dataStore.addData(result);
-      } else {
-        try {
-          console.log(`Fetching ticker data for ${selectedTicker}...`);
-          const response = await fetch(
-            `${FETCH_TICK_DATA_API_ROUTE}?ticker=${selectedTicker}${refresh ? '&refresh' : ''}`
-          );
-          if (!response.ok) {
-            throw new Error(`HTTP error ${response.status}: ${response.statusText}`);
-          }
-          const fetchedData: CombinedData = await response.json();
-          console.log(`Response received for ${selectedTicker}`);
-          dataStore.addData(fetchedData);
-          return fetchedData;
-        } catch (error) {
-          console.error('Error fetching data:', error);
-          setError(`Error fetching data for ticker ${selectedTicker}: ${error instanceof Error ? error.message : error}`);
-          return null;
-        }
-      }
-      setLoading(false);
-    }
-  }, [dataStore]);
+  // --- RENDER LOGIC ---
 
-  useEffect(() => {
-    if (selectedInstrument) {
-      console.log(`ITEM SELECTED LOG FROM in Maincontent: ${JSON.stringify(selectedInstrument)}`);
-      setMobileView('data');
-      const data = dataStore.data.find((item) => item.ticker === selectedInstrument?.symbol);
-      if (data) {
-        setData(data);
-        setLoading(false);
-        return;
-      }
-      setAskConfirmation(true);
-    }
-  }, [dataStore.data, selectedInstrument, setMobileView]);
+  // 1. Idle (No ticker selected)
+  if (status === 'idle') {
+    return <WelcomeScreen />;
+  }
 
-  const handleInstrumentDataFetch = async () => {
-    setAskConfirmation(false);
-    setLoading(true);
-    setError('');
-    const selectedInstrument = store.selectedInstrument;
-    const symbol = selectedInstrument?.symbol;
-    try {
-      if (!symbol) {
-        throw new Error('No symbol provided');
-      }
-      const fetchedData = await fetchData(symbol);
-      store.setSearchTerm('');
-      if (selectedInstrument && user && fetchedData) {
-        await updateInstrumentHistory(selectedInstrument);
-        setData(fetchedData);
-      } else {
-        console.error('No user or selectedInstrument:', { user, selectedInstrument });
-      }
-    } catch (error) {
-      console.error(`Error fetching data for ${symbol}:`, error);
-      setError(`Error fetching data for ticker ${symbol}: ${error instanceof Error ? error.message : error}`);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // 2. Error
+  if (status === 'error') {
+    return (
+      <div className="flex flex-col items-center justify-center h-full text-red-500">
+        <p className="text-xl mb-4">Error: {error}</p>
+        <button onClick={() => resetFlow()} className="px-4 py-2 bg-gray-200 rounded text-black">
+          Go Back
+        </button>
+      </div>
+    );
+  }
 
-  if (!store.selectedInstrument) return <WelcomeScreen />;
+  // 3. Checking Cache (NEW BLOCK)
+  if (status === 'checking_cache') {
+    return (
+      <div className="flex h-full flex-col items-center justify-center text-[var(--color-muted-foreground)]">
+        <Loader2 className="w-8 h-8 animate-spin mb-2" />
+        <p>Checking availability...</p>
+      </div>
+    );
+  }
 
-  if (error && !data) return <div>{error}</div>;
-
-  if (askConfirmation) {
+  // 4. Confirmation Screen
+  if (status === 'confirmation_needed') {
     return (
       <ConfirmationScreen
-        instrumentName={store.selectedInstrument.name}
-        onConfirm={handleInstrumentDataFetch}
+        instrumentName={store.selectedInstrument?.name || ''}
+        onConfirm={confirmAndFetch}
         onCancel={() => {
           store.setSelectedInstrument(null);
           store.setSearchTerm('');
-          setAskConfirmation(false)
+          resetFlow();
         }}
       />
     );
   }
 
-  if (loading) return <div>Loading data...</div>;
+  // 5. Loading States (Fetching from API)
+  if (status === 'loading') {
+    return <div className="flex h-full items-center justify-center text-lg">Fetching Data...</div>;
+  }
+  
+  // 6. Analyzing State (Waiting for Worker via Socket)
+  if (status === 'analyzing') {
+    return (
+      <div className="flex flex-col h-full items-center justify-center gap-4">
+        <div className="text-xl animate-pulse font-semibold">AI Analysis in Progress...</div>
+        <div className="text-sm text-gray-500">Our worker is crunching the numbers. This usually takes 5-10 seconds.</div>
+        <div className="text-sm text-gray-500">You may leave this screen and come back later.</div>
+      </div>
+    );
+  }
 
+  // 7. Success (Show the Report)
   return (
     <div className="h-full w-full bg-[var(--color-background)] flex flex-col">
-      <Header data={data} isShrunk={isShrunk} />
+      <Header 
+        data={data} 
+        isShrunk={isShrunk} 
+        onRefresh={refreshData} 
+        isLoading={false} 
+      />
       <div className="flex-1 w-full flex justify-center bg-[var(--color-background)] overflow-hidden">
-        <StockAnalysisReport data={data} setIsShrunk={setIsShrunk} />
+        {data && <StockAnalysisReport data={data} setIsShrunk={setIsShrunk} />}
       </div>
     </div>
   );

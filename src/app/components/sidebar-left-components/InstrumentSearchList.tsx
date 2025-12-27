@@ -3,6 +3,7 @@ import { useStore } from '@/store/store';
 import { TickerInfo } from '@/types/types';
 import { SEARCH_TICK_API_ROUTE } from '@/constants/constants';
 import SearchResultCard from './instrument-search-list-component/SearchResultCard';
+import { Spinner } from './instrument-search-list-component/Spinner'
 
 export default function InstrumentSearchList() {
   const { isLeftCollapsed, searchTerm } = useStore();
@@ -49,7 +50,8 @@ export default function InstrumentSearchList() {
   }
   if (loading && !isLeftCollapsed) {
     return (
-      <div className="p-4 text-sm text-sidebar-foreground">
+      <div className="flex flex-col items-center justify-center p-4 text-sm text-sidebar-foreground">
+        <Spinner className="mb-2 h-6 w-6" />
         loading data...
       </div>
     )

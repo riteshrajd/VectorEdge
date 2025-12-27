@@ -5,26 +5,44 @@ import { scrapeTradingViewTechnicals } from './technical/scrapeTradingViewTechni
 import { CombinedData } from '@/types/types';
 
 export async function aggregateData(ticker: string): Promise<CombinedData> {
-  const urls = {
-    overview: `https://finance.yahoo.com/quote/${ticker}/`,
-    fundamental: `https://finance.yahoo.com/quote/${ticker}/key-statistics/`,
-    analysis: `https://finance.yahoo.com/quote/${ticker}/analysis/`,
-    technicals: `https://www.tradingview.com/symbols/${ticker}/technicals/`,
-  };
+  const baseYahoo = `https://finance.yahoo.com/quote/${ticker}`;
+  const baseTV = `https://www.tradingview.com/symbols/${ticker}`;
 
-  const overviewData = await scrapeYahooOverview(urls.overview);
-  const fundamentalData = await scrapeYahooFundamental(urls.fundamental);
-  const analysisData = await scrapeYahooAnalysis(urls.analysis);
-  const technicalsData =  await scrapeTradingViewTechnicals(urls.technicals);
-  
-  console.log(`Aggregated data for ${ticker}: ${JSON.stringify(technicalsData)}`)
+  const overviewUrl = `${baseYahoo}/`;
+  const fundamentalUrl = `${baseYahoo}/key-statistics/`;
+  const analysisUrl = `${baseYahoo}/analysis/`;
+  const technicalsUrl = `${baseTV}/technicals/`;
+
+  // 1️⃣ OVERVIEW (fail immediately)
+  const overviewData = await scrapeYahooOverview(overviewUrl);
+  if (!overviewData) {
+    throw new Error('Overview scrape failed');
+  }
+
+  // 2️⃣ FUNDAMENTAL
+  const fundamentalData = await scrapeYahooFundamental(fundamentalUrl);
+  if (!fundamentalData) {
+    throw new Error('Fundamental scrape failed');
+  }
+
+  // 3️⃣ ANALYSIS
+  const analysisData = await scrapeYahooAnalysis(analysisUrl);
+  if (!analysisData) {
+    throw new Error('Analysis scrape failed');
+  }
+
+  // 4️⃣ TECHNICALS
+  const technicalsData = await scrapeTradingViewTechnicals(technicalsUrl);
+  if (!technicalsData) {
+    throw new Error('Technicals scrape failed');
+  }
 
   return {
     ticker,
     last_updated: new Date().toISOString(),
-    overview: overviewData?.overview ?? null,
-    fundamental: fundamentalData?.fundamental ?? null,
-    analysis: analysisData?.analysis ?? null,
-    technicals: technicalsData?.technicals ?? null,    
+    overview: overviewData.overview,
+    fundamental: fundamentalData.fundamental,
+    analysis: analysisData.analysis,
+    technicals: technicalsData.technicals,
   };
 }

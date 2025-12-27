@@ -27,7 +27,7 @@ export function LoginForm({
         alt="Background"
         fill
         style={{ objectFit: 'cover' }}
-        className="fixed inset-0 brightness-[0.8] dark:brightness-[0.4] z-[-1]"
+        className="fixed inset-0 brightness-[1] dark:brightness-[0.6] z-[-1]"
         priority
       />
       </div>
@@ -80,12 +80,15 @@ export function LoginForm({
               <Button type="submit" className="w-full bg-neutral-200 text-neutral-800 hover:bg-neutral-300 hover:cursor-pointer" formAction={login}>
                 Login
               </Button>
-              {/* 4. Adjusted divider styles */}
-              <div className="after:border-white/20 relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
-                <span className="bg-transparent text-neutral-300 relative z-10 px-2">
+              {/* 4. divider */}
+              <div className="flex w-full items-center">
+                <div className="flex-1 border-t border-white/20"></div>                
+                <span className="px-3 text-sm text-neutral-300">
                   Or continue with
                 </span>
+              <div className="flex-1 border-t border-white/20"></div>
               </div>
+              
               <div className="">
                 <SignWithGoogleButton type="Login" />
               </div>
