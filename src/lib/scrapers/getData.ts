@@ -3,7 +3,7 @@ import { aggregateData } from './aggrigator';
 // import { getInsightData } from './generateInsight';
 import type { CombinedData } from '../../types/types.ts';
 
-export async function getData(ticker: string): Promise<CombinedData> {
+export async function getData(ticker: string, name: string = ''): Promise<CombinedData> {
   console.log(`⚡ worker: Fetching FRESH data for ${ticker}...`);
 
   let data: CombinedData;
@@ -27,6 +27,7 @@ export async function getData(ticker: string): Promise<CombinedData> {
 
   return {
     ...data,
+    name,
     ai_insights: null,
   };
 }

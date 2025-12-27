@@ -16,7 +16,7 @@ console.log("------------------------------------------");
 
 // --- CORE LOGIC: Used by both User & Prewarm ---
 // Returns the data if successful, handles Locking & Caching internally.
-async function processAndCacheTicker(ticker: string, jobId: string) {
+async function processAndCacheTicker(ticker: string, jobId: string, name: string = '') {
     const lockKey = `lock:${ticker}`;
     const cacheKey = `ticker:${ticker}`;
 
@@ -40,7 +40,7 @@ async function processAndCacheTicker(ticker: string, jobId: string) {
         
         // Simulating delay or calling real scraper
         // await new Promise((resolve) => setTimeout(resolve, 5000)); 
-        const result = await getData(ticker);
+        const result = await getData(ticker, name);
 
         // 4. Save to Redis Cache (30 Days)
         await redisConnection.set(cacheKey, JSON.stringify(result), 'EX', 60 * 60 * 24 * 30);
@@ -59,14 +59,14 @@ async function processAndCacheTicker(ticker: string, jobId: string) {
 
 // --- WORKER DEFINITION ---
 const worker = new Worker(QUEUE_NAME, async (job: Job) => {
-    const { ticker } = job.data;
+    const { ticker, name} = job.data;
     
     // Switch behavior based on Job Name
     if (job.name === 'prewarm-ticker') {
         // === PREWARM MODE ===
         // Just fetch and cache. NO SOCKETS.
         console.log(`🌙 [Prewarm] Starting ${ticker}...`);
-        await processAndCacheTicker(ticker, job.id!);
+        await processAndCacheTicker(ticker, job.id!, name);
         console.log(`✅ [Prewarm] Finished ${ticker}.`);
         return { status: 'prewarmed' };
     } 
@@ -78,7 +78,7 @@ const worker = new Worker(QUEUE_NAME, async (job: Job) => {
         await new Promise((resolve) => setTimeout(resolve, 5000));
 
 
-        const result = await processAndCacheTicker(ticker, job.id!);
+        const result = await processAndCacheTicker(ticker, job.id!, name);
 
         // If locked or skipped, we might send a specific status, 
         // but generally we only emit if we have data.

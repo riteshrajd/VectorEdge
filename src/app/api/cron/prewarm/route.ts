@@ -6,7 +6,12 @@ import { redisConnection } from '@/lib/redis';
 const QUEUE_NAME = 'ticker-queue';
 
 const POPULAR_TICKERS = [
-  'AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA', 'META', 'NVDA'
+  {ticker: 'AAPL', name: 'Apple Inc.'}, 
+  {ticker: 'MSFT', name: 'Microsoft Corp.'},
+  {ticker: 'GOOGL', name: 'Alphabet Inc (Class C)'},
+  {ticker: 'AMZN', name: 'Amazon.com Inc.'},
+  {ticker: 'TSLA', name: 'Tesla Inc.'},
+  {ticker: 'META', name: 'Meta Platforms Inc.'},
 ];
 
 export async function GET() {
@@ -21,13 +26,16 @@ export async function GET() {
   const errors = [];
 
   try {
-    for (const ticker of POPULAR_TICKERS) {
+    for (const value of POPULAR_TICKERS) {
       try {
+        const ticker = value.ticker;
+        const name = value.name;
+
         console.log(`📥 [CRON] Enqueuing ${ticker}...`);
 
         await queue.add(
           'prewarm-ticker', // 👈 This name triggers the "No Socket" logic in worker
-          { ticker },
+          { ticker, name },
           {
             // Create a unique job ID per day so we don't spam duplicate jobs
             jobId: `prewarm:${ticker}:${new Date().toISOString().split('T')[0]}`, 
@@ -37,8 +45,8 @@ export async function GET() {
         );
         addedCount++;
       } catch (innerErr) {
-        console.error(`❌ [CRON] Failed to add ${ticker}`, innerErr);
-        errors.push({ ticker, error: innerErr });
+        console.error(`❌ [CRON] Failed to add ${value.ticker}`, innerErr);
+        errors.push({ ticker: value.ticker, error: innerErr });
       }
     }
   } catch (err) {

@@ -29,12 +29,13 @@ export const useTickerDataFlow = (selectedInstrument: InstrumentCoverInfo | null
   const updateHistory = useCallback(async (instrument: InstrumentCoverInfo) => {
     if (!user) return;
     try {
+      console.log(`*********updateHistory called***********************`)
       const response = await fetch(ADD_TO_SEARCH_HISTORY_API_ROUTE, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ instrument }),
       });
-
+      console.log('**got response**: ', response.json());
       if (response.ok) {
         const data = await response.json();
         
@@ -47,6 +48,7 @@ export const useTickerDataFlow = (selectedInstrument: InstrumentCoverInfo | null
             });
         }
       }
+      console.log('**************updateHistory end*************************');
     } catch (error) {
       console.error("Failed to update history", error);
     }
@@ -82,9 +84,11 @@ export const useTickerDataFlow = (selectedInstrument: InstrumentCoverInfo | null
       const currentSymbol = selectedInstrument?.symbol.toUpperCase();
       const incomingSymbol = socketData.ticker.toUpperCase();
 
+      console.log('recieved socketData: ', socketData);
+      updateHistory({name: socketData.name || socketData.ticker , symbol: socketData.ticker});
+      
       if (currentSymbol === incomingSymbol) {
          console.log("✅ User is on the same ticker. Updating UI.");
-         updateHistory(selectedInstrument!);
          setData(socketData);
          setStatus('success');
       } else {
@@ -105,10 +109,12 @@ export const useTickerDataFlow = (selectedInstrument: InstrumentCoverInfo | null
     setStatus('loading');
     setError('');
     const symbol = selectedInstrument.symbol.toUpperCase();
+    const name = selectedInstrument.name;
+    
     console.log(`🚀 ACTION: User Confirmed. Fetching ${symbol}...`);
 
     try {
-      const response = await fetch(`${FETCH_TICK_DATA_API_ROUTE}?ticker=${symbol}`);
+      const response = await fetch(`${FETCH_TICK_DATA_API_ROUTE}?ticker=${symbol}&name=${encodeURIComponent(name)}`);
       const result = await response.json();
 
       if (!response.ok) throw new Error(result.message || 'API Error');

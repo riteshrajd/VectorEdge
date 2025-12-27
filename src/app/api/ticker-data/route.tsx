@@ -11,6 +11,7 @@ const tickerQueue = new Queue(QUEUE_NAME, { connection: redisConnection });
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const ticker = searchParams.get('ticker');
+  const name = searchParams.get('name');
 
   console.log(`🔵 API: /ticker-data called for: ${ticker}`);
 
@@ -25,7 +26,7 @@ export async function GET(request: Request) {
     const cacheKey = `ticker:${normalizedTicker}`;
     const cachedData = await redisConnection.get(cacheKey);
 
-    if (cachedData) {
+    if (cachedData) { 
       console.log(`✅ API: Cache HIT for ${normalizedTicker}. Serving from Redis.`);
       return NextResponse.json({
         status: 'success',
@@ -37,17 +38,17 @@ export async function GET(request: Request) {
     // 2. Cache Miss? Add to Queue.
     console.log(`🟡 API: Cache MISS for ${normalizedTicker}. Adding job to queue.`);
     
-    await tickerQueue.add('analyze-stock', { ticker: normalizedTicker });
+    await tickerQueue.add('analyze-stock', { ticker: normalizedTicker, name });
 
     // 3. Return "Processing" immediately so frontend knows to listen to Socket
     return NextResponse.json({
       status: 'processing',
       message: 'Analysis has been started. You will be notified when it is complete.',
-      ticker: normalizedTicker
+      ticker: normalizedTicker,
     }, { status: 202 });
 
   } catch (error) {
     console.error('🔴 API: Error', error);
     return NextResponse.json({ message: 'Something went wrong' }, { status: 500 });
   }
-}
+} 
