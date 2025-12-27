@@ -19,7 +19,7 @@ dotenv.config({ path: path.resolve(__dirname, '../.env.local') });
 const REDIS_URL = process.env.REDIS_URL || 'redis://localhost:6379';
 const SOCKET_IO_PORT = Number(process.env.SOCKET_IO_PORT) || 3001;
 // Default to localhost:3000 if not set, to prevent crashes
-const CLIENT_URL = process.env.NEXT_PUBLIC_CLIENT_URL || "http://localhost:3000";
+const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:3000";
 
 console.log("------------------------------------------");
 console.log("🔧 CONFIGURATION LOADED:");

@@ -6,4 +6,4 @@ export const redisConnection = new IORedis(REDIS_URL, {
     maxRetriesPerRequest: null,
 });
 
-console.log(`Connected to Redis at ldksjldskj ${REDIS_URL}`);
+console.log(`Connected to Redis at ${REDIS_URL}`);
