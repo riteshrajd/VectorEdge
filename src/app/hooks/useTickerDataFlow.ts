@@ -29,13 +29,28 @@ export const useTickerDataFlow = (selectedInstrument: InstrumentCoverInfo | null
   const updateHistory = useCallback(async (instrument: InstrumentCoverInfo) => {
     if (!user) return;
     try {
-      await fetch(ADD_TO_SEARCH_HISTORY_API_ROUTE, {
+      const response = await fetch(ADD_TO_SEARCH_HISTORY_API_ROUTE, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ instrument }),
       });
-    } catch (e) { console.error(e); }
-  }, [user]);
+
+      if (response.ok) {
+        const data = await response.json();
+        
+        // --- THE FIX: Sync Frontend Store ---
+        // The API returns { instrument_history: [...] }
+        if (data.instrument_history) {
+            useUserStore.getState().setUser({
+                ...user,
+                instrument_history: data.instrument_history
+            });
+        }
+      }
+    } catch (error) {
+      console.error("Failed to update history", error);
+    }
+  }, []);
 
   // --- EFFECT: Socket Listener & Toast Logic ---
   useEffect(() => {

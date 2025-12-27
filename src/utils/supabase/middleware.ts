@@ -28,7 +28,7 @@ export async function updateSession(request: NextRequest) {
   )
 
   // Do not run code between createServerClient and
-  // supabase.auth.getUser(). A simple mistake could make it very hard to debug
+  // supabase.auth.getUser(). A simple mistake could make it very hard ffffffffffffffffto debug
   // issues with users being randomly logged out.
 
   // IMPORTANT: DO NOT REMOVE auth.getUser()
@@ -41,20 +41,20 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(new URL('/', request.url))
   }
 
-  if (
-    !user &&
-    !request.nextUrl.pathname.includes('/login') &&
-    !request.nextUrl.pathname.includes('/error') &&
-    !request.nextUrl.pathname.includes('/signup') &&
-    !request.nextUrl.pathname.includes('/verify-email') &&
-    // !request.nextUrl.pathname.includes('/testing') &&
-    !request.nextUrl.pathname.startsWith('/auth')
-  ) {
-    // no user, potentially respond by redirecting the user to the login page
-    const url = request.nextUrl.clone()
-    url.pathname = '/login'
-    return NextResponse.redirect(url)
-  } 
+  // if (
+  //   !user &&
+  //   !request.nextUrl.pathname.includes('/login') &&
+  //   !request.nextUrl.pathname.includes('/error') &&
+  //   !request.nextUrl.pathname.includes('/signup') &&
+  //   !request.nextUrl.pathname.includes('/verify-email') &&
+  //   // !request.nextUrl.pathname.includes('/testing') &&
+  //   !request.nextUrl.pathname.startsWith('/auth')
+  // ) {
+  //   // no user, potentially respond by redirecting the user to the login page
+  //   const url = request.nextUrl.clone()
+  //   url.pathname = '/login'
+  //   return NextResponse.redirect(url)
+  // } 
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is.
   // If you're creating a new response object with NextResponse.next() make sure to:

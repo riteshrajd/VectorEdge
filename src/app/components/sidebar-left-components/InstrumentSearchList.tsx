@@ -6,7 +6,7 @@ import SearchResultCard from './instrument-search-list-component/SearchResultCar
 import { Spinner } from './instrument-search-list-component/Spinner'
 
 export default function InstrumentSearchList() {
-  const { isLeftCollapsed, searchTerm } = useStore();
+  const { isLeftCollapsed, searchTerm , setMobileView} = useStore();
   const [searchResult, setSearchResult] = useState<TickerInfo[]>([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -63,7 +63,9 @@ export default function InstrumentSearchList() {
       <div className={`flex-1 h-full overflow-y-auto px-1 ${isLeftCollapsed ? 'pt-1' : ''}`}>
         <ul>
           {searchResult.map((item, i) => (
-            <li key={i} className={`border-b border-sidebar-border`}>
+            <li key={i} className={`border-b border-sidebar-border`}
+              onClick={() => setMobileView('data')}
+            >
               <SearchResultCard instrument={item} />
             </li>
           ))}

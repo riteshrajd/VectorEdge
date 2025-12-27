@@ -7,7 +7,7 @@ import { Star } from 'lucide-react';
 import { useUserStore } from '@/store/userStore';
 
 export default function InstrumentHistoryList() {
-  const { isLeftCollapsed, searchTerm, selectedInstrument } = useStore();
+  const { isLeftCollapsed, searchTerm, selectedInstrument, setMobileView } = useStore();
   const instrument_history = useUserStore().user?.instrument_history || [];
   const [activeTab, setActiveTab] = useState('history');
 
@@ -73,6 +73,7 @@ export default function InstrumentHistoryList() {
             <li
               key={i}
               className={`border-sidebar-border ${selectedInstrument?.symbol === item.symbol ? 'bg-sidebar-accent rounded-md' : ''}`}
+              onClick={() => setMobileView('data')}
             >
               <HistoryCard instrument={item} />
             </li>
