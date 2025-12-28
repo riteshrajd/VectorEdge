@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react'; // Added useState
+import { useState } from 'react';
 import { useUserStore } from '@/store/userStore';
 import { useRouter } from 'next/navigation';
 import { 
@@ -13,7 +13,7 @@ import {
   History,
   Star,
   Badge,
-  XCircle // Added Icon
+  XCircle 
 } from 'lucide-react';
 import { Button } from '@/components/shadcn/ui/button';
 import Image from 'next/image';
@@ -23,16 +23,14 @@ const ProfilePage = () => {
   const router = useRouter();
   useInitializeUser();
   const { user } = useUserStore();
-  const [isCanceling, setIsCanceling] = useState(false); // Added state
+  
+  // State for loading the API call
+  const [isCanceling, setIsCanceling] = useState(false);
+  // State for showing the custom modal
+  const [showCancelModal, setShowCancelModal] = useState(false);
 
-  // Added Cancel Function
-  const handleCancelSubscription = async () => {
-    const confirmed = window.confirm(
-      "Are you sure you want to cancel your subscription?\n\nYou will lose your Premium benefits immediately."
-    );
-
-    if (!confirmed) return;
-
+  // This function is called when the user clicks "Yes, Cancel" in the modal
+  const confirmCancellation = async () => {
     setIsCanceling(true);
 
     try {
@@ -43,20 +41,22 @@ const ProfilePage = () => {
       const data = await response.json();
 
       if (data.success) {
-        // Reload the page to refresh server data and update UI
+        // Reload to update UI
         window.location.reload();
       } else {
         alert(data.error || "Failed to cancel subscription.");
+        setIsCanceling(false); // Stop loading if error
+        setShowCancelModal(false); // Close modal
       }
     } catch (error) {
       console.error("Cancellation error:", error);
       alert("Something went wrong. Please try again.");
-    } finally {
       setIsCanceling(false);
+      setShowCancelModal(false);
     }
   };
 
-  // Loading State - Styled to match the theme
+  // Loading State
   if (!user) {
     return (
       <div className="flex items-center justify-center h-screen bg-gray-50 dark:bg-neutral-950 text-foreground transition-colors duration-300">
@@ -82,7 +82,7 @@ const ProfilePage = () => {
     });
   };
 
-  // Get subscription badge styling - Adapted for Light/Dark Theme
+  // Get subscription badge styling
   const getSubscriptionBadge = () => {
     if (user.is_paid_member) {
       return {
@@ -106,14 +106,10 @@ const ProfilePage = () => {
   const SubscriptionIcon = subscriptionBadge.icon;
 
   return (
-    // Main Container: Light (gray-50) / Dark (neutral-950)
     <div className="min-h-screen bg-gray-50 dark:bg-neutral-950 text-gray-900 dark:text-neutral-100 transition-colors duration-300">
       
-      {/* Sticky Header 
-        - Light: White with blur, gray border
-        - Dark: Black tint with blur, white-alpha border
-      */}
-      <div className="sticky top-0 z-50 w-full border-b border-gray-200 dark:border-white/5 bg-white/70 dark:bg-black/50 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-black/20 transition-colors duration-300">
+      {/* Sticky Header */}
+      <div className="sticky top-0 z-40 w-full border-b border-gray-200 dark:border-white/5 bg-white/70 dark:bg-black/50 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-black/20 transition-colors duration-300">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
@@ -126,7 +122,6 @@ const ProfilePage = () => {
               >
                 <ArrowLeft size={20} />
               </Button>
-              {/* Text Gradient adapts to theme */}
               <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-white/60 bg-clip-text text-transparent">
                 My Profile
               </h1>
@@ -138,11 +133,8 @@ const ProfilePage = () => {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
        
         {/* Profile Header Card */}
-        {/* Light: White bg, shadow-sm, gray border */}
-        {/* Dark: Glassmorphism, shadow-2xl, white-alpha border */}
         <div className="bg-white dark:bg-white/5 backdrop-blur-3xl border border-gray-200 dark:border-white/10 p-8 rounded-2xl shadow-sm dark:shadow-2xl mb-8 relative overflow-hidden transition-all duration-300">
          
-          {/* Background Glows (Subtle in light mode, prominent in dark) */}
           <div className="absolute inset-0 pointer-events-none opacity-50 dark:opacity-100">
             <div className="absolute top-0 -left-10 w-64 h-64 bg-blue-500/10 rounded-full blur-[80px]"></div>
             <div className="absolute bottom-0 -right-10 w-64 h-64 bg-purple-500/10 rounded-full blur-[80px]"></div>
@@ -283,28 +275,18 @@ const ProfilePage = () => {
                 </div>
               )}
 
-              {/* Cancel Button for Paid Users (ADDED THIS SECTION) */}
+              {/* Cancel Button - Opens Modal */}
               {user.is_paid_member && (
                 <div className="flex justify-between items-center py-3 pt-4 mt-2 border-t border-gray-100 dark:border-white/5">
                   <span className="text-gray-500 dark:text-neutral-400">Manage Plan</span>
                   <Button 
                     size="sm" 
                     variant="ghost" 
-                    disabled={isCanceling}
-                    onClick={handleCancelSubscription}
+                    onClick={() => setShowCancelModal(true)} // Opens the modal
                     className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20"
                   >
-                    {isCanceling ? (
-                      <span className="flex items-center">
-                        <span className="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin mr-2"></span>
-                        Canceling...
-                      </span>
-                    ) : (
-                      <>
-                        <XCircle size={14} className="mr-1.5" />
-                        Cancel Subscription
-                      </>
-                    )}
+                    <XCircle size={14} className="mr-1.5" />
+                    Cancel Subscription
                   </Button>
                 </div>
               )}
@@ -361,6 +343,42 @@ const ProfilePage = () => {
           )}
         </div>
       </div>
+
+      {/* CUSTOM CANCEL CONFIRMATION MODAL */}
+      {showCancelModal && (
+        <div className="fixed h-screen w-[100dvw] inset-0 z-50 flex items-center justify-center bg-black/60 bg-opacity-50 backdrop-blur-sm">
+          <div className="bg-card border border-border rounded-lg shadow-xl p-6 w-full max-w-sm mx-4 bg-white dark:bg-neutral-900 border-gray-200 dark:border-white/10">
+            <h2 className="text-lg font-semibold text-foreground text-gray-900 dark:text-white">Cancel Subscription</h2>
+            <p className="text-sm text-muted-foreground mt-2 text-gray-500 dark:text-neutral-400">
+              Are you sure you want to cancel your subscription? You will lose your Premium benefits immediately.
+            </p>
+            <div className="flex justify-end space-x-4 mt-6">
+              <button
+                onClick={() => setShowCancelModal(false)}
+                disabled={isCanceling}
+                className="px-4 py-2 rounded-md text-sm font-medium bg-muted text-muted-foreground hover:bg-gray-100 dark:hover:bg-white/10 text-gray-700 dark:text-gray-300"
+              >
+                Keep Subscription
+              </button>
+              <button
+                onClick={confirmCancellation}
+                disabled={isCanceling}
+                className="px-4 py-2 rounded-md text-sm font-medium bg-red-600 text-white hover:bg-red-700 flex items-center"
+              >
+                {isCanceling ? (
+                   <>
+                   <span className="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin mr-2"></span>
+                   Processing...
+                 </>
+                ) : (
+                  "Yes, Cancel"
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

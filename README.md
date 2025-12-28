@@ -1,4 +1,3 @@
-```
 <div align="center">
   <img src="public/assets/images/logo1.png" alt="Vectoredge Pro Logo" width="200"/>
   <h1>VectorEdge Pro</h1>
@@ -152,7 +151,3 @@ This project scrapes data from public sources for educational and demonstration 
 **Ritesh Raj Dwivedi** - riteshrajdwivedi@gmail.com
 
 Project Link: [https://github.com/riteshrajd/VectorEdge](https://github.com/riteshrajd/VectorEdge)
-
-```
-
-```
