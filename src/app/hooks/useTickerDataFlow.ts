@@ -13,7 +13,6 @@ export const useTickerDataFlow = (selectedInstrument: InstrumentCoverInfo | null
   const storedData = useDataStore((state) => state.data);
   const addData = useDataStore((state) => state.addData);
   const removeData = useDataStore((state) => state.removeData);
-  const { user } = useUserStore();
   
   // Need this to switch views when clicking toast
   const setSelectedInstrument = useStore((state) => state.setSelectedInstrument);
@@ -26,33 +25,39 @@ export const useTickerDataFlow = (selectedInstrument: InstrumentCoverInfo | null
   const socketData = useSocket(socketTicker);
 
   // --- HELPER: Update History ---
+  // src/app/hooks/useTickerDataFlow.ts
+
   const updateHistory = useCallback(async (instrument: InstrumentCoverInfo) => {
-    console.log(`*********updateHistory called***********************`)
-    if (!user) return;
-    try {
-      const response = await fetch(ADD_TO_SEARCH_HISTORY_API_ROUTE, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ instrument }),
-      });
-      console.log('**got response**: ', response.json());
-      if (response.ok) {
-        const data = await response.json();
-        
-        // --- THE FIX: Sync Frontend Store ---
-        // The API returns { instrument_history: [...] }
-        if (data.instrument_history) {
-            useUserStore.getState().setUser({
-                ...user,
-                instrument_history: data.instrument_history
-            });
-        }
+      // 👇 ALWAYS get the freshest user directly from the store
+      const currentUser = useUserStore.getState().user; 
+
+      if (!currentUser) {
+          console.warn("⚠️ Cannot update history: User not logged in yet.");
+          return; 
       }
-      console.log('**************updateHistory end*************************');
-    } catch (error) {
-      console.error("Failed to update history", error);
-    }
-  }, []);
+
+      try {
+        const response = await fetch(ADD_TO_SEARCH_HISTORY_API_ROUTE, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ instrument }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          
+          if (data.instrument_history) {
+              // 👇 Update the store safely
+              useUserStore.getState().setUser({
+                  ...currentUser,
+                  instrument_history: data.instrument_history
+              });
+          }
+        }
+      } catch (error) {
+        console.error("Failed to update history", error);
+      }
+  }, []); // ✅ Keep empty deps, because we use getState() internally
 
   // --- EFFECT: Socket Listener & Toast Logic ---
   useEffect(() => {
@@ -85,7 +90,7 @@ export const useTickerDataFlow = (selectedInstrument: InstrumentCoverInfo | null
       const incomingSymbol = socketData.ticker.toUpperCase();
 
       console.log('recieved socketData: ', socketData);
-      await updateHistory({name: socketData.name || socketData.ticker , symbol: socketData.ticker});
+      updateHistory({name: socketData.name || socketData.ticker , symbol: socketData.ticker});
       
       if (currentSymbol === incomingSymbol) {
          console.log("✅ User is on the same ticker. Updating UI.");
