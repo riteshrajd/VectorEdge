@@ -28,6 +28,7 @@ export const useTickerDataFlow = (selectedInstrument: InstrumentCoverInfo | null
   // src/app/hooks/useTickerDataFlow.ts
 
   const updateHistory = useCallback(async (instrument: InstrumentCoverInfo) => {
+      console.log("***************** updateHistory called *******************************");
       // 👇 ALWAYS get the freshest user directly from the store
       const currentUser = useUserStore.getState().user; 
 
@@ -54,6 +55,7 @@ export const useTickerDataFlow = (selectedInstrument: InstrumentCoverInfo | null
               });
           }
         }
+        console.log('*************** updateHistory end ***************************');
       } catch (error) {
         console.error("Failed to update history", error);
       }
@@ -90,8 +92,15 @@ export const useTickerDataFlow = (selectedInstrument: InstrumentCoverInfo | null
       const incomingSymbol = socketData.ticker.toUpperCase();
 
       console.log('recieved socketData: ', socketData);
-      updateHistory({name: socketData.name || socketData.ticker , symbol: socketData.ticker});
-      
+
+      updateHistory({
+          name: socketData.name || socketData.ticker, 
+          symbol: socketData.ticker,
+          isFavorite: false,
+          recomendation: 'neutral',  
+          icon: ''                   
+      });      
+
       if (currentSymbol === incomingSymbol) {
          console.log("✅ User is on the same ticker. Updating UI.");
          setData(socketData);
@@ -194,7 +203,13 @@ export const useTickerDataFlow = (selectedInstrument: InstrumentCoverInfo | null
           console.log(`✅ LEVEL 2: Found in Redis.`);
           addData(cacheResult.data);
           const { ticker: symbol, name } = cacheResult.data
-          await updateHistory({ symbol, name });
+          await updateHistory({ 
+            symbol,
+            name,
+            isFavorite: false,         // Default to false
+            recomendation: 'neutral',  // Default string (keep your typo 'recomendation' if that's in the DB)
+            icon: '' 
+          });
           setData(cacheResult.data);
           setStatus('success');
           return;
