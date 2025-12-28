@@ -44,13 +44,13 @@ function generateAIInsights(): AIInsights {
 
 /* ------------------ MAIN FUNCTION ------------------ */
 
-export async function fetchDummyData(ticker: string): Promise<CombinedData> {
+export async function fetchDummyData(ticker: string, name: string): Promise<CombinedData> {
   const price = rand(140, 200);
 
   return {
     ticker: ticker.toUpperCase(),
     last_updated: new Date().toISOString(),
-
+    name,
     overview: {
       current_price: price,
       change: rand(-3, 3),

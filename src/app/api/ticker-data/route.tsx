@@ -37,9 +37,10 @@ export async function GET(request: Request) {
 
     // 2. Cache Miss? Add to Queue.
     console.log(`🟡 API: Cache MISS for ${normalizedTicker}. Adding job to queue.`);
-    
-    await tickerQueue.add('analyze-stock', { ticker: normalizedTicker, name });
+    console.log(`name: ${name} \nticker: ${ticker}`)
 
+    await tickerQueue.add('analyze-stock', { ticker: normalizedTicker, name });
+    console.log(`ticker added to analysis queue`);
     // 3. Return "Processing" immediately so frontend knows to listen to Socket
     return NextResponse.json({
       status: 'processing',

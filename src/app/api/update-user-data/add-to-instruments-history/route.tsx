@@ -15,6 +15,10 @@ export async function POST(request: Request) {
   const { instrument } = await request.json();
 
   if (!instrument || !instrument.symbol || !instrument.name) {
+    console.log('**instrument faulty**');
+    if(instrument) console.log(JSON.stringify(instrument));
+    else console.log('****no instrument****');
+
     return NextResponse.json({ error: 'Invalid instrument data' }, { status: 400 });
   }
 

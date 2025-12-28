@@ -18,7 +18,7 @@ export const useTickerDataFlow = (selectedInstrument: InstrumentCoverInfo | null
   const setSelectedInstrument = useStore((state) => state.setSelectedInstrument);
 
   const [status, setStatus] = useState<FlowStatus>('idle');
-  const [data, setData] = useState<CombinedData | null>(null);
+  const [data, setData ] = useState<CombinedData | null>(null);
   const [error, setError] = useState<string>('');
   const [socketTicker, setSocketTicker] = useState<string | null>(null);
   
@@ -37,7 +37,11 @@ export const useTickerDataFlow = (selectedInstrument: InstrumentCoverInfo | null
         icon: '',
         recomendation: '',
         isFavorite: false,
-      } 
+      }
+      if(!instrument) console.log('no instrument');
+      else console.log('instrument: ', JSON.stringify(instrument));
+      
+      console.log(`full_instrument: ${JSON.stringify(full_instrument)}`);
       if (!currentUser) {
           console.warn("⚠️ Cannot update history: User not logged in yet.");
           return; 
@@ -106,6 +110,7 @@ export const useTickerDataFlow = (selectedInstrument: InstrumentCoverInfo | null
           recomendation: 'neutral',  
           icon: ''                   
       });      
+      console.log("*-*-*-*-*-*-*-*-* setting data: ", JSON.stringify(socketData));
 
       if (currentSymbol === incomingSymbol) {
          console.log("✅ User is on the same ticker. Updating UI.");

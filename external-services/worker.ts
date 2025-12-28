@@ -36,15 +36,16 @@ async function processAndCacheTicker(ticker: string, jobId: string, name: string
 
     try {
         // 3. Fetch Data (Heavy Operation)
-        console.log(`⏳ [${jobId}] Fetching external data for ${ticker}...`);
+        console.log(`⏳ [${jobId}] Fetching external data for ${ticker}: ${name}...`);
         
         // Simulating delay or calling real scraper
         await new Promise((resolve) => setTimeout(resolve, 5000)); 
         const result = await getData(ticker, name);
 
         // 4. Save to Redis Cache (30 Days)
-        await redisConnection.set(cacheKey, JSON.stringify(result), 'EX', 60 * 60 * 24 * 30);
+        await redisConnection.set(cacheKey, JSON.stringify(result), 'EX', 60 * 60 * 2);
         console.log(`📦 [${jobId}] Cached ${ticker} to Redis.`);
+        console.log(`***Woker -> data cached: ${JSON.stringify(result)}`);
 
         return { source: 'fetch', data: result };
 

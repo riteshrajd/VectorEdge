@@ -12,8 +12,9 @@ export async function getData(ticker: string, name: string = ''): Promise<Combin
     data = await aggregateData(ticker);
   } catch (error) {
     if(error instanceof Error) console.log(`error occured during scrapping data: ${error.message} \nfalling back to preloaded data`)
-    console.warn('⚠️ Scraping failed, using free Yahoo data');   
-    data = await fetchDummyData(ticker);
+    console.log('⚠️ Scraping failed, using free Yahoo data');   
+    data = await fetchDummyData(ticker, name);
+    console.log(`**getData is returning data for tikcer: ${ticker}  name: ${name} : `, JSON.stringify(data));
     return data;
   }
 

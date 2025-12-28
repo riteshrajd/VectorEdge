@@ -228,7 +228,7 @@ const StockAnalysisReport: React.FC<StockAnalysisReportProps> = ({ data, setIsSh
               
               <div className="relative pt-8 pb-4 px-2">
                   {/* The Bar */}
-                  <div className="h-2 bg-gradient-to-r from-rose-400 to-emerald-400 rounded-full w-full opacity-80" />
+                  <div className="h-2 bg-gradient-to-r from-rose-400 via-blue-400 to-emerald-400 rounded-full w-full opacity-80" />
                   
                   {/* Low Marker */}
                   <div className="absolute top-0 left-0 -translate-x-0 flex flex-col items-start">
@@ -245,7 +245,7 @@ const StockAnalysisReport: React.FC<StockAnalysisReportProps> = ({ data, setIsSh
                   {/* Average Marker (Centered roughly) */}
                   <div className="absolute top-0 left-1/2 -translate-x-1/2 flex flex-col items-center">
                       <span className="text-sm font-extrabold text-foreground">{formatCurrency(analysis!.analyst_ratings?.price_target_avg)}</span>
-                      <span className="text-[10px] text-muted-foreground">Average</span>
+                      <span className="text-[10px] text-muted-foreground"></span>
                       <div className="w-0.5 h-3 bg-foreground mt-1"></div>
                   </div>
               </div>

@@ -50,7 +50,10 @@ const MainContent = () => {
     return (
       <ConfirmationScreen
         instrumentName={store.selectedInstrument?.name || ''}
-        onConfirm={confirmAndFetch}
+        onConfirm={() => {
+          store.setSearchTerm('');
+          confirmAndFetch()
+        }}
         onCancel={() => {
           store.setSelectedInstrument(null);
           store.setSearchTerm('');
