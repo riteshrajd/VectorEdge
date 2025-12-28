@@ -76,7 +76,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 
 # --- Payments (Razorpay) ---
-RAZORPAY_KEY_ID=your_razorpay_id
+NEXT_PUBLIC_RAZORPAY_KEY_ID=your_razorpay_id
 RAZORPAY_KEY_SECRET=your_razorpay_secret
 
 # --- AI Models ---
