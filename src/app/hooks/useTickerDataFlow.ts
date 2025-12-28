@@ -188,6 +188,8 @@ export const useTickerDataFlow = (selectedInstrument: InstrumentCoverInfo | null
         if (isMounted && cacheResult.cached) {
           console.log(`✅ LEVEL 2: Found in Redis.`);
           addData(cacheResult.data);
+          const { ticker: symbol, name } = cacheResult.data
+          updateHistory({ symbol, name });
           setData(cacheResult.data);
           setStatus('success');
           return;

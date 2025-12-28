@@ -39,7 +39,7 @@ async function processAndCacheTicker(ticker: string, jobId: string, name: string
         console.log(`⏳ [${jobId}] Fetching external data for ${ticker}...`);
         
         // Simulating delay or calling real scraper
-        // await new Promise((resolve) => setTimeout(resolve, 5000)); 
+        await new Promise((resolve) => setTimeout(resolve, 5000)); 
         const result = await getData(ticker, name);
 
         // 4. Save to Redis Cache (30 Days)
