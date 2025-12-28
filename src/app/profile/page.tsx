@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react'; // Added useState
 import { useUserStore } from '@/store/userStore';
 import { useRouter } from 'next/navigation';
 import { 
@@ -11,7 +12,8 @@ import {
   CreditCard,
   History,
   Star,
-  Badge
+  Badge,
+  XCircle // Added Icon
 } from 'lucide-react';
 import { Button } from '@/components/shadcn/ui/button';
 import Image from 'next/image';
@@ -21,6 +23,38 @@ const ProfilePage = () => {
   const router = useRouter();
   useInitializeUser();
   const { user } = useUserStore();
+  const [isCanceling, setIsCanceling] = useState(false); // Added state
+
+  // Added Cancel Function
+  const handleCancelSubscription = async () => {
+    const confirmed = window.confirm(
+      "Are you sure you want to cancel your subscription?\n\nYou will lose your Premium benefits immediately."
+    );
+
+    if (!confirmed) return;
+
+    setIsCanceling(true);
+
+    try {
+      const response = await fetch('/api/subscription/cancel', {
+        method: 'POST',
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        // Reload the page to refresh server data and update UI
+        window.location.reload();
+      } else {
+        alert(data.error || "Failed to cancel subscription.");
+      }
+    } catch (error) {
+      console.error("Cancellation error:", error);
+      alert("Something went wrong. Please try again.");
+    } finally {
+      setIsCanceling(false);
+    }
+  };
 
   // Loading State - Styled to match the theme
   if (!user) {
@@ -102,21 +136,21 @@ const ProfilePage = () => {
       </div>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
+       
         {/* Profile Header Card */}
         {/* Light: White bg, shadow-sm, gray border */}
         {/* Dark: Glassmorphism, shadow-2xl, white-alpha border */}
         <div className="bg-white dark:bg-white/5 backdrop-blur-3xl border border-gray-200 dark:border-white/10 p-8 rounded-2xl shadow-sm dark:shadow-2xl mb-8 relative overflow-hidden transition-all duration-300">
-          
+         
           {/* Background Glows (Subtle in light mode, prominent in dark) */}
           <div className="absolute inset-0 pointer-events-none opacity-50 dark:opacity-100">
             <div className="absolute top-0 -left-10 w-64 h-64 bg-blue-500/10 rounded-full blur-[80px]"></div>
             <div className="absolute bottom-0 -right-10 w-64 h-64 bg-purple-500/10 rounded-full blur-[80px]"></div>
           </div>
-          
+         
           <div className="relative z-10">
             <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-6">
-              
+             
               {/* Avatar */}
               <div className="relative">
                 {user?.avatar_url ? (
@@ -146,7 +180,7 @@ const ProfilePage = () => {
                   <Mail size={16} />
                   {user.email}
                 </p>
-               
+              
                 {/* Subscription Badge */}
                 <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border backdrop-blur-md ${subscriptionBadge.bgColor} ${subscriptionBadge.borderColor}`}>
                   <SubscriptionIcon size={14} className={subscriptionBadge.color} />
@@ -161,7 +195,7 @@ const ProfilePage = () => {
 
         {/* Details Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          
+         
           {/* Account Information Card */}
           <div className="bg-white dark:bg-white/5 backdrop-blur-md p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm dark:shadow-lg transition-all duration-300">
             <div className="flex items-center gap-3 mb-6">
@@ -176,7 +210,7 @@ const ProfilePage = () => {
                 <span className="text-gray-500 dark:text-neutral-400">User ID</span>
                 <code className="text-xs bg-gray-100 dark:bg-black/30 px-2 py-1 rounded font-mono text-gray-700 dark:text-neutral-300 border border-gray-200 dark:border-white/5">{user.id}</code>
               </div>
-             
+            
               <div className="flex justify-between items-center py-3 border-b border-gray-100 dark:border-white/5 last:border-b-0">
                 <span className="text-gray-500 dark:text-neutral-400">Full Name</span>
                 <span className="font-medium text-gray-900 dark:text-neutral-200">{user.full_name}</span>
@@ -215,7 +249,7 @@ const ProfilePage = () => {
                   </span>
                 </div>
               </div>
-             
+            
               <div className="flex justify-between items-center py-3 border-b border-gray-100 dark:border-white/5 last:border-b-0">
                 <span className="text-gray-500 dark:text-neutral-400">Status</span>
                 <div className="flex items-center gap-2">
@@ -238,12 +272,39 @@ const ProfilePage = () => {
                 </div>
               )}
 
+              {/* Upgrade Button for Free Users */}
               {!user.is_paid_member && (
                 <div className="flex justify-between items-center py-3">
                   <span className="text-gray-500 dark:text-neutral-400">Upgrade Available</span>
                   <Button size="sm" variant="outline" className="bg-gray-50 dark:bg-white/5 border-gray-200 dark:border-white/10 hover:bg-gray-100 dark:hover:bg-white/10 text-gray-900 dark:text-neutral-200" onClick={() => router.push('/subscription')}>
                     <Star size={14} className="mr-1" />
                     Upgrade Now
+                  </Button>
+                </div>
+              )}
+
+              {/* Cancel Button for Paid Users (ADDED THIS SECTION) */}
+              {user.is_paid_member && (
+                <div className="flex justify-between items-center py-3 pt-4 mt-2 border-t border-gray-100 dark:border-white/5">
+                  <span className="text-gray-500 dark:text-neutral-400">Manage Plan</span>
+                  <Button 
+                    size="sm" 
+                    variant="ghost" 
+                    disabled={isCanceling}
+                    onClick={handleCancelSubscription}
+                    className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20"
+                  >
+                    {isCanceling ? (
+                      <span className="flex items-center">
+                        <span className="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin mr-2"></span>
+                        Canceling...
+                      </span>
+                    ) : (
+                      <>
+                        <XCircle size={14} className="mr-1.5" />
+                        Cancel Subscription
+                      </>
+                    )}
                   </Button>
                 </div>
               )}

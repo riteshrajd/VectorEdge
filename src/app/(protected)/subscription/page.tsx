@@ -1,344 +1,386 @@
-"use client";
+'use client';
 
-import { JSX, useEffect, useState } from "react";
-import { useUserStore } from "@/store/userStore";
-import { useRouter } from "next/navigation";
+import { useState } from 'react';
+import { useUserStore } from '@/store/userStore';
+import { useRouter } from 'next/navigation';
 import { 
-  Check, 
+  ArrowLeft, 
   Crown, 
-  Star, 
-  Shield, 
-  Zap, 
+  User, 
   Mail, 
-  Headphones,
-  Sparkles,
-  ArrowLeft,
-  Loader2
-} from "lucide-react";
-import { useInitializeUser } from "@/app/hooks/useInitializeUser";
-import { RazorpayInstance, RazorpayOptions, RazorpayPaymentFailureResponse, RazorpayPaymentSuccessResponse } from "@/types/types";
+  Calendar,
+  CreditCard,
+  History,
+  Star,
+  Badge,
+  XCircle 
+} from 'lucide-react';
+import { Button } from '@/components/shadcn/ui/button';
+import Image from 'next/image';
+import { useInitializeUser } from '../hooks/useInitializeUser';
 
-declare global {
-  interface Window {
-    Razorpay: new (options: RazorpayOptions) => RazorpayInstance;
-  }
-}
-
-export default function Subscription(): JSX.Element {
+const ProfilePage = () => {
+  const router = useRouter();
   useInitializeUser();
   const { user } = useUserStore();
-  const router = useRouter();
-  const [loadingPlan, setLoadingPlan] = useState<"monthly" | "yearly" | null>(null);
-  const [isProcessing, setIsProcessing] = useState(false);
+  
+  // State for loading the API call
+  const [isCanceling, setIsCanceling] = useState(false);
+  // State for showing the custom modal
+  const [showCancelModal, setShowCancelModal] = useState(false);
 
-  // Load Razorpay script
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://checkout.razorpay.com/v1/checkout.js";
-    script.async = true;
-    document.body.appendChild(script);
-
-    return () => {
-      if (document.body.contains(script)) {
-        document.body.removeChild(script);
-      }
-    };
-  }, []);
-
-  const processPayment = async (plan: "monthly" | "yearly", amount: number) => {
-    if (useUserStore.getState().user?.is_paid_member) return;
-    if (isProcessing) return; 
-
-    setIsProcessing(true);
-    setLoadingPlan(plan);
+  // This function is called when the user clicks "Yes, Cancel" in the modal
+  const confirmCancellation = async () => {
+    setIsCanceling(true);
 
     try {
-      const response = await fetch("/api/razorpay", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount, currency: "INR" }),
+      const response = await fetch('/api/subscription/cancel', {
+        method: 'POST',
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to create Razorpay order");
+      const data = await response.json();
+
+      if (data.success) {
+        // Reload to update UI
+        window.location.reload();
+      } else {
+        alert(data.error || "Failed to cancel subscription.");
+        setIsCanceling(false); // Stop loading if error
+        setShowCancelModal(false); // Close modal
       }
-
-      const order = await response.json();
-
-      const options: RazorpayOptions = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-        amount: order.amount,
-        currency: order.currency,
-        name: "VectorEdge",
-        description: `${plan.charAt(0).toUpperCase() + plan.slice(1)} Subscription`,
-        order_id: order.id,
-        handler: async function (response: RazorpayPaymentSuccessResponse) {
-          try {
-            const verificationResponse = await fetch('/api/razorpay/verify', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature,
-                plan: plan,
-                userId: user?.id,
-              }),
-            });
-
-            const result = await verificationResponse.json();
-
-            if (result.success) {
-              setTimeout(() => {
-                router.push('/');
-              }, 2000);
-            } else {
-              throw new Error(result.error || 'Payment verification failed.');
-            }
-          } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
-            alert(`Payment verification failed: ${errorMessage}`);
-            setIsProcessing(false);
-            setLoadingPlan(null);
-          }
-        },
-        prefill: {
-          name: user?.full_name || "Valued Customer",
-          email: user?.email,
-        },
-        notes: {
-          plan: plan,
-          userId: user?.id,
-        },
-        theme: {
-          color: "#6366f1",
-        },
-        modal: {
-          ondismiss: function() {
-            setIsProcessing(false);
-            setLoadingPlan(null);
-          }
-        }
-      };
-
-      const rzp = new window.Razorpay(options);
-      rzp.open();
-
-      rzp.on("payment.failed", function (response: RazorpayPaymentFailureResponse) {
-        console.error("Payment failed:", response.error);
-        alert(`Payment Failed: ${response.error.description}`);
-        setIsProcessing(false);
-        setLoadingPlan(null);
-      });
     } catch (error) {
-      console.error("Error processing payment:", error);
-      alert("There was an error processing your payment. Please try again.");
-      setIsProcessing(false);
-      setLoadingPlan(null);
+      console.error("Cancellation error:", error);
+      alert("Something went wrong. Please try again.");
+      setIsCanceling(false);
+      setShowCancelModal(false);
     }
   };
 
-  if (isProcessing) {
+  // Loading State
+  if (!user) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-neutral-950 flex items-center justify-center transition-colors duration-300">
-        <div className="bg-white/70 dark:bg-white/5 backdrop-blur-xl border border-gray-200 dark:border-white/10 p-12 rounded-2xl shadow-2xl text-center space-y-6">
-          <div className="w-16 h-16 mx-auto relative">
-            <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl animate-pulse"></div>
-            <Loader2 className="w-16 h-16 animate-spin text-primary relative z-10" />
-          </div>
-          <div className="space-y-2">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-              {loadingPlan === "monthly" ? "Processing Monthly Plan..." : "Processing Yearly Plan..."}
-            </h2>
-            <p className="text-gray-500 dark:text-neutral-400">
-              Please wait while we secure your subscription
-            </p>
-          </div>
+      <div className="flex items-center justify-center h-screen bg-gray-50 dark:bg-neutral-950 text-foreground transition-colors duration-300">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-gray-500 dark:text-neutral-400">Loading user profile...</p>
         </div>
       </div>
     );
   }
 
+  // Fallback for avatar
+  const getAvatarFallback = (fullName: string) => {
+    return fullName.split(' ').map(name => name.charAt(0)).join('').toUpperCase().slice(0, 2);
+  };
+
+  const formatDate = (dateString: string | null) => {
+    if (!dateString) return 'N/A';
+    return new Date(dateString).toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    });
+  };
+
+  // Get subscription badge styling
+  const getSubscriptionBadge = () => {
+    if (user.is_paid_member) {
+      return {
+        icon: Crown,
+        text: user.subscription_plan || 'Premium',
+        color: 'text-amber-600 dark:text-amber-400',
+        bgColor: 'bg-amber-100 dark:bg-amber-500/10',
+        borderColor: 'border-amber-200 dark:border-amber-500/20'
+      };
+    }
+    return {
+      icon: User,
+      text: 'Free Plan',
+      color: 'text-gray-500 dark:text-neutral-400',
+      bgColor: 'bg-gray-100 dark:bg-white/5',
+      borderColor: 'border-gray-200 dark:border-white/10'
+    };
+  };
+
+  const subscriptionBadge = getSubscriptionBadge();
+  const SubscriptionIcon = subscriptionBadge.icon;
+
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-neutral-950 text-gray-900 dark:text-neutral-100 transition-colors duration-300 relative overflow-hidden">
+    <div className="min-h-screen bg-gray-50 dark:bg-neutral-950 text-gray-900 dark:text-neutral-100 transition-colors duration-300">
       
-      {/* Background Ambience */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-blue-500/5 dark:bg-blue-500/10 rounded-full blur-[100px]"></div>
-        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-500/5 dark:bg-purple-500/10 rounded-full blur-[100px]"></div>
-      </div>
-
-      {/* Header */}
-      <div className="sticky top-0 z-50 w-full border-b border-gray-200 dark:border-white/5 bg-white/70 dark:bg-black/50 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-black/20 transition-colors duration-300">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={() => router.back()}
-              className="p-2 hover:bg-gray-200 dark:hover:bg-white/10 rounded-lg transition-colors text-gray-600 dark:text-neutral-300 hover:text-black dark:hover:text-white"
-              aria-label="Go back"
-            >
-              <ArrowLeft size={20} />
-            </button>
-            <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-white/60 bg-clip-text text-transparent">
-              Choose Your Plan
-            </h1>
+      {/* Sticky Header */}
+      <div className="sticky top-0 z-40 w-full border-b border-gray-200 dark:border-white/5 bg-white/70 dark:bg-black/50 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-black/20 transition-colors duration-300">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <Button
+                onClick={() => router.back()}
+                variant="ghost"
+                size="icon"
+                className="hover:bg-gray-200 dark:hover:bg-white/10 text-gray-600 dark:text-neutral-300 hover:text-black dark:hover:text-white transition-colors"
+                aria-label="Go back"
+              >
+                <ArrowLeft size={20} />
+              </Button>
+              <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-white/60 bg-clip-text text-transparent">
+                My Profile
+              </h1>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
-        {/* Hero Section */}
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 text-primary px-3 py-1 rounded-full text-xs font-medium mb-4 backdrop-blur-md">
-            <Sparkles size={12} />
-            Unlock Premium Features
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+       
+        {/* Profile Header Card */}
+        <div className="bg-white dark:bg-white/5 backdrop-blur-3xl border border-gray-200 dark:border-white/10 p-8 rounded-2xl shadow-sm dark:shadow-2xl mb-8 relative overflow-hidden transition-all duration-300">
+         
+          <div className="absolute inset-0 pointer-events-none opacity-50 dark:opacity-100">
+            <div className="absolute top-0 -left-10 w-64 h-64 bg-blue-500/10 rounded-full blur-[80px]"></div>
+            <div className="absolute bottom-0 -right-10 w-64 h-64 bg-purple-500/10 rounded-full blur-[80px]"></div>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4 leading-tight text-gray-900 dark:text-white">
-            Supercharge Your <br className="hidden sm:block" />
-            <span className="bg-gradient-to-r from-blue-600 to-teal-600 dark:from-blue-400 dark:to-teal-400 bg-clip-text text-transparent">Trading Experience</span>
-          </h2>
-          <p className="text-base text-gray-600 dark:text-neutral-400 max-w-2xl mx-auto">
-            Join thousands of traders trusting VectorEdge for advanced insights.
-          </p>
-        </div>
+         
+          <div className="relative z-10">
+            <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-6">
+             
+              {/* Avatar */}
+              <div className="relative">
+                {user?.avatar_url ? (
+                  <Image
+                    src={user.avatar_url}
+                    alt="User avatar"
+                    width={96}
+                    height={96}
+                    className="w-24 h-24 rounded-2xl object-cover border border-gray-200 dark:border-white/20 shadow-xl"
+                  />
+                ) : (
+                  <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-gray-100 to-gray-200 dark:from-neutral-800 dark:to-neutral-900 flex items-center justify-center text-gray-700 dark:text-white text-2xl font-bold border border-gray-200 dark:border-white/10 shadow-xl">
+                    {getAvatarFallback(user.full_name)}
+                  </div>
+                )}
+                {user.is_paid_member && (
+                  <div className="absolute -top-2 -right-2 w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center shadow-lg ring-4 ring-white dark:ring-neutral-950">
+                    <Crown size={16} className="text-white fill-white" />
+                  </div>
+                )}
+              </div>
 
-        {/* Pricing Cards Container */}
-        {/* Removed 'items-start' to allow grid to stretch items to equal height */}
-        <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-          
-          {/* Monthly Plan */}
-          <div className="relative bg-white dark:bg-white/5 backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-2xl p-6 shadow-lg hover:shadow-xl dark:shadow-2xl transition-all duration-300 group flex flex-col h-full">
-            <div className="flex items-start justify-between mb-6">
-                <div>
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1">Monthly Plan</h3>
-                    <p className="text-sm text-gray-500 dark:text-neutral-400">Perfect for getting started</p>
+              {/* User Info */}
+              <div className="flex-1 text-center sm:text-left">
+                <h2 className="text-3xl font-bold mb-2 text-gray-900 dark:text-white">{user.full_name}</h2>
+                <p className="text-gray-500 dark:text-neutral-400 text-lg mb-4 flex items-center justify-center sm:justify-start gap-2">
+                  <Mail size={16} />
+                  {user.email}
+                </p>
+              
+                {/* Subscription Badge */}
+                <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border backdrop-blur-md ${subscriptionBadge.bgColor} ${subscriptionBadge.borderColor}`}>
+                  <SubscriptionIcon size={14} className={subscriptionBadge.color} />
+                  <span className={`text-sm font-semibold ${subscriptionBadge.color}`}>
+                    {subscriptionBadge.text}
+                  </span>
                 </div>
-                <div className="w-10 h-10 bg-gray-100 dark:bg-white/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Star className="w-5 h-5 text-gray-700 dark:text-white" />
-                </div>
-            </div>
-
-            <div className="mb-6">
-              <span className="text-3xl font-bold text-gray-900 dark:text-white">₹1299</span>
-              <span className="text-gray-500 dark:text-neutral-400 text-sm"> /month</span>
-            </div>
-
-            <div className="flex-grow">
-                <ul className="grid grid-cols-1 gap-y-3 mb-6 text-sm">
-                {[
-                    { icon: Check, text: "Access to basic features" },
-                    { icon: Zap, text: "Monthly market updates" },
-                    { icon: Mail, text: "Email support" },
-                    { icon: Shield, text: "Secure trading environment" }
-                ].map((feature, index) => (
-                    <li key={index} className="flex items-center gap-3">
-                    <div className="w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-500/20 flex items-center justify-center flex-shrink-0">
-                        <feature.icon size={10} className="text-blue-600 dark:text-blue-400" />
-                    </div>
-                    <span className="text-gray-700 dark:text-neutral-300">{feature.text}</span>
-                    </li>
-                ))}
-                </ul>
-            </div>
-
-            <button
-              onClick={() => processPayment("monthly", 1299)}
-              disabled={isProcessing || user?.is_paid_member}
-              className="w-full mt-auto bg-gray-100 hover:bg-gray-200 dark:bg-white/10 dark:hover:bg-white/20 text-gray-900 dark:text-white py-3 px-4 rounded-xl font-semibold text-sm transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed border border-gray-200 dark:border-white/10"
-            > 
-              {user?.is_paid_member ? "Already Subscribed" : "Get Monthly Plan"}
-            </button>
-          </div>
-
-          {/* Yearly Plan - Removed translate-y so it aligns perfectly */}
-          <div className="relative 
-            bg-white dark:bg-white/5 backdrop-blur-xl
-            bg-gradient-to-b from-indigo-50/40 to-white 
-            dark:bg-gradient-to-b dark:from-indigo-950/30 dark:to-neutral-900/40 
-            backdrop-blur-xl border-2 border-primary/50 dark:border-primary/50 
-            rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 
-            group flex flex-col h-full"
-          >
-            {/* Popular Badge */}
-            <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-              <div className="bg-white dark:bg-neutral-900 bg-gradient-to-r from-blue-500 to-teal-500 text-white px-4 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-lg shadow-blue-500/20">
-                <Crown size={12} />
-                Most Popular
               </div>
             </div>
-
-            <div className="flex items-start justify-between mb-6 mt-2">
-                <div>
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1">Yearly Plan</h3>
-                    <div className="flex items-center gap-2">
-                        <p className="text-sm text-gray-500 dark:text-neutral-400">Best value for pros</p>
-                        <span className="inline-flex items-center gap-1 bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400 px-2 py-0.5 rounded-full text-[10px] font-bold">
-                            SAVE 36%
-                        </span>
-                    </div>
-                </div>
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-teal-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
-                    <Crown className="w-5 h-5 text-white" />
-                </div>
-            </div>
-
-            <div className="mb-6">
-              <span className="text-3xl font-bold text-gray-900 dark:text-white">₹9999</span>
-              <span className="text-gray-500 dark:text-neutral-400 text-sm"> /year</span>
-            </div>
-
-            <div className="flex-grow">
-                {/* 2-Column Grid */}
-                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3 mb-6 text-sm">
-                {[
-                    { icon: Check, text: "All premium features" },
-                    { icon: Zap, text: "Real-time insights" },
-                    { icon: Headphones, text: "Priority support" },
-                    { icon: Crown, text: "Beta access" },
-                    { icon: Shield, text: "Advanced security" },
-                    { icon: Star, text: "Exclusive reports" }
-                ].map((feature, index) => (
-                    <li key={index} className="flex items-center gap-2">
-                    <div className="w-5 h-5 rounded-full bg-gradient-to-br from-blue-500/20 to-teal-500/20 flex items-center justify-center flex-shrink-0">
-                        <feature.icon size={10} className="text-blue-600 dark:text-blue-400" />
-                    </div>
-                    <span className="text-gray-700 dark:text-neutral-200 text-xs sm:text-sm">{feature.text}</span>
-                    </li>
-                ))}
-                </ul>
-            </div>
-
-            <button
-              onClick={() => processPayment("yearly", 9999)}
-              disabled={isProcessing || user?.is_paid_member}
-              className="w-full mt-auto bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700 text-white py-3 px-4 rounded-xl font-semibold text-sm transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-blue-500/25 active:scale-[0.98]"
-            >
-              {user?.is_paid_member ? "Already Subscribed" : "Get Yearly Plan"}
-            </button>
           </div>
         </div>
 
-        {/* Trust Footer */}
-        <div className="text-center mt-12 border-t border-gray-200 dark:border-white/5 pt-6 max-w-2xl mx-auto">
-          <div className="flex flex-wrap justify-center gap-4 sm:gap-8 text-gray-500 dark:text-neutral-500 text-xs sm:text-sm">
-            <div className="flex items-center gap-2">
-              <Shield size={14} className="text-green-500" />
-              <span>Secure Payment</span>
+        {/* Details Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+         
+          {/* Account Information Card */}
+          <div className="bg-white dark:bg-white/5 backdrop-blur-md p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm dark:shadow-lg transition-all duration-300">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 bg-gray-100 dark:bg-white/5 rounded-lg flex items-center justify-center border border-gray-200 dark:border-white/10">
+                <Badge size={20} className="text-gray-700 dark:text-neutral-200" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-neutral-200">Account Information</h3>
             </div>
-            <div className="hidden sm:block w-1 h-1 bg-gray-300 dark:bg-white/20 rounded-full"></div>
-            <div className="flex items-center gap-2">
-              <Check size={14} className="text-blue-500" />
-              <span>Cancel Anytime</span>
-            </div>
-            <div className="hidden sm:block w-1 h-1 bg-gray-300 dark:bg-white/20 rounded-full"></div>
-            <div className="flex items-center gap-2">
-              <Headphones size={14} className="text-purple-500" />
-              <span>24/7 Support</span>
+
+            <div className="space-y-4">
+              <div className="flex justify-between items-center py-3 border-b border-gray-100 dark:border-white/5 last:border-b-0">
+                <span className="text-gray-500 dark:text-neutral-400">User ID</span>
+                <code className="text-xs bg-gray-100 dark:bg-black/30 px-2 py-1 rounded font-mono text-gray-700 dark:text-neutral-300 border border-gray-200 dark:border-white/5">{user.id}</code>
+              </div>
+            
+              <div className="flex justify-between items-center py-3 border-b border-gray-100 dark:border-white/5 last:border-b-0">
+                <span className="text-gray-500 dark:text-neutral-400">Full Name</span>
+                <span className="font-medium text-gray-900 dark:text-neutral-200">{user.full_name}</span>
+              </div>
+
+              <div className="flex justify-between items-center py-3 border-b border-gray-100 dark:border-white/5 last:border-b-0">
+                <span className="text-gray-500 dark:text-neutral-400">Email Address</span>
+                <span className="font-medium text-gray-900 dark:text-neutral-200">{user.email}</span>
+              </div>
+
+              <div className="flex justify-between items-center py-3">
+                <span className="text-gray-500 dark:text-neutral-400">Member Since</span>
+                <span className="font-medium text-gray-900 dark:text-neutral-200">
+                  {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}
+                </span>
+              </div>
             </div>
           </div>
+
+          {/* Subscription Details Card */}
+          <div className="bg-white dark:bg-white/5 backdrop-blur-md p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm dark:shadow-lg transition-all duration-300">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 bg-gray-100 dark:bg-white/5 rounded-lg flex items-center justify-center border border-gray-200 dark:border-white/10">
+                <CreditCard size={20} className="text-gray-700 dark:text-neutral-200" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-neutral-200">Subscription</h3>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex justify-between items-center py-3 border-b border-gray-100 dark:border-white/5 last:border-b-0">
+                <span className="text-gray-500 dark:text-neutral-400">Current Plan</span>
+                <div className="flex items-center gap-2">
+                  <SubscriptionIcon size={16} className={subscriptionBadge.color} />
+                  <span className={`font-semibold ${subscriptionBadge.color}`}>
+                    {user.subscription_plan || subscriptionBadge.text}
+                  </span>
+                </div>
+              </div>
+            
+              <div className="flex justify-between items-center py-3 border-b border-gray-100 dark:border-white/5 last:border-b-0">
+                <span className="text-gray-500 dark:text-neutral-400">Status</span>
+                <div className="flex items-center gap-2">
+                  <div className={`w-2 h-2 rounded-full ${user.is_paid_member ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'bg-orange-500'}`}></div>
+                  <span className={`font-semibold ${user.is_paid_member ? 'text-emerald-600 dark:text-emerald-400' : 'text-orange-600 dark:text-orange-400'}`}>
+                    {user.is_paid_member ? 'Active' : 'Inactive'}
+                  </span>
+                </div>
+              </div>
+
+              {user.is_paid_member && user.subscription_expiry && (
+                <div className="flex justify-between items-center py-3 border-b border-gray-100 dark:border-white/5 last:border-b-0">
+                  <span className="text-gray-500 dark:text-neutral-400">Next Billing</span>
+                  <div className="flex items-center gap-2">
+                    <Calendar size={16} className="text-gray-400 dark:text-neutral-500" />
+                    <span className="font-medium text-gray-900 dark:text-neutral-200">
+                      {formatDate(user.subscription_expiry)}
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              {/* Upgrade Button for Free Users */}
+              {!user.is_paid_member && (
+                <div className="flex justify-between items-center py-3">
+                  <span className="text-gray-500 dark:text-neutral-400">Upgrade Available</span>
+                  <Button size="sm" variant="outline" className="bg-gray-50 dark:bg-white/5 border-gray-200 dark:border-white/10 hover:bg-gray-100 dark:hover:bg-white/10 text-gray-900 dark:text-neutral-200" onClick={() => router.push('/subscription')}>
+                    <Star size={14} className="mr-1" />
+                    Upgrade Now
+                  </Button>
+                </div>
+              )}
+
+              {/* Cancel Button - Opens Modal */}
+              {user.is_paid_member && (
+                <div className="flex justify-between items-center py-3 pt-4 mt-2 border-t border-gray-100 dark:border-white/5">
+                  <span className="text-gray-500 dark:text-neutral-400">Manage Plan</span>
+                  <Button 
+                    size="sm" 
+                    variant="ghost" 
+                    onClick={() => setShowCancelModal(true)} // Opens the modal
+                    className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20"
+                  >
+                    <XCircle size={14} className="mr-1.5" />
+                    Cancel Subscription
+                  </Button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Instrument History Card */}
+        <div className="bg-white dark:bg-white/5 backdrop-blur-md p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm dark:shadow-lg transition-all duration-300">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gray-100 dark:bg-white/5 rounded-lg flex items-center justify-center border border-gray-200 dark:border-white/10">
+                <History size={20} className="text-gray-700 dark:text-neutral-200" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-neutral-200">Instrument History</h3>
+            </div>
+            <span className="text-sm text-gray-500 dark:text-neutral-500">
+              {user.instrument_history?.length || 0} instruments
+            </span>
+          </div>
+
+          {user.instrument_history && user.instrument_history.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {user.instrument_history.slice(0, 6).map((instrument, index) => (
+                <div key={index} className="bg-gray-50 dark:bg-black/20 p-4 rounded-lg border border-gray-200 dark:border-white/5 hover:border-gray-300 dark:hover:border-white/20 hover:bg-gray-100 dark:hover:bg-white/5 transition-all cursor-default">
+                  <div className="space-y-2">
+                    <div className="font-semibold text-sm text-gray-900 dark:text-neutral-200">
+                      {typeof instrument === 'object' ? instrument.name || instrument.symbol : instrument}
+                    </div>
+                    {typeof instrument === 'object' && (
+                      <div className="space-y-1">
+                        {instrument.symbol && (
+                          <div className="text-xs text-gray-500 dark:text-neutral-500">
+                            <span className="font-medium text-gray-400 dark:text-neutral-400">Symbol:</span> {instrument.symbol}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+              {user.instrument_history.length > 6 && (
+                <div className="bg-gray-50 dark:bg-black/20 p-4 rounded-lg border border-gray-200 dark:border-white/5 flex items-center justify-center text-gray-500 dark:text-neutral-500 text-sm">
+                  +{user.instrument_history.length - 6} more
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="text-center py-8 text-gray-400 dark:text-neutral-500">
+              <History size={48} className="mx-auto mb-4 opacity-20" />
+              <p>No instrument history available</p>
+              <p className="text-sm opacity-60">Start using instruments to see them here</p>
+            </div>
+          )}
         </div>
       </div>
+
+      {/* CUSTOM CANCEL CONFIRMATION MODAL */}
+      {showCancelModal && (
+        <div className="fixed h-screen w-[100dvw] inset-0 z-50 flex items-center justify-center bg-black/60 bg-opacity-50 backdrop-blur-sm">
+          <div className="bg-card border border-border rounded-lg shadow-xl p-6 w-full max-w-sm mx-4 bg-white dark:bg-neutral-900 border-gray-200 dark:border-white/10">
+            <h2 className="text-lg font-semibold text-foreground text-gray-900 dark:text-white">Cancel Subscription</h2>
+            <p className="text-sm text-muted-foreground mt-2 text-gray-500 dark:text-neutral-400">
+              Are you sure you want to cancel your subscription? You will lose your Premium benefits immediately.
+            </p>
+            <div className="flex justify-end space-x-4 mt-6">
+              <button
+                onClick={() => setShowCancelModal(false)}
+                disabled={isCanceling}
+                className="px-4 py-2 rounded-md text-sm font-medium bg-muted text-muted-foreground hover:bg-gray-100 dark:hover:bg-white/10 text-gray-700 dark:text-gray-300"
+              >
+                Keep Subscription
+              </button>
+              <button
+                onClick={confirmCancellation}
+                disabled={isCanceling}
+                className="px-4 py-2 rounded-md text-sm font-medium bg-red-600 text-white hover:bg-red-700 flex items-center"
+              >
+                {isCanceling ? (
+                   <>
+                   <span className="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin mr-2"></span>
+                   Processing...
+                 </>
+                ) : (
+                  "Yes, Cancel"
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
-}
+};
+
+export default ProfilePage;

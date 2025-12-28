@@ -102,3 +102,26 @@ export async function updateSubscriptionStatus(status: boolean, planType: string
   console.log(`✅ Subscription status updated for user ${userId} to ${status}`);
   return { success: true, data };
 }
+
+export async function cancelSubscription(userId: string) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from('profiles')
+    .update({
+      is_paid_member: false,
+      subscription_plan: 'Free',
+      subscription_expiry: null, // We explicitly clear the expiry date
+    })
+    .eq('id', userId)
+    .select()
+    .single();
+
+  if (error) {
+    console.error(`Error canceling subscription for user ${userId}:`, error);
+    return { success: false, error: error.message };
+  }
+
+  console.log(`✅ Subscription cancelled for user ${userId}`);
+  return { success: true, data };
+}
