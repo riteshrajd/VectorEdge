@@ -27,9 +27,9 @@ export const useTickerDataFlow = (selectedInstrument: InstrumentCoverInfo | null
 
   // --- HELPER: Update History ---
   const updateHistory = useCallback(async (instrument: InstrumentCoverInfo) => {
+    console.log(`*********updateHistory called***********************`)
     if (!user) return;
     try {
-      console.log(`*********updateHistory called***********************`)
       const response = await fetch(ADD_TO_SEARCH_HISTORY_API_ROUTE, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -85,7 +85,7 @@ export const useTickerDataFlow = (selectedInstrument: InstrumentCoverInfo | null
       const incomingSymbol = socketData.ticker.toUpperCase();
 
       console.log('recieved socketData: ', socketData);
-      updateHistory({name: socketData.name || socketData.ticker , symbol: socketData.ticker});
+      await updateHistory({name: socketData.name || socketData.ticker , symbol: socketData.ticker});
       
       if (currentSymbol === incomingSymbol) {
          console.log("✅ User is on the same ticker. Updating UI.");
@@ -122,7 +122,7 @@ export const useTickerDataFlow = (selectedInstrument: InstrumentCoverInfo | null
       if (result.status === 'success') {
         console.log(`✅ API: Success.`);
         addData(result.data);
-        updateHistory(selectedInstrument);
+        await updateHistory(selectedInstrument);
         setData(result.data);
         setStatus('success');
       } 
@@ -189,7 +189,7 @@ export const useTickerDataFlow = (selectedInstrument: InstrumentCoverInfo | null
           console.log(`✅ LEVEL 2: Found in Redis.`);
           addData(cacheResult.data);
           const { ticker: symbol, name } = cacheResult.data
-          updateHistory({ symbol, name });
+          await updateHistory({ symbol, name });
           setData(cacheResult.data);
           setStatus('success');
           return;
