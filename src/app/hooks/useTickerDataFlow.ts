@@ -31,7 +31,13 @@ export const useTickerDataFlow = (selectedInstrument: InstrumentCoverInfo | null
       console.log("***************** updateHistory called *******************************");
       // 👇 ALWAYS get the freshest user directly from the store
       const currentUser = useUserStore.getState().user; 
-
+      const full_instrument: InstrumentCoverInfo = {
+        symbol: instrument.symbol,
+        name: instrument.name,
+        icon: '',
+        recomendation: '',
+        isFavorite: false,
+      } 
       if (!currentUser) {
           console.warn("⚠️ Cannot update history: User not logged in yet.");
           return; 
@@ -41,7 +47,7 @@ export const useTickerDataFlow = (selectedInstrument: InstrumentCoverInfo | null
         const response = await fetch(ADD_TO_SEARCH_HISTORY_API_ROUTE, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ instrument }),
+          body: JSON.stringify({ instrument: full_instrument }),
         });
 
         if (response.ok) {
