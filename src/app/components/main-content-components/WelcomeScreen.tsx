@@ -67,11 +67,11 @@ export default function WelcomeScreen() {
         </p>
 
         {/* --- Mandatory Warning Section --- */}
-        <div className="max-w-md mx-auto mt-8 p-4 rounded-lg border border-red-500/30 bg-red-500/5 text-left">
+        <div className="max-w-md mx-auto mt-8 p-4 rounded-lg border border-orange-500/30 bg-orange-500/5 text-left">
           <div className="flex items-start gap-3">
-            <Server className="w-5 h-5 text-red-500 mt-0.5 shrink-0" />
+            <Server className="w-5 h-5 text-orange-500 mt-0.5 shrink-0" />
             <div>
-              <h3 className="text-sm font-medium text-red-500 mb-1">
+              <h3 className="text-sm font-medium text-orange-500 mb-1">
                 Backend Status: Free Tier Limitation
               </h3>
               
@@ -82,7 +82,7 @@ export default function WelcomeScreen() {
                     The backend servers are currently sleeping. They are being booted up now. 
                     Please wait for the timer before searching or requesting data.
                   </p>
-                  <div className="flex items-center gap-2 text-xs font-mono text-red-400 bg-red-950/20 px-2 py-1 rounded w-fit">
+                  <div className="flex items-center gap-2 text-xs font-mono text-orange-400 bg-orange-950/20 px-2 py-1 rounded w-fit">
                     <Clock className="w-3 h-3" />
                     <span>Estimated boot time: {formatTime(timeLeft)}</span>
                   </div>
@@ -93,7 +93,7 @@ export default function WelcomeScreen() {
                   <p className="mb-2">
                     Servers have been signaled to wake up.
                   </p>
-                  <div className="flex items-start gap-2 text-red-400/80">
+                  <div className="flex items-start gap-2 text-orange-400/80">
                     <AlertCircle className="w-3 h-3 mt-0.5 shrink-0" />
                     <p>
                       If you experience connection errors or empty data, the servers are still cold starting. 
