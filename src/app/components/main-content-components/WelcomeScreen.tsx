@@ -82,7 +82,7 @@ export default function WelcomeScreen() {
                     The backend servers are currently sleeping. They are being booted up now. 
                     Please wait for the timer before searching or requesting data.
                   </p>
-                  <div className="flex items-center gap-2 text-xs font-mono text-orange-400 bg-orange-950/20 px-2 py-1 rounded w-fit">
+                  <div className="flex items-center gap-2 text-xs font-mono text-orange-400 bg-orange-500/20 dark:bg-orange-950/40 px-2 py-1 rounded w-fit">
                     <Clock className="w-3 h-3" />
                     <span>Estimated boot time: {formatTime(timeLeft)}</span>
                   </div>
