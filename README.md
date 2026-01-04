@@ -53,7 +53,7 @@ Follow these steps to set up the project locally. You will need to run the datab
 Clone the repository and install dependencies:
 
 ```bash
-git clone [https://github.com/riteshrajd/VectorEdge.git](https://github.com/riteshrajd/VectorEdge.git)
+git clone https://github.com/riteshrajd/VectorEdge.git
 cd VectorEdge
 npm install
 
@@ -148,5 +148,5 @@ This project scrapes data from public sources for educational and demonstration 
 
 ## 👨‍💻 Contact
 
-**Ritesh Raj Dwivedi** - riteshrajdwivedi@gmail.com
-**LindedIn** - https://www.linkedin.com/in/ritesh-raj-dwivedi-b720b428b/
+* **Ritesh Raj Dwivedi** - riteshrajdwivedi@gmail.com
+* **LindedIn** - https://www.linkedin.com/in/ritesh-raj-dwivedi-b720b428b/
