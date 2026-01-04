@@ -149,5 +149,4 @@ This project scrapes data from public sources for educational and demonstration 
 ## 👨‍💻 Contact
 
 **Ritesh Raj Dwivedi** - riteshrajdwivedi@gmail.com
-
-Project Link: [https://github.com/riteshrajd/VectorEdge](https://github.com/riteshrajd/VectorEdge)
+**LindedIn** - https://www.linkedin.com/in/ritesh-raj-dwivedi-b720b428b/
