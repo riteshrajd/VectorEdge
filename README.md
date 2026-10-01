@@ -1,19 +1,31 @@
 <div align="center">
   <img src="public/assets/images/logo1.png" alt="Vectoredge Pro Logo" width="200"/>
   <h1>VectorEdge Pro</h1>
-  <p>
-    <strong>A powerful, AI-driven stock analysis platform.</strong>
-  </p>
-  <p>
-    VectorEdge Pro combines real-time data scraping, distributed background processing, and Large Language Models (LLMs) to deliver institutional-grade financial insights to retail investors.
-  </p>
-  <p>
-    <a href="https://vector-edge-wheat.vercel.app/" target="_blank"><strong>View Live Demo »</strong></a>
-    <br />
-    <a href="#-getting-started"><strong>Explore the docs »</strong></a>
-    ·
-    <a href="https://github.com/riteshrajd/VectorEdge/issues"><strong>Report Bug »</strong></a>
-  </p>
+</div>
+
+---
+
+## Description
+
+**A powerful, AI-driven stock analysis platform.**
+
+VectorEdge Pro combines real-time data scraping, distributed background processing, and Large Language Models (LLMs) to deliver institutional-grade financial insights to retail investors.
+
+[**View Live Demo »**](https://vector-edge-wheat.vercel.app/)
+
+> [!NOTE]
+> Live demo services may occasionally be inactive or slow due to free-tier limits and cold starts on Render, Upstash Redis, and Supabase. Refer to the screenshots below for the full interface.
+
+---
+
+## Screenshots
+
+<div align="center">
+  <p><strong>Stock Analysis Dashboard</strong></p>
+  <img src="public/assets/images/Screenshot1-dark.png" alt="VectorEdge Dashboard" width="850"/>
+  <br /><br />
+  <p><strong>Subscription & Account Tier</strong></p>
+  <img src="public/assets/images/Screenshot2-payment-dark.png" alt="VectorEdge Pricing and Payments" width="850"/>
 </div>
 
 ---
