@@ -1,15 +1,15 @@
 <div align="center">
-  <img src="public/assets/images/logo1.png" alt="Vectoredge Pro Logo" width="200"/>
-  <h1>VectorEdge Pro</h1>
+  <img src="public/assets/images/logo1.png" alt="Vectoredge Logo" width="200"/>
+  <h1>VectorEdge</h1>
 </div>
 
 ---
 
 ## Description
 
-**A powerful, AI-driven stock analysis platform.**
+**A Platform for stock analysis using AI.**
 
-VectorEdge Pro combines real-time data scraping, distributed background processing, and Large Language Models (LLMs) to deliver institutional-grade financial insights to retail investors.
+VectorEdge combines real-time data scraping, distributed background processing, and Large Language Models (LLMs) to deliver institutional-grade financial insights to retail investors.
 
 [**View Live Demo »**](https://vector-edge-wheat.vercel.app/)
 
